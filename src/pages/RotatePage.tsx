@@ -84,10 +84,10 @@ const RotatePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-gradient">
       <Header />
       
-      <main className="container mx-auto max-w-5xl px-4 py-8">
+      <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('rotate.title')}</h1>
         </div>
@@ -97,7 +97,7 @@ const RotatePage = () => {
         ) : (
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Controls */}
-            <Card className="p-6">
+            <Card className="p-6 hover-card-enhanced">
               <h3 className="font-semibold text-foreground mb-4">Rotasi</h3>
               <div className="grid grid-cols-3 gap-2 mb-4">
                 <Button
@@ -188,7 +188,7 @@ const RotatePage = () => {
             </Card>
 
             {/* Preview */}
-            <Card className="p-6 lg:col-span-2">
+            <Card className="p-6 hover-card-enhanced lg:col-span-2">
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">{t('common.original')}</h3>

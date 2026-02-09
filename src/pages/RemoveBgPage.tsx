@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { UploadZone } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Slider } from '@/components/ui/slider';
 import { Download, Eraser, RefreshCw, Loader2 } from 'lucide-react';
 import { downloadImage, formatFileSize } from '@/lib/imageProcessing';
 
@@ -13,6 +14,10 @@ const RemoveBgPage = () => {
   const [selectedImage, setSelectedImage] = useState<{ file: File; url: string } | null>(null);
   const [processedImage, setProcessedImage] = useState<{ url: string; blob: Blob } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [tolerance, setTolerance] = useState(30);
+  const [edgeSoftness, setEdgeSoftness] = useState(2);
+  const [bgType, setBgType] = useState<'transparent' | 'white' | 'black' | 'custom'>('transparent');
+  const [customBgColor, setCustomBgColor] = useState('#00ff00');
 
   const handleFilesSelected = useCallback((files: { file: File; preview: string }[]) => {
     const newImages = files.map((f) => ({
@@ -31,11 +36,6 @@ const RemoveBgPage = () => {
     
     setIsProcessing(true);
     try {
-      // Note: This is a placeholder implementation
-      // For real background removal, you would need a library like @imgly/background-removal
-      // or an external API like remove.bg
-      
-      // Simulating processing with a simple transparency effect as placeholder
       const img = new Image();
       img.crossOrigin = 'anonymous';
       
@@ -52,34 +52,124 @@ const RemoveBgPage = () => {
       const ctx = canvas.getContext('2d')!;
       ctx.drawImage(img, 0, 0);
       
-      // Get image data for processing
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
       
-      // Simple background removal: make near-white pixels transparent
-      // This is a basic implementation - real apps would use AI/ML
+      // Detect background color from corners (more accurate)
+      const samplePoints = [
+        0, // top-left
+        (canvas.width - 1) * 4, // top-right
+        (canvas.height - 1) * canvas.width * 4, // bottom-left
+        ((canvas.height - 1) * canvas.width + canvas.width - 1) * 4 // bottom-right
+      ];
+      
+      let bgR = 0, bgG = 0, bgB = 0;
+      samplePoints.forEach(i => {
+        bgR += data[i];
+        bgG += data[i + 1];
+        bgB += data[i + 2];
+      });
+      bgR = Math.round(bgR / 4);
+      bgG = Math.round(bgG / 4);
+      bgB = Math.round(bgB / 4);
+      
+      // Create alpha mask based on color distance
+      const alphaMask = new Float32Array(data.length / 4);
+      
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
         
-        // Check if pixel is close to white
-        if (r > 240 && g > 240 && b > 240) {
-          data[i + 3] = 0; // Make transparent
+        // Calculate color distance from background
+        const distance = Math.sqrt(
+          Math.pow(r - bgR, 2) + 
+          Math.pow(g - bgG, 2) + 
+          Math.pow(b - bgB, 2)
+        );
+        
+        const maxDistance = tolerance * 4.42; // Scale tolerance to RGB space
+        
+        if (distance < maxDistance) {
+          // Smooth transition based on distance
+          alphaMask[i / 4] = Math.min(1, distance / maxDistance);
+        } else {
+          alphaMask[i / 4] = 1;
         }
       }
       
-      ctx.putImageData(imageData, 0, 0);
-
-      canvas.toBlob((blob) => {
-        if (blob) {
-          setProcessedImage({
-            url: URL.createObjectURL(blob),
-            blob,
-          });
+      // Apply edge softness with simple blur on alpha mask
+      if (edgeSoftness > 0) {
+        const width = canvas.width;
+        const height = canvas.height;
+        const blurRadius = edgeSoftness;
+        
+        const tempMask = new Float32Array(alphaMask);
+        
+        for (let y = blurRadius; y < height - blurRadius; y++) {
+          for (let x = blurRadius; x < width - blurRadius; x++) {
+            let sum = 0;
+            let count = 0;
+            
+            for (let dy = -blurRadius; dy <= blurRadius; dy++) {
+              for (let dx = -blurRadius; dx <= blurRadius; dx++) {
+                const idx = (y + dy) * width + (x + dx);
+                sum += tempMask[idx];
+                count++;
+              }
+            }
+            
+            alphaMask[y * width + x] = sum / count;
+          }
         }
-        setIsProcessing(false);
-      }, 'image/png');
+      }
+      
+      // Apply alpha mask to image
+      for (let i = 0; i < data.length; i += 4) {
+        const alpha = Math.round(alphaMask[i / 4] * 255);
+        data[i + 3] = alpha;
+      }
+      
+      ctx.putImageData(imageData, 0, 0);
+      
+      // Apply background if not transparent
+      if (bgType !== 'transparent') {
+        const finalCanvas = document.createElement('canvas');
+        finalCanvas.width = canvas.width;
+        finalCanvas.height = canvas.height;
+        const finalCtx = finalCanvas.getContext('2d')!;
+        
+        if (bgType === 'white') {
+          finalCtx.fillStyle = '#ffffff';
+        } else if (bgType === 'black') {
+          finalCtx.fillStyle = '#000000';
+        } else {
+          finalCtx.fillStyle = customBgColor;
+        }
+        
+        finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+        finalCtx.drawImage(canvas, 0, 0);
+        
+        finalCanvas.toBlob((blob) => {
+          if (blob) {
+            setProcessedImage({
+              url: URL.createObjectURL(blob),
+              blob,
+            });
+          }
+          setIsProcessing(false);
+        }, 'image/png');
+      } else {
+        canvas.toBlob((blob) => {
+          if (blob) {
+            setProcessedImage({
+              url: URL.createObjectURL(blob),
+              blob,
+            });
+          }
+          setIsProcessing(false);
+        }, 'image/png');
+      }
     } catch (error) {
       console.error('Background removal failed:', error);
       setIsProcessing(false);
@@ -93,11 +183,18 @@ const RemoveBgPage = () => {
     }
   };
 
+  const bgOptions = [
+    { value: 'transparent' as const, label: 'Transparan', color: '' },
+    { value: 'white' as const, label: 'Putih', color: '#ffffff' },
+    { value: 'black' as const, label: 'Hitam', color: '#000000' },
+    { value: 'custom' as const, label: 'Custom', color: customBgColor },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-gradient">
       <Header />
       
-      <main className="container mx-auto max-w-5xl px-4 py-8">
+      <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('removeBg.title')}</h1>
           <p className="text-muted-foreground mt-2">
@@ -108,21 +205,80 @@ const RemoveBgPage = () => {
         {uploadedImages.length === 0 ? (
           <UploadZone onFilesSelected={handleFilesSelected} />
         ) : (
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Original */}
-            <Card className="p-6">
-              <h3 className="font-semibold text-foreground mb-4">{t('common.original')}</h3>
-              <div className="relative overflow-hidden rounded-lg bg-muted aspect-square flex items-center justify-center">
-                {selectedImage && (
-                  <img
-                    src={selectedImage.url}
-                    alt="Original"
-                    className="max-w-full max-h-full object-contain"
+          <div className="grid gap-6 lg:grid-cols-3">
+            {/* Controls */}
+            <Card className="p-6 hover-card-enhanced">
+              <h3 className="font-semibold text-foreground mb-4">Pengaturan</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground">
+                    Toleransi Warna: {tolerance}
+                  </label>
+                  <Slider
+                    value={[tolerance]}
+                    max={100}
+                    min={5}
+                    step={5}
+                    onValueChange={([v]) => setTolerance(v)}
+                    className="mt-2"
                   />
-                )}
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Semakin tinggi = lebih banyak warna dihapus
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-foreground">
+                    Kehalusan Tepi: {edgeSoftness}px
+                  </label>
+                  <Slider
+                    value={[edgeSoftness]}
+                    max={10}
+                    min={0}
+                    step={1}
+                    onValueChange={([v]) => setEdgeSoftness(v)}
+                    className="mt-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-foreground">Background Baru</label>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    {bgOptions.map((option) => (
+                      <Button
+                        key={option.value}
+                        variant={bgType === option.value ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setBgType(option.value)}
+                        className="relative"
+                      >
+                        {option.value !== 'transparent' && option.value !== 'custom' && (
+                          <span 
+                            className="w-3 h-3 rounded-full mr-2 border" 
+                            style={{ backgroundColor: option.color }}
+                          />
+                        )}
+                        {option.value === 'transparent' && (
+                          <span className="w-3 h-3 mr-2 rounded-full bg-gradient-to-br from-gray-200 to-gray-400" />
+                        )}
+                        {option.label}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  {bgType === 'custom' && (
+                    <input
+                      type="color"
+                      value={customBgColor}
+                      onChange={(e) => setCustomBgColor(e.target.value)}
+                      className="w-full h-10 mt-2 rounded cursor-pointer"
+                    />
+                  )}
+                </div>
               </div>
               
-              <div className="mt-4 space-y-2">
+              <div className="mt-6 space-y-2">
                 <Button
                   className="w-full btn-accent"
                   onClick={removeBackground}
@@ -156,15 +312,30 @@ const RemoveBgPage = () => {
               </div>
             </Card>
 
+            {/* Original */}
+            <Card className="p-6 hover-card-enhanced">
+              <h3 className="font-semibold text-foreground mb-4">{t('common.original')}</h3>
+              <div className="relative overflow-hidden rounded-lg bg-muted aspect-square flex items-center justify-center">
+                {selectedImage && (
+                  <img
+                    src={selectedImage.url}
+                    alt="Original"
+                    className="max-w-full max-h-full object-contain"
+                  />
+                )}
+              </div>
+            </Card>
+
             {/* Result */}
-            <Card className="p-6">
+            <Card className="p-6 hover-card-enhanced">
               <h3 className="font-semibold text-foreground mb-4">{t('common.result')}</h3>
               <div 
                 className="relative overflow-hidden rounded-lg aspect-square flex items-center justify-center"
                 style={{
-                  backgroundImage: 'linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%)',
+                  backgroundImage: 'linear-gradient(45deg, hsl(var(--muted)) 25%, transparent 25%), linear-gradient(-45deg, hsl(var(--muted)) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, hsl(var(--muted)) 75%), linear-gradient(-45deg, transparent 75%, hsl(var(--muted)) 75%)',
                   backgroundSize: '20px 20px',
                   backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
+                  backgroundColor: 'hsl(var(--background))',
                 }}
               >
                 {processedImage ? (
@@ -175,7 +346,7 @@ const RemoveBgPage = () => {
                   />
                 ) : (
                   <p className="text-muted-foreground text-center p-8">
-                    {isProcessing ? t('common.processing') : 'Result will appear here'}
+                    {isProcessing ? t('common.processing') : 'Hasil akan muncul di sini'}
                   </p>
                 )}
               </div>
@@ -195,9 +366,9 @@ const RemoveBgPage = () => {
           </div>
         )}
         
-        <div className="mt-8 p-4 rounded-lg bg-muted/50 text-center">
+        <div className="mt-8 p-4 rounded-lg bg-card/80 backdrop-blur border border-border/50 text-center">
           <p className="text-sm text-muted-foreground">
-            💡 Fitur ini menggunakan algoritma sederhana. Untuk hasil terbaik, gunakan gambar dengan latar belakang polos.
+            💡 Tips: Gunakan gambar dengan latar belakang yang kontras dengan objek untuk hasil terbaik. Sesuaikan toleransi warna jika terlalu banyak atau terlalu sedikit yang terhapus.
           </p>
         </div>
       </main>

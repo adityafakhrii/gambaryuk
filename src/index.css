@@ -112,6 +112,39 @@
   .btn-accent {
     @apply bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200 shadow-md hover:shadow-lg;
   }
+
+  /* Page gradient backgrounds */
+  .page-gradient {
+    @apply relative;
+    background: linear-gradient(
+      135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--primary-light)) 50%, 
+      hsl(var(--background)) 100%
+    );
+  }
+
+  .page-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(ellipse at top right, hsl(var(--primary) / 0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  .page-gradient::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(ellipse at bottom left, hsl(var(--accent) / 0.08), transparent 70%);
+    pointer-events: none;
+  }
 }
 
 @layer utilities {
@@ -121,5 +154,20 @@
   
   .shadow-soft-lg {
     box-shadow: 0 8px 30px -6px hsl(var(--foreground) / 0.12);
+  }
+
+  /* Enhanced hover states for cards */
+  .hover-card-enhanced {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-card-enhanced:hover {
+    @apply -translate-y-1 shadow-soft-lg;
+    border-color: hsl(var(--primary) / 0.4);
+  }
+
+  .dark .hover-card-enhanced:hover {
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 0 8px 30px -6px hsl(var(--primary) / 0.15);
   }
 }

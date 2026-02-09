@@ -15,6 +15,14 @@ interface CropArea {
   height: number;
 }
 
+interface SocialMediaPreset {
+  label: string;
+  platform: string;
+  value: string;
+  ratio: number | null; // null = free
+  size?: { width: number; height: number };
+}
+
 const CropPage = () => {
   const { t } = useLanguage();
   const [uploadedImages, setUploadedImages] = useState<{ file: File; url: string }[]>([]);
@@ -23,16 +31,44 @@ const CropPage = () => {
   const [aspectRatio, setAspectRatio] = useState<string>('free');
   const [processedImage, setProcessedImage] = useState<{ url: string; blob: Blob } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const aspectRatios = [
-    { label: t('crop.free'), value: 'free' },
-    { label: t('crop.square'), value: '1:1' },
-    { label: t('crop.landscape'), value: '16:9' },
-    { label: t('crop.portrait'), value: '9:16' },
-    { label: '4:3', value: '4:3' },
-    { label: '3:2', value: '3:2' },
+  const socialMediaPresets: SocialMediaPreset[] = [
+    // General
+    { label: 'Bebas', platform: '', value: 'free', ratio: null },
+    { label: 'Kotak (1:1)', platform: '', value: '1:1', ratio: 1 },
+    
+    // Instagram
+    { label: 'Instagram Post', platform: 'Instagram', value: 'ig-post', ratio: 1, size: { width: 1080, height: 1080 } },
+    { label: 'Instagram Story', platform: 'Instagram', value: 'ig-story', ratio: 9/16, size: { width: 1080, height: 1920 } },
+    { label: 'Instagram Landscape', platform: 'Instagram', value: 'ig-landscape', ratio: 1.91, size: { width: 1080, height: 566 } },
+    { label: 'Instagram Portrait', platform: 'Instagram', value: 'ig-portrait', ratio: 4/5, size: { width: 1080, height: 1350 } },
+    
+    // TikTok
+    { label: 'TikTok Video', platform: 'TikTok', value: 'tiktok', ratio: 9/16, size: { width: 1080, height: 1920 } },
+    
+    // YouTube
+    { label: 'YouTube Thumbnail', platform: 'YouTube', value: 'yt-thumb', ratio: 16/9, size: { width: 1280, height: 720 } },
+    { label: 'YouTube Banner', platform: 'YouTube', value: 'yt-banner', ratio: 16/9, size: { width: 2560, height: 1440 } },
+    
+    // Facebook
+    { label: 'Facebook Post', platform: 'Facebook', value: 'fb-post', ratio: 1.91, size: { width: 1200, height: 630 } },
+    { label: 'Facebook Cover', platform: 'Facebook', value: 'fb-cover', ratio: 2.7, size: { width: 820, height: 312 } },
+    { label: 'Facebook Profile', platform: 'Facebook', value: 'fb-profile', ratio: 1, size: { width: 170, height: 170 } },
+    
+    // Twitter/X
+    { label: 'Twitter Post', platform: 'Twitter/X', value: 'twitter-post', ratio: 16/9, size: { width: 1200, height: 675 } },
+    { label: 'Twitter Header', platform: 'Twitter/X', value: 'twitter-header', ratio: 3, size: { width: 1500, height: 500 } },
+    
+    // LinkedIn
+    { label: 'LinkedIn Post', platform: 'LinkedIn', value: 'linkedin-post', ratio: 1.91, size: { width: 1200, height: 627 } },
+    { label: 'LinkedIn Cover', platform: 'LinkedIn', value: 'linkedin-cover', ratio: 4, size: { width: 1584, height: 396 } },
+    
+    // WhatsApp
+    { label: 'WhatsApp Status', platform: 'WhatsApp', value: 'wa-status', ratio: 9/16, size: { width: 1080, height: 1920 } },
+    
+    // Pinterest
+    { label: 'Pinterest Pin', platform: 'Pinterest', value: 'pinterest', ratio: 2/3, size: { width: 1000, height: 1500 } },
   ];
 
   const handleFilesSelected = useCallback((files: { file: File; preview: string }[]) => {
@@ -93,13 +129,24 @@ const CropPage = () => {
     }
   };
 
-  const updateCropWithRatio = (ratio: string) => {
-    setAspectRatio(ratio);
-    if (!imageRef.current || ratio === 'free') return;
+  const updateCropWithPreset = (presetValue: string) => {
+    setAspectRatio(presetValue);
+    if (!imageRef.current) return;
+    
+    const preset = socialMediaPresets.find(p => p.value === presetValue);
+    if (!preset || preset.ratio === null) {
+      // Free mode - use full image
+      setCropArea({
+        x: 0,
+        y: 0,
+        width: imageRef.current.naturalWidth,
+        height: imageRef.current.naturalHeight,
+      });
+      return;
+    }
     
     const img = imageRef.current;
-    const [w, h] = ratio.split(':').map(Number);
-    const targetRatio = w / h;
+    const targetRatio = preset.ratio;
     
     let newWidth = img.naturalWidth;
     let newHeight = img.naturalHeight;
@@ -118,13 +165,18 @@ const CropPage = () => {
     });
   };
 
+  const getCurrentPreset = () => socialMediaPresets.find(p => p.value === aspectRatio);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-gradient">
       <Header />
       
-      <main className="container mx-auto max-w-5xl px-4 py-8">
+      <main className="container relative z-10 mx-auto max-w-6xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('crop.title')}</h1>
+          <p className="text-muted-foreground mt-2">
+            Pilih ukuran sesuai platform sosial media
+          </p>
         </div>
 
         {uploadedImages.length === 0 ? (
@@ -132,24 +184,48 @@ const CropPage = () => {
         ) : (
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Controls */}
-            <Card className="p-6">
-              <h3 className="font-semibold text-foreground mb-4">{t('crop.ratio')}</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {aspectRatios.map((ratio) => (
-                  <Button
-                    key={ratio.value}
-                    variant={aspectRatio === ratio.value ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => updateCropWithRatio(ratio.value)}
-                  >
-                    {ratio.label}
-                  </Button>
-                ))}
+            <Card className="p-6 hover-card-enhanced">
+              <h3 className="font-semibold text-foreground mb-4">Ukuran Social Media</h3>
+              
+              <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
+                {/* Group by platform */}
+                {['', 'Instagram', 'TikTok', 'YouTube', 'Facebook', 'Twitter/X', 'LinkedIn', 'WhatsApp', 'Pinterest'].map(platform => {
+                  const platformPresets = socialMediaPresets.filter(p => p.platform === platform);
+                  if (platformPresets.length === 0) return null;
+                  
+                  return (
+                    <div key={platform || 'general'}>
+                      {platform && (
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                          {platform}
+                        </p>
+                      )}
+                      <div className="grid grid-cols-1 gap-1.5">
+                        {platformPresets.map((preset) => (
+                          <Button
+                            key={preset.value}
+                            variant={aspectRatio === preset.value ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => updateCropWithPreset(preset.value)}
+                            className="justify-between text-xs h-8"
+                          >
+                            <span>{preset.label}</span>
+                            {preset.size && (
+                              <span className="text-[10px] opacity-70">
+                                {preset.size.width}×{preset.size.height}
+                              </span>
+                            )}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              <div className="mt-6 space-y-4">
+              <div className="mt-6 space-y-4 border-t border-border pt-4">
                 <div>
-                  <label className="text-sm font-medium text-foreground">X</label>
+                  <label className="text-sm font-medium text-foreground">X: {Math.round(cropArea.x)}px</label>
                   <Slider
                     value={[cropArea.x]}
                     max={imageRef.current?.naturalWidth || 1000}
@@ -158,32 +234,12 @@ const CropPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground">Y</label>
+                  <label className="text-sm font-medium text-foreground">Y: {Math.round(cropArea.y)}px</label>
                   <Slider
                     value={[cropArea.y]}
                     max={imageRef.current?.naturalHeight || 1000}
                     step={1}
                     onValueChange={([v]) => setCropArea({ ...cropArea, y: v })}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">{t('resize.width')}</label>
-                  <Slider
-                    value={[cropArea.width]}
-                    max={imageRef.current?.naturalWidth || 1000}
-                    min={10}
-                    step={1}
-                    onValueChange={([v]) => setCropArea({ ...cropArea, width: v })}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">{t('resize.height')}</label>
-                  <Slider
-                    value={[cropArea.height]}
-                    max={imageRef.current?.naturalHeight || 1000}
-                    min={10}
-                    step={1}
-                    onValueChange={([v]) => setCropArea({ ...cropArea, height: v })}
                   />
                 </div>
               </div>
@@ -212,10 +268,17 @@ const CropPage = () => {
             </Card>
 
             {/* Preview */}
-            <Card className="p-6 lg:col-span-2">
+            <Card className="p-6 hover-card-enhanced lg:col-span-2">
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">{t('common.original')}</h3>
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="font-semibold text-foreground">{t('common.original')}</h3>
+                    {getCurrentPreset()?.size && (
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                        {getCurrentPreset()?.label}: {getCurrentPreset()?.size?.width}×{getCurrentPreset()?.size?.height}
+                      </span>
+                    )}
+                  </div>
                   <div className="relative overflow-hidden rounded-lg bg-muted">
                     {selectedImage && (
                       <img

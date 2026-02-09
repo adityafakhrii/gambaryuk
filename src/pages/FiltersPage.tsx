@@ -16,6 +16,7 @@ interface FilterSettings {
   grayscale: number;
   sepia: number;
   invert: number;
+  hueRotate: number;
 }
 
 const defaultFilters: FilterSettings = {
@@ -26,7 +27,14 @@ const defaultFilters: FilterSettings = {
   grayscale: 0,
   sepia: 0,
   invert: 0,
+  hueRotate: 0,
 };
+
+interface FilterPreset {
+  name: string;
+  emoji: string;
+  filters: FilterSettings;
+}
 
 const FiltersPage = () => {
   const { t } = useLanguage();
@@ -36,12 +44,46 @@ const FiltersPage = () => {
   const [processedImage, setProcessedImage] = useState<{ url: string; blob: Blob } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const presets = [
-    { name: t('filters.grayscale'), filters: { ...defaultFilters, grayscale: 100 } },
-    { name: t('filters.sepia'), filters: { ...defaultFilters, sepia: 100 } },
-    { name: t('filters.vintage'), filters: { ...defaultFilters, sepia: 50, saturation: 80, contrast: 110 } },
-    { name: 'High Contrast', filters: { ...defaultFilters, contrast: 140, saturation: 120 } },
-    { name: 'Soft', filters: { ...defaultFilters, contrast: 90, brightness: 105, blur: 1 } },
+  const presets: FilterPreset[] = [
+    // Essentials
+    { name: 'Normal', emoji: '📷', filters: { ...defaultFilters } },
+    { name: t('filters.grayscale'), emoji: '⚫', filters: { ...defaultFilters, grayscale: 100 } },
+    { name: t('filters.sepia'), emoji: '🟤', filters: { ...defaultFilters, sepia: 100 } },
+    
+    // Warm tones
+    { name: 'Warm', emoji: '🌅', filters: { ...defaultFilters, saturation: 110, sepia: 20, brightness: 105 } },
+    { name: 'Golden Hour', emoji: '🌇', filters: { ...defaultFilters, saturation: 120, sepia: 30, contrast: 110 } },
+    { name: 'Sunset', emoji: '🌆', filters: { ...defaultFilters, saturation: 130, sepia: 40, hueRotate: -10 } },
+    
+    // Cool tones
+    { name: 'Cool', emoji: '❄️', filters: { ...defaultFilters, saturation: 90, hueRotate: 20, brightness: 105 } },
+    { name: 'Ocean', emoji: '🌊', filters: { ...defaultFilters, saturation: 110, hueRotate: 30, contrast: 105 } },
+    { name: 'Arctic', emoji: '🏔️', filters: { ...defaultFilters, saturation: 80, hueRotate: 40, brightness: 110 } },
+    
+    // Vintage & Retro
+    { name: t('filters.vintage'), emoji: '📻', filters: { ...defaultFilters, sepia: 50, saturation: 80, contrast: 110 } },
+    { name: 'Retro', emoji: '📼', filters: { ...defaultFilters, sepia: 30, contrast: 120, saturation: 90 } },
+    { name: 'Film', emoji: '🎞️', filters: { ...defaultFilters, contrast: 115, saturation: 95, brightness: 95 } },
+    { name: 'Noir', emoji: '🎬', filters: { ...defaultFilters, grayscale: 100, contrast: 130 } },
+    
+    // Enhancement
+    { name: 'Vivid', emoji: '🎨', filters: { ...defaultFilters, saturation: 140, contrast: 115 } },
+    { name: 'HDR', emoji: '✨', filters: { ...defaultFilters, contrast: 130, saturation: 120, brightness: 105 } },
+    { name: 'Pop', emoji: '💥', filters: { ...defaultFilters, saturation: 150, contrast: 120 } },
+    
+    // Soft & Dreamy
+    { name: 'Soft', emoji: '☁️', filters: { ...defaultFilters, contrast: 90, brightness: 105, blur: 0.5 } },
+    { name: 'Dreamy', emoji: '💫', filters: { ...defaultFilters, contrast: 85, brightness: 110, saturation: 90, blur: 1 } },
+    { name: 'Fade', emoji: '🌫️', filters: { ...defaultFilters, contrast: 80, brightness: 110, saturation: 85 } },
+    
+    // Dramatic
+    { name: 'Dramatic', emoji: '🎭', filters: { ...defaultFilters, contrast: 150, saturation: 110, brightness: 95 } },
+    { name: 'Dark', emoji: '🌑', filters: { ...defaultFilters, brightness: 80, contrast: 120 } },
+    { name: 'Moody', emoji: '🌙', filters: { ...defaultFilters, brightness: 90, contrast: 115, saturation: 85 } },
+    
+    // Special
+    { name: 'Invert', emoji: '🔄', filters: { ...defaultFilters, invert: 100 } },
+    { name: 'X-Ray', emoji: '💀', filters: { ...defaultFilters, invert: 100, grayscale: 100, contrast: 120 } },
   ];
 
   const handleFilesSelected = useCallback((files: { file: File; preview: string }[]) => {
@@ -58,7 +100,7 @@ const FiltersPage = () => {
   }, []);
 
   const getFilterString = () => {
-    return `brightness(${filters.brightness}%) contrast(${filters.contrast}%) saturate(${filters.saturation}%) blur(${filters.blur}px) grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) invert(${filters.invert}%)`;
+    return `brightness(${filters.brightness}%) contrast(${filters.contrast}%) saturate(${filters.saturation}%) blur(${filters.blur}px) grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) invert(${filters.invert}%) hue-rotate(${filters.hueRotate}deg)`;
   };
 
   const applyFilters = async () => {
@@ -102,99 +144,102 @@ const FiltersPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-gradient">
       <Header />
       
-      <main className="container mx-auto max-w-5xl px-4 py-8">
+      <main className="container relative z-10 mx-auto max-w-6xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('filters.title')}</h1>
+          <p className="text-muted-foreground mt-2">
+            Pilih preset atau atur filter secara manual
+          </p>
         </div>
 
         {uploadedImages.length === 0 ? (
           <UploadZone onFilesSelected={handleFilesSelected} />
         ) : (
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Controls */}
-            <Card className="p-6">
-              <h3 className="font-semibold text-foreground mb-4">Presets</h3>
-              <div className="grid grid-cols-2 gap-2 mb-6">
+          <div className="grid gap-6 lg:grid-cols-4">
+            {/* Presets */}
+            <Card className="p-4 hover-card-enhanced lg:col-span-1">
+              <h3 className="font-semibold text-foreground mb-3">Preset Filter</h3>
+              <div className="grid grid-cols-2 gap-1.5 max-h-96 overflow-y-auto pr-1">
                 {presets.map((preset) => (
                   <Button
                     key={preset.name}
                     variant="outline"
                     size="sm"
                     onClick={() => setFilters(preset.filters)}
+                    className="justify-start text-xs h-8 px-2"
                   >
-                    {preset.name}
+                    <span className="mr-1">{preset.emoji}</span>
+                    <span className="truncate">{preset.name}</span>
                   </Button>
                 ))}
               </div>
+            </Card>
 
-              <h3 className="font-semibold text-foreground mb-4">Adjustments</h3>
-              <div className="space-y-4">
+            {/* Adjustments */}
+            <Card className="p-4 hover-card-enhanced lg:col-span-1">
+              <h3 className="font-semibold text-foreground mb-3">Pengaturan Manual</h3>
+              <div className="space-y-3">
                 <div>
-                  <label className="text-sm font-medium text-foreground">{t('filters.brightness')}: {filters.brightness}%</label>
+                  <label className="text-xs font-medium text-foreground">{t('filters.brightness')}: {filters.brightness}%</label>
                   <Slider
                     value={[filters.brightness]}
                     max={200}
                     min={0}
                     step={5}
                     onValueChange={([v]) => updateFilter('brightness', v)}
+                    className="mt-1"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground">{t('filters.contrast')}: {filters.contrast}%</label>
+                  <label className="text-xs font-medium text-foreground">{t('filters.contrast')}: {filters.contrast}%</label>
                   <Slider
                     value={[filters.contrast]}
                     max={200}
                     min={0}
                     step={5}
                     onValueChange={([v]) => updateFilter('contrast', v)}
+                    className="mt-1"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground">{t('filters.saturation')}: {filters.saturation}%</label>
+                  <label className="text-xs font-medium text-foreground">{t('filters.saturation')}: {filters.saturation}%</label>
                   <Slider
                     value={[filters.saturation]}
                     max={200}
                     min={0}
                     step={5}
                     onValueChange={([v]) => updateFilter('saturation', v)}
+                    className="mt-1"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground">{t('filters.blur')}: {filters.blur}px</label>
+                  <label className="text-xs font-medium text-foreground">Hue Rotate: {filters.hueRotate}°</label>
+                  <Slider
+                    value={[filters.hueRotate]}
+                    max={180}
+                    min={-180}
+                    step={10}
+                    onValueChange={([v]) => updateFilter('hueRotate', v)}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-foreground">{t('filters.blur')}: {filters.blur}px</label>
                   <Slider
                     value={[filters.blur]}
                     max={10}
                     min={0}
                     step={0.5}
                     onValueChange={([v]) => updateFilter('blur', v)}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">{t('filters.grayscale')}: {filters.grayscale}%</label>
-                  <Slider
-                    value={[filters.grayscale]}
-                    max={100}
-                    min={0}
-                    step={5}
-                    onValueChange={([v]) => updateFilter('grayscale', v)}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">{t('filters.sepia')}: {filters.sepia}%</label>
-                  <Slider
-                    value={[filters.sepia]}
-                    max={100}
-                    min={0}
-                    step={5}
-                    onValueChange={([v]) => updateFilter('sepia', v)}
+                    className="mt-1"
                   />
                 </div>
               </div>
 
-              <div className="mt-6 space-y-2">
+              <div className="mt-4 space-y-2">
                 <Button
                   className="w-full btn-accent"
                   onClick={applyFilters}
@@ -229,7 +274,7 @@ const FiltersPage = () => {
             </Card>
 
             {/* Preview */}
-            <Card className="p-6 lg:col-span-2">
+            <Card className="p-4 hover-card-enhanced lg:col-span-2">
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Preview</h3>
@@ -238,7 +283,7 @@ const FiltersPage = () => {
                       <img
                         src={selectedImage.url}
                         alt="Preview"
-                        className="w-full h-auto max-h-64 object-contain"
+                        className="w-full h-auto max-h-72 object-contain"
                         style={{ filter: getFilterString() }}
                       />
                     )}
@@ -252,7 +297,7 @@ const FiltersPage = () => {
                       <img
                         src={processedImage.url}
                         alt="Filtered"
-                        className="w-full h-auto max-h-64 object-contain"
+                        className="w-full h-auto max-h-72 object-contain"
                       />
                     </div>
                     <div className="flex justify-between items-center mt-2">

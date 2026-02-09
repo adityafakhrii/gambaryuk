@@ -129,11 +129,11 @@
      });
    };
  
-   return (
-     <div className="min-h-screen bg-background">
-       <Header />
-       
-       <main className="container mx-auto max-w-5xl px-4 py-8">
+    return (
+      <div className="min-h-screen page-gradient">
+        <Header />
+        
+        <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
            {t('resize.title')}
          </h1>
