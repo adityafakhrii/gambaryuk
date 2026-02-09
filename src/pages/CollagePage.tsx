@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/layout/Header';
 import { UploadZone } from '@/components/UploadZone';
@@ -6,10 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
-import { Download, LayoutGrid, RefreshCw } from 'lucide-react';
+import { Download, LayoutGrid, RefreshCw, Plus } from 'lucide-react';
 import { loadImage, downloadImage, formatFileSize } from '@/lib/imageProcessing';
 
-type Template = '2x1' | '1x2' | '2x2' | '3x3' | '2x3' | '3x2';
+type Template = '2x1' | '1x2' | '2x2' | '3x3' | '2x3' | '3x2' | '1x3' | '3x1' | '1x4' | '4x1' | '2x4' | '4x2';
+
+interface TemplateConfig {
+  value: Template;
+  label: string;
+  cols: number;
+  rows: number;
+  minImages: number;
+}
 
 const CollagePage = () => {
   const { t } = useLanguage();
@@ -20,14 +28,43 @@ const CollagePage = () => {
   const [processedImage, setProcessedImage] = useState<{ url: string; blob: Blob } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const templates: { value: Template; label: string; cols: number; rows: number }[] = [
-    { value: '2x1', label: '2×1', cols: 2, rows: 1 },
-    { value: '1x2', label: '1×2', cols: 1, rows: 2 },
-    { value: '2x2', label: '2×2', cols: 2, rows: 2 },
-    { value: '2x3', label: '2×3', cols: 2, rows: 3 },
-    { value: '3x2', label: '3×2', cols: 3, rows: 2 },
-    { value: '3x3', label: '3×3', cols: 3, rows: 3 },
+  const allTemplates: TemplateConfig[] = [
+    { value: '2x1', label: '2 foto (horizontal)', cols: 2, rows: 1, minImages: 2 },
+    { value: '1x2', label: '2 foto (vertikal)', cols: 1, rows: 2, minImages: 2 },
+    { value: '1x3', label: '3 foto (vertikal)', cols: 1, rows: 3, minImages: 3 },
+    { value: '3x1', label: '3 foto (horizontal)', cols: 3, rows: 1, minImages: 3 },
+    { value: '2x2', label: '4 foto (grid 2×2)', cols: 2, rows: 2, minImages: 4 },
+    { value: '1x4', label: '4 foto (vertikal)', cols: 1, rows: 4, minImages: 4 },
+    { value: '4x1', label: '4 foto (horizontal)', cols: 4, rows: 1, minImages: 4 },
+    { value: '2x3', label: '6 foto (grid 2×3)', cols: 2, rows: 3, minImages: 6 },
+    { value: '3x2', label: '6 foto (grid 3×2)', cols: 3, rows: 2, minImages: 6 },
+    { value: '2x4', label: '8 foto (grid 2×4)', cols: 2, rows: 4, minImages: 8 },
+    { value: '4x2', label: '8 foto (grid 4×2)', cols: 4, rows: 2, minImages: 8 },
+    { value: '3x3', label: '9 foto (grid 3×3)', cols: 3, rows: 3, minImages: 9 },
   ];
+
+  // Filter templates based on uploaded image count
+  const availableTemplates = useMemo(() => {
+    const count = uploadedImages.length;
+    
+    // Show only templates that can be filled with uploaded images
+    return allTemplates.filter(t => t.minImages <= count);
+  }, [uploadedImages.length]);
+
+  // Auto-select best template when images change
+  const autoSelectTemplate = useCallback((imageCount: number) => {
+    const bestTemplate = allTemplates
+      .filter(t => t.minImages <= imageCount)
+      .reduce((best, current) => {
+        // Prefer template that uses most images but doesn't exceed count
+        if (current.minImages <= imageCount && current.minImages > best.minImages) {
+          return current;
+        }
+        return best;
+      }, allTemplates[0]);
+    
+    setTemplate(bestTemplate.value);
+  }, []);
 
   const handleFilesSelected = useCallback((files: { file: File; preview: string }[]) => {
     const newImages = files.map((f) => ({
@@ -36,9 +73,14 @@ const CollagePage = () => {
     }));
     setUploadedImages(newImages);
     setProcessedImage(null);
-  }, []);
+    
+    // Auto-select best template
+    if (newImages.length >= 2) {
+      autoSelectTemplate(newImages.length);
+    }
+  }, [autoSelectTemplate]);
 
-  const getTemplateConfig = () => templates.find((t) => t.value === template) || templates[2];
+  const getTemplateConfig = () => allTemplates.find((t) => t.value === template) || allTemplates[0];
 
   const generateCollage = async () => {
     if (uploadedImages.length < 2) return;
@@ -72,7 +114,6 @@ const CollagePage = () => {
         const x = gap + col * (cellWidth + gap);
         const y = gap + row * (cellHeight + gap);
         
-        // Calculate aspect ratio fit
         const imgRatio = img.naturalWidth / img.naturalHeight;
         const cellRatio = cellWidth / cellHeight;
         
@@ -90,7 +131,6 @@ const CollagePage = () => {
           drawY = y - (drawHeight - cellHeight) / 2;
         }
         
-        // Clip to cell
         ctx.save();
         ctx.beginPath();
         ctx.rect(x, y, cellWidth, cellHeight);
@@ -124,14 +164,14 @@ const CollagePage = () => {
   const requiredImages = config.cols * config.rows;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-gradient">
       <Header />
       
-      <main className="container mx-auto max-w-5xl px-4 py-8">
+      <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('collage.title')}</h1>
           <p className="text-muted-foreground mt-2">
-            {t('collage.minImages')}
+            Upload minimal 2 foto untuk membuat collage
           </p>
         </div>
 
@@ -140,22 +180,36 @@ const CollagePage = () => {
         ) : (
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Controls */}
-            <Card className="p-6">
+            <Card className="p-6 hover-card-enhanced">
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-foreground">{t('collage.template')}</label>
-                  <div className="grid grid-cols-3 gap-2 mt-2">
-                    {templates.map((t) => (
-                      <Button
-                        key={t.value}
-                        variant={template === t.value ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setTemplate(t.value)}
-                      >
-                        {t.label}
-                      </Button>
-                    ))}
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-sm font-medium text-foreground">{t('collage.template')}</label>
+                    <span className="text-xs text-muted-foreground">
+                      {uploadedImages.length} foto
+                    </span>
                   </div>
+                  
+                  {availableTemplates.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Upload minimal 2 foto
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-1.5 max-h-48 overflow-y-auto">
+                      {availableTemplates.map((t) => (
+                        <Button
+                          key={t.value}
+                          variant={template === t.value ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setTemplate(t.value)}
+                          className="justify-between text-xs h-8"
+                        >
+                          <span>{t.label}</span>
+                          <span className="opacity-60">{t.minImages} foto</span>
+                        </Button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -185,6 +239,19 @@ const CollagePage = () => {
                       className="flex-1"
                     />
                   </div>
+                  
+                  {/* Quick color options */}
+                  <div className="flex gap-1 mt-2">
+                    {['#ffffff', '#000000', '#f3f4f6', '#1f2937', '#fef3c7', '#dbeafe'].map(color => (
+                      <button
+                        key={color}
+                        onClick={() => setBgColor(color)}
+                        className="w-6 h-6 rounded border border-border"
+                        style={{ backgroundColor: color }}
+                        title={color}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 <div className="pt-4 space-y-2">
@@ -210,30 +277,53 @@ const CollagePage = () => {
                   </Button>
                 </div>
 
-                <p className="text-xs text-muted-foreground">
-                  Uploaded: {uploadedImages.length} / {requiredImages} images needed
+                <p className="text-xs text-muted-foreground text-center">
+                  Akan menggunakan {Math.min(uploadedImages.length, requiredImages)} dari {uploadedImages.length} foto
                 </p>
               </div>
             </Card>
 
             {/* Preview */}
-            <Card className="p-6 lg:col-span-2">
-              <h3 className="font-semibold text-foreground mb-4">Preview</h3>
+            <Card className="p-6 hover-card-enhanced lg:col-span-2">
+              <h3 className="font-semibold text-foreground mb-4">Foto yang diupload</h3>
               
               {/* Uploaded Images Grid */}
               <div className="grid grid-cols-4 gap-2 mb-6">
                 {uploadedImages.map((img, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative group">
                     <img
                       src={img.url}
                       alt={`Image ${index + 1}`}
-                      className="w-full h-20 object-cover rounded-lg"
+                      className={`w-full h-20 object-cover rounded-lg transition-opacity ${
+                        index < requiredImages ? 'opacity-100' : 'opacity-40'
+                      }`}
                     />
-                    <span className="absolute top-1 left-1 bg-foreground/70 text-background text-xs px-1 rounded">
+                    <span className={`absolute top-1 left-1 text-xs px-1.5 py-0.5 rounded ${
+                      index < requiredImages 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'bg-muted text-muted-foreground'
+                    }`}>
                       {index + 1}
                     </span>
+                    {index >= requiredImages && (
+                      <span className="absolute inset-0 flex items-center justify-center bg-background/60 rounded-lg text-xs text-muted-foreground">
+                        Tidak dipakai
+                      </span>
+                    )}
                   </div>
                 ))}
+                
+                {/* Add more button */}
+                <UploadZone 
+                  onFilesSelected={(files) => {
+                    const newImages = files.map(f => ({ file: f.file, url: f.preview }));
+                    setUploadedImages([...uploadedImages, ...newImages]);
+                  }}
+                  multiple
+                  className="w-full h-20 border-dashed border-2 rounded-lg flex items-center justify-center cursor-pointer hover:bg-muted/50"
+                >
+                  <Plus className="w-6 h-6 text-muted-foreground" />
+                </UploadZone>
               </div>
 
               {processedImage && (
