@@ -1,11 +1,10 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/layout/Header';
 import { UploadZone } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Download, Crop, RotateCcw } from 'lucide-react';
+import { Download, Crop, RotateCcw, Move } from 'lucide-react';
 import { loadImage, downloadImage, formatFileSize } from '@/lib/imageProcessing';
 
 interface CropArea {
@@ -19,7 +18,7 @@ interface SocialMediaPreset {
   label: string;
   platform: string;
   value: string;
-  ratio: number | null; // null = free
+  ratio: number | null;
   size?: { width: number; height: number };
 }
 
@@ -31,43 +30,31 @@ const CropPage = () => {
   const [aspectRatio, setAspectRatio] = useState<string>('free');
   const [processedImage, setProcessedImage] = useState<{ url: string; blob: Blob } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0, naturalWidth: 0, naturalHeight: 0 });
+  
   const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const socialMediaPresets: SocialMediaPreset[] = [
-    // General
     { label: 'Bebas', platform: '', value: 'free', ratio: null },
     { label: 'Kotak (1:1)', platform: '', value: '1:1', ratio: 1 },
-    
-    // Instagram
     { label: 'Instagram Post', platform: 'Instagram', value: 'ig-post', ratio: 1, size: { width: 1080, height: 1080 } },
     { label: 'Instagram Story', platform: 'Instagram', value: 'ig-story', ratio: 9/16, size: { width: 1080, height: 1920 } },
     { label: 'Instagram Landscape', platform: 'Instagram', value: 'ig-landscape', ratio: 1.91, size: { width: 1080, height: 566 } },
     { label: 'Instagram Portrait', platform: 'Instagram', value: 'ig-portrait', ratio: 4/5, size: { width: 1080, height: 1350 } },
-    
-    // TikTok
     { label: 'TikTok Video', platform: 'TikTok', value: 'tiktok', ratio: 9/16, size: { width: 1080, height: 1920 } },
-    
-    // YouTube
     { label: 'YouTube Thumbnail', platform: 'YouTube', value: 'yt-thumb', ratio: 16/9, size: { width: 1280, height: 720 } },
     { label: 'YouTube Banner', platform: 'YouTube', value: 'yt-banner', ratio: 16/9, size: { width: 2560, height: 1440 } },
-    
-    // Facebook
     { label: 'Facebook Post', platform: 'Facebook', value: 'fb-post', ratio: 1.91, size: { width: 1200, height: 630 } },
     { label: 'Facebook Cover', platform: 'Facebook', value: 'fb-cover', ratio: 2.7, size: { width: 820, height: 312 } },
     { label: 'Facebook Profile', platform: 'Facebook', value: 'fb-profile', ratio: 1, size: { width: 170, height: 170 } },
-    
-    // Twitter/X
     { label: 'Twitter Post', platform: 'Twitter/X', value: 'twitter-post', ratio: 16/9, size: { width: 1200, height: 675 } },
     { label: 'Twitter Header', platform: 'Twitter/X', value: 'twitter-header', ratio: 3, size: { width: 1500, height: 500 } },
-    
-    // LinkedIn
     { label: 'LinkedIn Post', platform: 'LinkedIn', value: 'linkedin-post', ratio: 1.91, size: { width: 1200, height: 627 } },
     { label: 'LinkedIn Cover', platform: 'LinkedIn', value: 'linkedin-cover', ratio: 4, size: { width: 1584, height: 396 } },
-    
-    // WhatsApp
     { label: 'WhatsApp Status', platform: 'WhatsApp', value: 'wa-status', ratio: 9/16, size: { width: 1080, height: 1920 } },
-    
-    // Pinterest
     { label: 'Pinterest Pin', platform: 'Pinterest', value: 'pinterest', ratio: 2/3, size: { width: 1000, height: 1500 } },
   ];
 
@@ -86,9 +73,101 @@ const CropPage = () => {
   const handleImageLoad = useCallback(() => {
     if (imageRef.current) {
       const img = imageRef.current;
+      setImageDimensions({
+        width: img.clientWidth,
+        height: img.clientHeight,
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight,
+      });
       setCropArea({ x: 0, y: 0, width: img.naturalWidth, height: img.naturalHeight });
     }
   }, []);
+
+  // Update dimensions on resize
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (imageRef.current) {
+        setImageDimensions(prev => ({
+          ...prev,
+          width: imageRef.current!.clientWidth,
+          height: imageRef.current!.clientHeight,
+        }));
+      }
+    };
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  // Calculate scale factor between displayed image and natural image
+  const getScale = () => {
+    if (!imageDimensions.naturalWidth || !imageDimensions.width) return 1;
+    return imageDimensions.width / imageDimensions.naturalWidth;
+  };
+
+  // Convert crop area to display coordinates
+  const getCropOverlayStyle = () => {
+    const scale = getScale();
+    return {
+      left: cropArea.x * scale,
+      top: cropArea.y * scale,
+      width: cropArea.width * scale,
+      height: cropArea.height * scale,
+    };
+  };
+
+  // Mouse/Touch event handlers for dragging
+  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    setIsDragging(true);
+    setDragStart({ x: clientX, y: clientY });
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent | TouchEvent) => {
+    if (!isDragging) return;
+    
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    const scale = getScale();
+    const deltaX = (clientX - dragStart.x) / scale;
+    const deltaY = (clientY - dragStart.y) / scale;
+    
+    setCropArea(prev => {
+      const maxX = imageDimensions.naturalWidth - prev.width;
+      const maxY = imageDimensions.naturalHeight - prev.height;
+      
+      return {
+        ...prev,
+        x: Math.max(0, Math.min(maxX, prev.x - deltaX)),
+        y: Math.max(0, Math.min(maxY, prev.y - deltaY)),
+      };
+    });
+    
+    setDragStart({ x: clientX, y: clientY });
+  }, [isDragging, dragStart, imageDimensions.naturalWidth, imageDimensions.naturalHeight]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Add/remove event listeners
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchmove', handleMouseMove);
+      window.addEventListener('touchend', handleMouseUp);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleMouseMove);
+      window.removeEventListener('touchend', handleMouseUp);
+    };
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const applyCrop = async () => {
     if (!selectedImage || !imageRef.current) return;
@@ -135,7 +214,6 @@ const CropPage = () => {
     
     const preset = socialMediaPresets.find(p => p.value === presetValue);
     if (!preset || preset.ratio === null) {
-      // Free mode - use full image
       setCropArea({
         x: 0,
         y: 0,
@@ -188,7 +266,6 @@ const CropPage = () => {
               <h3 className="font-semibold text-foreground mb-4">Ukuran Social Media</h3>
               
               <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
-                {/* Group by platform */}
                 {['', 'Instagram', 'TikTok', 'YouTube', 'Facebook', 'Twitter/X', 'LinkedIn', 'WhatsApp', 'Pinterest'].map(platform => {
                   const platformPresets = socialMediaPresets.filter(p => p.platform === platform);
                   if (platformPresets.length === 0) return null;
@@ -223,25 +300,18 @@ const CropPage = () => {
                 })}
               </div>
 
-              <div className="mt-6 space-y-4 border-t border-border pt-4">
-                <div>
-                  <label className="text-sm font-medium text-foreground">X: {Math.round(cropArea.x)}px</label>
-                  <Slider
-                    value={[cropArea.x]}
-                    max={imageRef.current?.naturalWidth || 1000}
-                    step={1}
-                    onValueChange={([v]) => setCropArea({ ...cropArea, x: v })}
-                  />
+              <div className="mt-6 pt-4 border-t border-border">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                  <Move className="w-4 h-4" />
+                  <span>Geser gambar untuk memposisikan area crop</span>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">Y: {Math.round(cropArea.y)}px</label>
-                  <Slider
-                    value={[cropArea.y]}
-                    max={imageRef.current?.naturalHeight || 1000}
-                    step={1}
-                    onValueChange={([v]) => setCropArea({ ...cropArea, y: v })}
-                  />
-                </div>
+                
+                <p className="text-sm text-foreground">
+                  Posisi: X {Math.round(cropArea.x)}px, Y {Math.round(cropArea.y)}px
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Ukuran: {Math.round(cropArea.width)} × {Math.round(cropArea.height)}px
+                </p>
               </div>
 
               <Button
@@ -279,19 +349,77 @@ const CropPage = () => {
                       </span>
                     )}
                   </div>
-                  <div className="relative overflow-hidden rounded-lg bg-muted">
+                  
+                  {/* Interactive crop preview */}
+                  <div 
+                    ref={containerRef}
+                    className="relative overflow-hidden rounded-lg bg-muted select-none"
+                    style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+                  >
                     {selectedImage && (
-                      <img
-                        ref={imageRef}
-                        src={selectedImage.url}
-                        alt="Original"
-                        className="w-full h-auto max-h-64 object-contain"
-                        onLoad={handleImageLoad}
-                      />
+                      <>
+                        <img
+                          ref={imageRef}
+                          src={selectedImage.url}
+                          alt="Original"
+                          className="w-full h-auto max-h-[400px] object-contain pointer-events-none"
+                          onLoad={handleImageLoad}
+                          draggable={false}
+                        />
+                        
+                        {/* Dark overlay outside crop area */}
+                        <div 
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background: `linear-gradient(to right, 
+                              rgba(0,0,0,0.6) ${getCropOverlayStyle().left}px, 
+                              transparent ${getCropOverlayStyle().left}px, 
+                              transparent ${getCropOverlayStyle().left + getCropOverlayStyle().width}px, 
+                              rgba(0,0,0,0.6) ${getCropOverlayStyle().left + getCropOverlayStyle().width}px)`,
+                          }}
+                        />
+                        
+                        {/* Crop frame - draggable */}
+                        <div
+                          className="absolute border-2 border-primary shadow-lg transition-shadow"
+                          style={{
+                            left: getCropOverlayStyle().left,
+                            top: getCropOverlayStyle().top,
+                            width: getCropOverlayStyle().width,
+                            height: getCropOverlayStyle().height,
+                            boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)',
+                            cursor: isDragging ? 'grabbing' : 'grab',
+                          }}
+                          onMouseDown={handleMouseDown}
+                          onTouchStart={handleMouseDown}
+                        >
+                          {/* Corner handles for visual feedback */}
+                          <div className="absolute -top-1 -left-1 w-3 h-3 bg-primary rounded-sm" />
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-sm" />
+                          <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-primary rounded-sm" />
+                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-primary rounded-sm" />
+                          
+                          {/* Center move indicator */}
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                            <div className="bg-background/80 rounded-full p-2">
+                              <Move className="w-5 h-5 text-foreground" />
+                            </div>
+                          </div>
+                          
+                          {/* Grid lines */}
+                          <div className="absolute inset-0 pointer-events-none">
+                            <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/30" />
+                            <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/30" />
+                            <div className="absolute top-1/3 left-0 right-0 h-px bg-white/30" />
+                            <div className="absolute top-2/3 left-0 right-0 h-px bg-white/30" />
+                          </div>
+                        </div>
+                      </>
                     )}
                   </div>
+                  
                   <p className="text-sm text-muted-foreground mt-2">
-                    Crop: {Math.round(cropArea.width)} × {Math.round(cropArea.height)}px
+                    Output: {Math.round(cropArea.width)} × {Math.round(cropArea.height)}px
                   </p>
                 </div>
 
