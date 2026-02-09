@@ -1,157 +1,281 @@
 
-# Image Utility Web Tool - Implementation Plan
+Color Scheme Change: From current blue (#7BBEDE) to Soft Sage (#ACC8A2) and Deep Olive (#1A2517)
+Default Language: Change from 'en' to 'id' (Indonesian)
 
-## Overview
-A professional, full-featured image processing tool with client-side processing, bilingual support (English/Indonesian), dark mode, and batch upload capabilities.
+# Implementasi 7 Fitur Image Utilities Tambahan
 
----
-
-## Phase 1: Foundation & Design System
-
-### Design System Setup
-- Configure custom color palette:
-  - Primary: #7BBEDE
-  - Primary Light: #C9E5F0
-  - Background: #FBF8F1
-  - Accent: #F96E2B
-  - Text: #3A3A3A
-- Set up dark mode theme variants
-- Create soft shadows, rounded corners, and card-based component styles
-
-### Core Layout Components
-- Responsive navigation with tab/segment switcher
-- Mobile-first sticky action buttons
-- Drag & drop upload zone component
-- Image preview card component
-- Bilingual text system (EN/ID toggle)
+## Ringkasan
+Menambahkan 7 fitur image utilities baru ke aplikasi untuk menjadikannya platform pengolahan gambar yang lebih lengkap. Semua proses tetap dilakukan di browser (client-side) untuk kecepatan dan privasi.
 
 ---
 
-## Phase 2: Landing Page
+## Fitur yang Akan Ditambahkan
 
-### Hero Section
-- Headline with bilingual support
-- Animated call-to-action button
-- Clean, professional SaaS aesthetic
-
-### Feature Highlights
-- Three cards showcasing Resize, Compress, Convert tools
-- Smooth hover animations
-- Clear icons for each feature
-
-### Benefits Section
-- Fast loading explanation
-- Compatibility benefits
-- Social media optimization benefits
+| No | Fitur | Deskripsi | Route |
+|----|-------|-----------|-------|
+| 1 | Crop Image | Potong gambar dengan rasio bebas atau preset | `/crop` |
+| 2 | Rotate & Flip | Putar 90°/180°/270° dan flip horizontal/vertikal | `/rotate` |
+| 3 | Watermark | Tambah teks atau logo ke gambar | `/watermark` |
+| 4 | Remove Background | Hapus latar belakang gambar | `/remove-bg` |
+| 5 | Image Filters | Filter brightness, contrast, grayscale, sepia | `/filters` |
+| 6 | Bulk Rename | Rename banyak file dengan pattern | `/rename` |
+| 7 | Merge/Collage | Gabung beberapa gambar jadi satu | `/collage` |
 
 ---
 
-## Phase 3: Resize Image Tool
+## Perubahan File yang Diperlukan
 
-### Upload & Preview
-- Drag & drop support + file picker
-- Original image preview with dimensions display
-- File size and format info
+### 1. File Baru yang Dibuat
 
-### Resize Controls
-- Custom width & height inputs
-- Aspect ratio lock toggle
-- Quick preset buttons:
-  - Instagram Post (1080×1080)
-  - Instagram Story (1080×1920)
-  - YouTube Thumbnail (1280×720)
-  - Website Banner (1920×600)
-  - Custom
+```text
+src/pages/
+├── CropPage.tsx          (Halaman Crop)
+├── RotatePage.tsx        (Halaman Rotate & Flip)
+├── WatermarkPage.tsx     (Halaman Watermark)
+├── RemoveBgPage.tsx      (Halaman Remove Background)
+├── FiltersPage.tsx       (Halaman Image Filters)
+├── RenamePage.tsx        (Halaman Bulk Rename)
+└── CollagePage.tsx       (Halaman Merge/Collage)
+```
 
-### Output
-- Live preview of resized result
-- New dimensions & file size estimate
-- Download button
+### 2. File yang Dimodifikasi
 
----
-
-## Phase 4: Compress Image Tool
-
-### Upload & Analysis
-- Display original file size
-- Real-time compression preview
-
-### Compression Controls
-- Quality slider (10% – 100%)
-- Mode presets:
-  - Balanced (recommended)
-  - Maximum compression
-  - High quality
-
-### Visual Comparison
-- Before/After comparison slider
-- Percentage reduction display
-- Performance improvement message
+- `src/App.tsx` - Tambah 7 route baru
+- `src/components/layout/Header.tsx` - Update navigasi dengan dropdown untuk tools
+- `src/contexts/LanguageContext.tsx` - Tambah terjemahan untuk 7 fitur baru
+- `src/lib/imageProcessing.ts` - Tambah fungsi processing baru
+- `src/pages/Index.tsx` - Update landing page dengan semua 10 fitur
 
 ---
 
-## Phase 5: Convert Image Tool
+## Detail Implementasi Per Fitur
 
-### Format Conversion
-- Support for JPG, PNG, WEBP
-- Format selection dropdown
-- Transparency preservation toggle (PNG/WEBP)
+### 1. Crop Image (Potong Gambar)
 
-### Preview & Download
-- Converted image preview
-- Download with proper file extension
+**Fungsi:**
+- Area pemilihan crop yang bisa di-drag dan resize
+- Preset rasio: 1:1, 4:3, 16:9, 9:16 (Story), Free
 
----
+**Kontrol:**
+- Drag handles untuk resize area crop
+- Tombol preset rasio
+- Input manual untuk posisi dan ukuran
 
-## Phase 6: Batch Upload System
-
-### Multi-file Support
-- Upload multiple images at once
-- Progress indicator for each file
-- Process all with current settings
-- Bulk download option
+**Fungsi Processing:**
+```text
+cropImage(imageUrl, { x, y, width, height }) → ProcessedImage
+```
 
 ---
 
-## Phase 7: UX Enhancements
+### 2. Rotate & Flip (Putar & Balik)
 
-### Feedback & Status
-- Loading animations during processing
-- Progress indicators
-- Success confirmation messages
-- Friendly error messages for:
-  - Unsupported formats
-  - Files too large
-  - Upload failures
+**Fungsi:**
+- Rotasi: 90° CW, 90° CCW, 180°
+- Flip: Horizontal, Vertikal
 
-### Mobile Optimizations
-- Thumb-friendly controls
-- Vertical stacking layout
-- Easy gallery upload on mobile
-- Smooth scrolling experience
+**Kontrol:**
+- Tombol rotasi dengan preview real-time
+- Tombol flip horizontal/vertikal
+- Slider untuk rotasi custom (0-360°)
 
----
-
-## Phase 8: Dark Mode & Language Toggle
-
-### Theme Switching
-- Light/Dark mode toggle in header
-- Persistent preference (localStorage)
-
-### Bilingual Support
-- English/Indonesian toggle
-- All microcopy translated
-- Stored language preference
+**Fungsi Processing:**
+```text
+rotateImage(imageUrl, { angle, flipH, flipV }) → ProcessedImage
+```
 
 ---
 
-## Technical Approach
-- **Client-side processing**: Using HTML Canvas API for all image manipulation
-- **No backend required**: All processing happens in the browser
-- **Privacy-focused**: Images never leave the user's device
-- **Fast & lightweight**: No server round-trips needed
+### 3. Watermark (Tanda Air)
+
+**Fungsi:**
+- Tambah teks watermark
+- Upload logo sebagai watermark
+- Kontrol posisi (9 titik: corners, edges, center)
+
+**Kontrol:**
+- Input teks watermark
+- Pilihan font, ukuran, warna
+- Slider opacity (0-100%)
+- Grid posisi 3x3
+
+**Fungsi Processing:**
+```text
+addWatermark(imageUrl, { type: 'text'|'image', content, position, opacity, size }) → ProcessedImage
+```
 
 ---
 
-## Result
-A polished, professional image utility platform that feels fast, reliable, and trustworthy - ready for daily real-world usage with a clean SaaS aesthetic.
+### 4. Remove Background (Hapus Latar)
+
+**Catatan:** Fitur ini memerlukan library external karena browser Canvas API tidak bisa otomatis mendeteksi objek.
+
+**Pendekatan:**
+- Gunakan library `@imgly/background-removal` (client-side AI)
+- Atau API gratis seperti remove.bg (perlu koneksi internet)
+
+**Kontrol:**
+- Tombol "Remove Background"
+- Preview before/after
+- Pilihan background: Transparan atau warna solid
+
+**Fungsi Processing:**
+```text
+removeBackground(imageUrl) → ProcessedImage (PNG dengan transparansi)
+```
+
+---
+
+### 5. Image Filters (Filter Gambar)
+
+**Fungsi:**
+- Adjustments: Brightness, Contrast, Saturation, Blur, Sharpen
+- Preset filters: Grayscale, Sepia, Invert, Vintage, Cool, Warm
+
+**Kontrol:**
+- Slider untuk setiap adjustment (-100 to +100)
+- Tombol preset filter
+- Reset button
+
+**Fungsi Processing:**
+```text
+applyFilters(imageUrl, { brightness, contrast, saturation, preset }) → ProcessedImage
+```
+
+---
+
+### 6. Bulk Rename (Rename Massal)
+
+**Fungsi:**
+- Rename banyak file sekaligus dengan pattern
+- Pattern tokens: `{name}`, `{index}`, `{date}`, `{width}`, `{height}`
+
+**Contoh Pattern:**
+- `photo_{index}` → photo_1.jpg, photo_2.jpg, ...
+- `{name}_edited` → original_edited.jpg
+- `img_{date}_{index}` → img_20240115_1.jpg
+
+**Kontrol:**
+- Input pattern template
+- Preview daftar nama baru
+- Start index input
+- Download sebagai ZIP
+
+---
+
+### 7. Merge/Collage (Gabung Gambar)
+
+**Fungsi:**
+- Gabung 2-9 gambar dalam layout grid
+- Template: 2x1, 1x2, 2x2, 3x3, 2x3, dll
+
+**Kontrol:**
+- Pilihan template layout
+- Drag & drop untuk reorder gambar
+- Slider gap/spacing antar gambar
+- Warna background
+
+**Fungsi Processing:**
+```text
+createCollage(images[], { template, gap, bgColor }) → ProcessedImage
+```
+
+---
+
+## Update Navigasi
+
+Karena sekarang ada 10 tools, navigasi akan diubah menjadi dropdown menu:
+
+```text
+[Home] [Tools ▼] [Language] [Theme]
+         │
+         ├── Resize
+         ├── Compress
+         ├── Convert
+         ├── ─────────
+         ├── Crop
+         ├── Rotate & Flip
+         ├── Watermark
+         ├── ─────────
+         ├── Remove Background
+         ├── Filters
+         ├── Bulk Rename
+         └── Collage
+```
+
+---
+
+## Update Landing Page
+
+Landing page akan menampilkan grid 10 fitur yang dikategorikan:
+
+**Kategori 1: Essential Tools**
+- Resize, Compress, Convert
+
+**Kategori 2: Edit Tools**
+- Crop, Rotate & Flip, Watermark
+
+**Kategori 3: Advanced Tools**
+- Remove Background, Filters, Bulk Rename, Collage
+
+---
+
+## Terjemahan Baru (LanguageContext)
+
+Tambah 50+ key terjemahan baru untuk:
+- Nama navigasi 7 tools
+- Judul dan deskripsi setiap fitur
+- Kontrol dan label UI
+- Pesan sukses/error
+
+---
+
+## Detail Teknis
+
+### Dependencies Baru
+- `jszip` - Untuk download batch sebagai ZIP file (Bulk Rename & Batch processing)
+- `@imgly/background-removal` - Untuk fitur Remove Background (opsional, ~5MB)
+
+### Fungsi Processing Baru di imageProcessing.ts
+
+```text
+// Crop
+cropImage(imageUrl, options: CropOptions): Promise<ProcessedImage>
+
+// Rotate & Flip
+rotateImage(imageUrl, options: RotateOptions): Promise<ProcessedImage>
+
+// Watermark
+addTextWatermark(imageUrl, options: TextWatermarkOptions): Promise<ProcessedImage>
+addImageWatermark(imageUrl, options: ImageWatermarkOptions): Promise<ProcessedImage>
+
+// Filters (menggunakan CSS filters via Canvas)
+applyFilters(imageUrl, options: FilterOptions): Promise<ProcessedImage>
+
+// Collage
+createCollage(images: string[], options: CollageOptions): Promise<ProcessedImage>
+
+// Remove Background (wrapper untuk library external)
+removeBackground(imageUrl): Promise<ProcessedImage>
+```
+
+---
+
+## Urutan Implementasi
+
+1. **Phase 1**: Update navigasi dan landing page
+2. **Phase 2**: Crop & Rotate (fitur dasar)
+3. **Phase 3**: Watermark & Filters (fitur edit)
+4. **Phase 4**: Bulk Rename & Collage (fitur batch)
+5. **Phase 5**: Remove Background (fitur AI - opsional)
+
+---
+
+## Hasil Akhir
+
+Aplikasi image utilities yang lengkap dengan 10 fitur:
+- 3 fitur existing (Resize, Compress, Convert)
+- 7 fitur baru (Crop, Rotate, Watermark, Remove BG, Filters, Rename, Collage)
+- Semua proses client-side untuk kecepatan dan privasi
+- UI konsisten dengan design system existing
+- Support batch upload untuk semua fitur
