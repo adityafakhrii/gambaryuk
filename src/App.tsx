@@ -9,6 +9,13 @@ import Index from "./pages/Index";
 import ResizePage from "./pages/ResizePage";
 import CompressPage from "./pages/CompressPage";
 import ConvertPage from "./pages/ConvertPage";
+import CropPage from "./pages/CropPage";
+import RotatePage from "./pages/RotatePage";
+import WatermarkPage from "./pages/WatermarkPage";
+import RemoveBgPage from "./pages/RemoveBgPage";
+import FiltersPage from "./pages/FiltersPage";
+import RenamePage from "./pages/RenamePage";
+import CollagePage from "./pages/CollagePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +33,13 @@ const App = () => (
               <Route path="/resize" element={<ResizePage />} />
               <Route path="/compress" element={<CompressPage />} />
               <Route path="/convert" element={<ConvertPage />} />
+              <Route path="/crop" element={<CropPage />} />
+              <Route path="/rotate" element={<RotatePage />} />
+              <Route path="/watermark" element={<WatermarkPage />} />
+              <Route path="/remove-bg" element={<RemoveBgPage />} />
+              <Route path="/filters" element={<FiltersPage />} />
+              <Route path="/rename" element={<RenamePage />} />
+              <Route path="/collage" element={<CollagePage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
