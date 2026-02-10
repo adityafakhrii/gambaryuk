@@ -106,7 +106,7 @@ import { useCallback, useState, ReactNode } from 'react';
      >
        <input
          type="file"
-         accept="image/jpeg,image/png,image/webp"
+         accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/tiff,image/svg+xml,image/x-icon,image/avif"
          multiple={multiple}
          onChange={handleFileInput}
          className="absolute inset-0 cursor-pointer opacity-0"
