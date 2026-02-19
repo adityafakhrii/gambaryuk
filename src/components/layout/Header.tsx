@@ -59,10 +59,10 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-            IM
+            GY
           </div>
           <span className="hidden font-semibold text-foreground sm:inline-block">
-            ImageUtils
+            GambarYuk
           </span>
         </Link>
 

@@ -30,6 +30,19 @@ const translations: Translations = {
   'hero.description': { en: 'Optimize your images without hassle. Fast, lightweight, and professional.', id: 'Optimasi gambar lo tanpa ribet. Cepat, ringan, dan profesional.' },
   'hero.cta': { en: 'Upload Image Now', id: 'Upload Gambar Sekarang' },
   
+  // App Branding
+  'app.slogan': { en: 'Edit images? say less. No upload, no drama. ✌️', id: 'Edit gambar? santai aja. Tanpa upload, tanpa ribet. ✌️' },
+  
+  // Footer
+  'footer.privacy': { en: 'Your images never leave your device', id: 'Gambar kamu nggak pernah keluar dari device kamu' },
+  'footer.browserOnly': { en: 'All processing happens in your browser — zero data stored.', id: 'Semua proses terjadi di browser kamu — nol data tersimpan.' },
+  
+  // Privacy Page
+  'privacy.title': { en: 'Privacy Policy', id: 'Kebijakan Privasi' },
+  'privacy.subtitle': { en: 'We take your privacy seriously. Here\'s exactly what happens with your images.', id: 'Kami serius soal privasi kamu. Ini penjelasan lengkap tentang apa yang terjadi dengan gambar kamu.' },
+  'privacy.tldr': { en: 'Your images never leave your browser. GambarYuk has no server, no database, and no way to access your files. Everything is processed locally on your device using JavaScript. When you close the tab, everything is gone. Period.', id: 'Gambar kamu nggak pernah keluar dari browser. GambarYuk nggak punya server, nggak punya database, dan nggak bisa akses file kamu. Semua diproses secara lokal di perangkat kamu pakai JavaScript. Kalau tab ditutup, semua hilang. Titik.' },
+  'privacy.lastUpdated': { en: 'Last updated: February 2026', id: 'Terakhir diperbarui: Februari 2026' },
+  
   // Feature Categories
   'category.essential': { en: 'Essential Tools', id: 'Alat Utama' },
   'category.edit': { en: 'Edit Tools', id: 'Alat Edit' },
