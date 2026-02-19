@@ -16,6 +16,7 @@ import RemoveBgPage from "./pages/RemoveBgPage";
 import FiltersPage from "./pages/FiltersPage";
 import RenamePage from "./pages/RenamePage";
 import CollagePage from "./pages/CollagePage";
+import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
               <Route path="/filters" element={<FiltersPage />} />
               <Route path="/rename" element={<RenamePage />} />
               <Route path="/collage" element={<CollagePage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

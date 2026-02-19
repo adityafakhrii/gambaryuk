@@ -2,215 +2,87 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/layout/Header';
 import { 
-  Maximize2, FileDown, RefreshCw, Zap, Shield, Gift, ArrowRight,
-  Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid
+  Maximize2, FileDown, RefreshCw, ArrowRight,
+  Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid, Shield
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const { t } = useLanguage();
 
-  const featureCategories = [
-    {
-      title: t('category.essential'),
-      features: [
-        {
-          icon: Maximize2,
-          title: t('feature.resize.title'),
-          description: t('feature.resize.desc'),
-          path: '/resize',
-        },
-        {
-          icon: FileDown,
-          title: t('feature.compress.title'),
-          description: t('feature.compress.desc'),
-          path: '/compress',
-        },
-        {
-          icon: RefreshCw,
-          title: t('feature.convert.title'),
-          description: t('feature.convert.desc'),
-          path: '/convert',
-        },
-      ],
-    },
-    {
-      title: t('category.edit'),
-      features: [
-        {
-          icon: Crop,
-          title: t('feature.crop.title'),
-          description: t('feature.crop.desc'),
-          path: '/crop',
-        },
-        {
-          icon: RotateCcw,
-          title: t('feature.rotate.title'),
-          description: t('feature.rotate.desc'),
-          path: '/rotate',
-        },
-        {
-          icon: Stamp,
-          title: t('feature.watermark.title'),
-          description: t('feature.watermark.desc'),
-          path: '/watermark',
-        },
-      ],
-    },
-    {
-      title: t('category.advanced'),
-      features: [
-        {
-          icon: Eraser,
-          title: t('feature.removeBg.title'),
-          description: t('feature.removeBg.desc'),
-          path: '/remove-bg',
-        },
-        {
-          icon: Palette,
-          title: t('feature.filters.title'),
-          description: t('feature.filters.desc'),
-          path: '/filters',
-        },
-        {
-          icon: FileText,
-          title: t('feature.rename.title'),
-          description: t('feature.rename.desc'),
-          path: '/rename',
-        },
-        {
-          icon: LayoutGrid,
-          title: t('feature.collage.title'),
-          description: t('feature.collage.desc'),
-          path: '/collage',
-        },
-      ],
-    },
-  ];
-
-  const benefits = [
-    {
-      icon: Zap,
-      title: t('benefits.fast.title'),
-      description: t('benefits.fast.desc'),
-    },
-    {
-      icon: Shield,
-      title: t('benefits.private.title'),
-      description: t('benefits.private.desc'),
-    },
-    {
-      icon: Gift,
-      title: t('benefits.free.title'),
-      description: t('benefits.free.desc'),
-    },
+  const tools = [
+    { icon: Maximize2, title: t('feature.resize.title'), description: t('feature.resize.desc'), path: '/resize' },
+    { icon: FileDown, title: t('feature.compress.title'), description: t('feature.compress.desc'), path: '/compress' },
+    { icon: RefreshCw, title: t('feature.convert.title'), description: t('feature.convert.desc'), path: '/convert' },
+    { icon: Crop, title: t('feature.crop.title'), description: t('feature.crop.desc'), path: '/crop' },
+    { icon: RotateCcw, title: t('feature.rotate.title'), description: t('feature.rotate.desc'), path: '/rotate' },
+    { icon: Stamp, title: t('feature.watermark.title'), description: t('feature.watermark.desc'), path: '/watermark' },
+    { icon: Eraser, title: t('feature.removeBg.title'), description: t('feature.removeBg.desc'), path: '/remove-bg' },
+    { icon: Palette, title: t('feature.filters.title'), description: t('feature.filters.desc'), path: '/filters' },
+    { icon: FileText, title: t('feature.rename.title'), description: t('feature.rename.desc'), path: '/rename' },
+    { icon: LayoutGrid, title: t('feature.collage.title'), description: t('feature.collage.desc'), path: '/collage' },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-gradient flex flex-col">
       <Header />
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-16 md:py-24">
-        <div className="container mx-auto max-w-5xl text-center">
-          <h1 className="animate-fade-in text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
-            {t('hero.title')}
+      {/* Hero - compact */}
+      <section className="relative z-10 px-4 pt-10 pb-6 text-center">
+        <div className="container mx-auto max-w-3xl">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+            GambarYuk ✨
           </h1>
-          <p className="mt-2 animate-fade-in text-xl font-medium text-primary md:text-2xl" style={{ animationDelay: '0.1s' }}>
-            {t('hero.subtitle')}
+          <p className="mt-2 text-base md:text-lg text-muted-foreground">
+            {t('app.slogan')}
           </p>
-          <p className="mx-auto mt-6 max-w-2xl animate-fade-in text-lg text-muted-foreground" style={{ animationDelay: '0.2s' }}>
-            {t('hero.description')}
-          </p>
-          <div className="mt-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <Link to="/resize">
-              <Button size="lg" className="btn-accent h-12 px-8 text-base font-semibold rounded-xl gap-2">
-                {t('hero.cta')}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
         </div>
-        
-        {/* Background decoration */}
-        <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-accent/5 blur-3xl" />
       </section>
 
-      {/* Features Section */}
-      {featureCategories.map((category, categoryIndex) => (
-        <section 
-          key={category.title} 
-          className={`px-4 py-12 md:py-16 ${categoryIndex % 2 === 1 ? 'bg-muted/30' : ''}`}
-        >
-          <div className="container mx-auto max-w-5xl">
-            <h2 className="text-center text-2xl font-bold text-foreground md:text-3xl mb-8">
-              {category.title}
-            </h2>
-            <div className={`grid gap-6 ${category.features.length === 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'}`}>
-              {category.features.map((feature, index) => (
-                <Link
-                  key={feature.path}
-                  to={feature.path}
-                  className="group animate-fade-in"
-                  style={{ animationDelay: `${0.1 * index}s` }}
-                >
-                  <div className="h-full rounded-2xl border border-border/50 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-soft-lg hover:-translate-y-1 hover:border-primary/30">
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
-                      <feature.icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="mt-4 text-lg font-semibold text-foreground">
-                      {feature.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
-                    <div className="mt-4 flex items-center text-sm font-medium text-primary">
-                      <span>{t('common.getStarted')}</span>
-                      <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      ))}
-
-      {/* Benefits Section */}
-      <section className="px-4 py-16 md:py-20 bg-muted/30">
+      {/* Tools Grid */}
+      <section className="relative z-10 flex-1 px-4 pb-12">
         <div className="container mx-auto max-w-5xl">
-          <h2 className="text-center text-2xl font-bold text-foreground md:text-3xl">
-            {t('benefits.title')}
-          </h2>
-          
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {benefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="text-center animate-fade-in"
-                style={{ animationDelay: `${0.1 * index}s` }}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {tools.map((tool, index) => (
+              <Link
+                key={tool.path}
+                to={tool.path}
+                className="group animate-fade-in"
+                style={{ animationDelay: `${0.05 * index}s` }}
               >
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <benefit.icon className="h-7 w-7" />
+                <div className="h-full rounded-2xl border border-border/50 bg-card p-5 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                    <tool.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-foreground leading-tight">
+                    {tool.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-snug hidden sm:block">
+                    {tool.description}
+                  </p>
+                  <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowRight className="h-3 w-3" />
+                  </div>
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-foreground">
-                  {benefit.title}
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {benefit.description}
-                </p>
-              </div>
+              </Link>
             ))}
           </div>
+
+          {/* Privacy badge */}
+          <Link to="/privacy" className="mt-8 mx-auto flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Shield className="h-4 w-4" />
+            <span>{t('footer.privacy')}</span>
+          </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 px-4 py-8">
-        <div className="container mx-auto max-w-5xl text-center">
+      <footer className="relative z-10 border-t border-border/50 px-4 py-6">
+        <div className="container mx-auto max-w-5xl text-center space-y-1">
           <p className="text-sm text-muted-foreground">
-            © 2024 ImageUtils. All processing happens in your browser.
+            © 2026 GambarYuk. Part of YukAccess.
+          </p>
+          <p className="text-xs text-muted-foreground/70">
+            {t('footer.browserOnly')}
           </p>
         </div>
       </footer>
