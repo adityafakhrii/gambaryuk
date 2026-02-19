@@ -72,7 +72,7 @@ const PrivacyPage = () => {
 
           {/* TL;DR Box */}
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 mb-10">
-            <h2 className="text-lg font-bold text-foreground mb-2">TL;DR 🔒</h2>
+            <h2 className="text-lg font-bold text-foreground mb-2">TL;DR</h2>
             <p className="text-sm text-foreground/80 leading-relaxed">
               {t('privacy.tldr')}
             </p>

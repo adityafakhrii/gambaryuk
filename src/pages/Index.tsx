@@ -30,7 +30,7 @@ const Index = () => {
       <section className="relative z-10 px-4 pt-10 pb-6 text-center">
         <div className="container mx-auto max-w-3xl">
           <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            GambarYuk ✨
+            GambarYuk
           </h1>
           <p className="mt-2 text-base md:text-lg text-muted-foreground">
             {t('app.slogan')}
@@ -49,17 +49,17 @@ const Index = () => {
                 className="group animate-fade-in"
                 style={{ animationDelay: `${0.05 * index}s` }}
               >
-                <div className="h-full rounded-2xl border border-border/50 bg-card p-5 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
-                    <tool.icon className="h-6 w-6" />
+                <div className="h-full rounded-2xl border border-border/50 bg-card p-5 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-3 transition-all duration-300 group-hover:bg-primary/5 group-hover:border-primary/30">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md">
+                    <tool.icon className="h-6 w-6 transition-transform duration-300 group-hover:rotate-[-8deg]" />
                   </div>
-                  <h3 className="text-sm font-semibold text-foreground leading-tight">
+                  <h3 className="text-sm font-semibold text-foreground leading-tight transition-colors duration-200 group-hover:text-primary">
                     {tool.title}
                   </h3>
                   <p className="text-xs text-muted-foreground leading-snug hidden sm:block">
                     {tool.description}
                   </p>
-                  <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                     <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
