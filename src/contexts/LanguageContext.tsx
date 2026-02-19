@@ -31,7 +31,7 @@ const translations: Translations = {
   'hero.cta': { en: 'Upload Image Now', id: 'Upload Gambar Sekarang' },
   
   // App Branding
-  'app.slogan': { en: 'Edit images? say less. No upload, no drama. ✌️', id: 'Edit gambar? santai aja. Tanpa upload, tanpa ribet. ✌️' },
+  'app.slogan': { en: 'Edit images? Just upload and go! AD-FREE, 100% FREE!', id: 'Edit gambar? Langsung upload gas! TANPA IKLAN, 100% GRATIS!' },
   
   // Footer
   'footer.privacy': { en: 'Your images never leave your device', id: 'Gambar kamu nggak pernah keluar dari device kamu' },
