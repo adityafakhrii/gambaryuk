@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Header } from '@/components/layout/Header';
-import { 
+import { useImageStats } from '@/hooks/useImageStats';
+import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
-  Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid, Shield
+  Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
+  Images, Zap, Shield,
 } from 'lucide-react';
 
 const Index = () => {
   const { t } = useLanguage();
+  const { stats } = useImageStats();
 
   const tools = [
     { icon: Maximize2, title: t('feature.resize.title'), description: t('feature.resize.desc'), path: '/resize' },
@@ -22,41 +24,83 @@ const Index = () => {
     { icon: LayoutGrid, title: t('feature.collage.title'), description: t('feature.collage.desc'), path: '/collage' },
   ];
 
+  const statItems = [
+    {
+      icon: Images,
+      label: 'Gambar Diproses',
+      value: stats.totalProcessed.toLocaleString('id-ID'),
+      suffix: 'file',
+    },
+    {
+      icon: Zap,
+      label: 'Total Tools',
+      value: tools.length.toString(),
+      suffix: 'tools',
+    },
+    {
+      icon: Shield,
+      label: 'Data Tersimpan',
+      value: '0',
+      suffix: 'byte',
+    },
+  ];
+
   return (
-    <div className="min-h-screen page-gradient flex flex-col">
-      <Header />
-      
+    <div className="min-h-full page-gradient flex flex-col">
       {/* Hero - compact */}
-      <section className="relative z-10 px-4 pt-10 pb-6 text-center">
-        <div className="container mx-auto max-w-3xl">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+      <section className="relative z-10 px-4 pt-8 pb-5 text-center">
+        <div className="mx-auto max-w-2xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
             GambarYuk
           </h1>
-          <p className="mt-2 text-base md:text-lg text-muted-foreground">
+          <p className="mt-1.5 text-sm md:text-base text-muted-foreground">
             {t('app.slogan')}
           </p>
         </div>
       </section>
 
+      {/* Stats Row */}
+      <section className="relative z-10 px-4 pb-6">
+        <div className="mx-auto max-w-2xl">
+          <div className="grid grid-cols-3 gap-3">
+            {statItems.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-border/50 bg-card/80 backdrop-blur px-3 py-3 text-center shadow-soft"
+              >
+                <div className="flex justify-center mb-1">
+                  <stat.icon className="h-4 w-4 text-primary" />
+                </div>
+                <div className="text-lg font-bold text-foreground leading-none">
+                  {stat.value}
+                  <span className="text-xs font-normal text-muted-foreground ml-1">{stat.suffix}</span>
+                </div>
+                <div className="text-xs text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Tools Grid */}
-      <section className="relative z-10 flex-1 px-4 pb-12">
-        <div className="container mx-auto max-w-5xl">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <section className="relative z-10 flex-1 px-4 pb-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {tools.map((tool, index) => (
               <Link
                 key={tool.path}
                 to={tool.path}
                 className="group animate-fade-in"
-                style={{ animationDelay: `${0.05 * index}s` }}
+                style={{ animationDelay: `${0.04 * index}s` }}
               >
-                <div className="h-full rounded-2xl border border-border/50 bg-card p-5 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-3 transition-all duration-300 group-hover:bg-primary/5 group-hover:border-primary/30">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md">
-                    <tool.icon className="h-6 w-6 transition-transform duration-300 group-hover:rotate-[-8deg]" />
+                <div className="h-full rounded-2xl border border-border/50 bg-card p-4 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-2.5 transition-all duration-300 group-hover:bg-primary/5 group-hover:border-primary/30">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md">
+                    <tool.icon className="h-5 w-5 transition-transform duration-300 group-hover:rotate-[-8deg]" />
                   </div>
-                  <h3 className="text-sm font-semibold text-foreground leading-tight transition-colors duration-200 group-hover:text-primary">
+                  <h3 className="text-xs font-semibold text-foreground leading-tight transition-colors duration-200 group-hover:text-primary">
                     {tool.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-snug hidden sm:block">
+                  <p className="text-xs text-muted-foreground leading-snug hidden sm:block line-clamp-2">
                     {tool.description}
                   </p>
                   <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
@@ -66,23 +110,17 @@ const Index = () => {
               </Link>
             ))}
           </div>
-
-          {/* Privacy badge */}
-          <Link to="/privacy" className="mt-8 mx-auto flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <Shield className="h-4 w-4" />
-            <span>{t('footer.privacy')}</span>
-          </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-border/50 px-4 py-6">
-        <div className="container mx-auto max-w-5xl text-center space-y-1">
-          <p className="text-sm text-muted-foreground">
+      <footer className="relative z-10 border-t border-border/50 px-4 py-5">
+        <div className="mx-auto max-w-4xl text-center space-y-0.5">
+          <p className="text-xs text-muted-foreground">
             © 2026 GambarYuk. Part of YukAccess.
           </p>
-          <p className="text-xs text-muted-foreground/70">
-            {t('footer.browserOnly')}
+          <p className="text-xs text-muted-foreground/60">
+            All processing happens in your browser — zero data stored.
           </p>
         </div>
       </footer>
