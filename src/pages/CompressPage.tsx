@@ -1,5 +1,6 @@
  import { useState, useCallback } from 'react';
  import { useLanguage } from '@/contexts/LanguageContext';
+ import { trackImageProcessed } from '@/hooks/useImageStats';
  import { UploadZone, ImagePreview } from '@/components/UploadZone';
  import { Button } from '@/components/ui/button';
  import { Label } from '@/components/ui/label';
@@ -77,9 +78,10 @@
          img.id === image.id ? { ...img, result, processing: false } : img
        ));
  
-       toast.success(t('common.success'));
-     } catch (error) {
-       toast.error('Failed to compress image');
+        toast.success(t('common.success'));
+        trackImageProcessed();
+      } catch (error) {
+        toast.error('Failed to compress image');
        setImages(prev => prev.map(img => 
          img.id === image.id ? { ...img, processing: false } : img
        ));

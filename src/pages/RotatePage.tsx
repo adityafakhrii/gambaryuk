@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { trackImageProcessed } from '@/hooks/useImageStats';
 import { UploadZone } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -59,6 +60,7 @@ const RotatePage = () => {
             url: URL.createObjectURL(blob),
             blob,
           });
+          trackImageProcessed();
         }
         setIsProcessing(false);
       }, 'image/png');
