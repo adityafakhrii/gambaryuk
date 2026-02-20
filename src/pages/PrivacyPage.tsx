@@ -1,4 +1,3 @@
-import { Header } from '@/components/layout/Header';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Shield, Lock, Eye, Server, Trash2, Globe } from 'lucide-react';
 
@@ -53,9 +52,7 @@ const PrivacyPage = () => {
   const isId = true; // We'll use the language context
 
   return (
-    <div className="min-h-screen page-gradient flex flex-col">
-      <Header />
-      
+    <div className="min-h-full page-gradient flex flex-col">
       <main className="relative z-10 flex-1 px-4 py-12">
         <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-12">

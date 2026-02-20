@@ -1,6 +1,5 @@
  import { useState, useCallback } from 'react';
  import { useLanguage } from '@/contexts/LanguageContext';
- import { Header } from '@/components/layout/Header';
  import { UploadZone, ImagePreview } from '@/components/UploadZone';
  import { Button } from '@/components/ui/button';
  import { Label } from '@/components/ui/label';
@@ -113,9 +112,7 @@
    };
  
     return (
-      <div className="min-h-screen page-gradient">
-        <Header />
-        
+      <div className="min-h-full page-gradient">
         <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
            {t('compress.title')}

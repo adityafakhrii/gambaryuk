@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Header } from '@/components/layout/Header';
 import { UploadZone } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -191,9 +190,7 @@ const RemoveBgPage = () => {
   ];
 
   return (
-    <div className="min-h-screen page-gradient">
-      <Header />
-      
+    <div className="min-h-full page-gradient">
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('removeBg.title')}</h1>

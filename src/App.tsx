@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
 import Index from "./pages/Index";
 import ResizePage from "./pages/ResizePage";
 import CompressPage from "./pages/CompressPage";
@@ -29,22 +31,37 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/resize" element={<ResizePage />} />
-              <Route path="/compress" element={<CompressPage />} />
-              <Route path="/convert" element={<ConvertPage />} />
-              <Route path="/crop" element={<CropPage />} />
-              <Route path="/rotate" element={<RotatePage />} />
-              <Route path="/watermark" element={<WatermarkPage />} />
-              <Route path="/remove-bg" element={<RemoveBgPage />} />
-              <Route path="/filters" element={<FiltersPage />} />
-              <Route path="/rename" element={<RenamePage />} />
-              <Route path="/collage" element={<CollagePage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <SidebarProvider defaultOpen={true}>
+              <div className="min-h-screen flex w-full bg-background">
+                <AppSidebar />
+                <div className="flex flex-col flex-1 min-w-0">
+                  {/* Top bar with trigger */}
+                  <header className="sticky top-0 z-40 flex h-12 items-center gap-2 border-b border-border/50 bg-background/80 backdrop-blur-md px-4">
+                    <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
+                    <div className="h-4 w-px bg-border/70" />
+                    <span className="text-sm text-muted-foreground font-medium hidden sm:block">GambarYuk</span>
+                  </header>
+                  <main className="flex-1 overflow-auto">
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/resize" element={<ResizePage />} />
+                      <Route path="/compress" element={<CompressPage />} />
+                      <Route path="/convert" element={<ConvertPage />} />
+                      <Route path="/crop" element={<CropPage />} />
+                      <Route path="/rotate" element={<RotatePage />} />
+                      <Route path="/watermark" element={<WatermarkPage />} />
+                      <Route path="/remove-bg" element={<RemoveBgPage />} />
+                      <Route path="/filters" element={<FiltersPage />} />
+                      <Route path="/rename" element={<RenamePage />} />
+                      <Route path="/collage" element={<CollagePage />} />
+                      <Route path="/privacy" element={<PrivacyPage />} />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                </div>
+              </div>
+            </SidebarProvider>
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
