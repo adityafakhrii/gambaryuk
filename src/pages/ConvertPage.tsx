@@ -1,5 +1,6 @@
  import { useState, useCallback } from 'react';
  import { useLanguage } from '@/contexts/LanguageContext';
+ import { trackImageProcessed } from '@/hooks/useImageStats';
  import { UploadZone, ImagePreview } from '@/components/UploadZone';
  import { Button } from '@/components/ui/button';
  import { Label } from '@/components/ui/label';
@@ -142,6 +143,7 @@ const formats: { value: Format; label: string; description: string }[] = [
       setImages(prev => prev.map(img => 
         img.id === image.id ? { ...img, result, processing: false } : img
       ));
+      trackImageProcessed();
 
       toast.success(t('common.success'));
     } catch (error) {
