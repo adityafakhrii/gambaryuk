@@ -22,7 +22,7 @@ import { useCallback, useState, ReactNode } from 'react';
  export function UploadZone({
    onFilesSelected,
    multiple = true,
-   maxFiles = 10,
+   maxFiles = 20,
    className,
   children,
  }: UploadZoneProps) {
