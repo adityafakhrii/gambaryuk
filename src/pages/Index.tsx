@@ -4,7 +4,7 @@ import { useImageStats } from '@/hooks/useImageStats';
 import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
   Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
-  Images, Zap, Shield,
+  Images, Zap, Shield, Link as LinkIcon,
 } from 'lucide-react';
 
 const Index = () => {
@@ -22,6 +22,7 @@ const Index = () => {
     { icon: Palette, title: t('feature.filters.title'), description: t('feature.filters.desc'), path: '/filters' },
     { icon: FileText, title: t('feature.rename.title'), description: t('feature.rename.desc'), path: '/rename' },
     { icon: LayoutGrid, title: t('feature.collage.title'), description: t('feature.collage.desc'), path: '/collage' },
+    { icon: LinkIcon, title: t('feature.imageToLink.title'), description: t('feature.imageToLink.desc'), path: '/image-to-link' },
   ];
 
   const statItems = [

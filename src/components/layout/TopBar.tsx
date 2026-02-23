@@ -14,6 +14,7 @@ const routeLabels: Record<string, string> = {
   '/filters': 'feature.filters.title',
   '/rename': 'feature.rename.title',
   '/collage': 'feature.collage.title',
+  '/image-to-link': 'feature.imageToLink.title',
   '/privacy': 'privacy.title',
 };
 

@@ -4,7 +4,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import {
   Maximize2, FileDown, RefreshCw, Crop, RotateCcw, Stamp,
   Eraser, Palette, FileText, LayoutGrid, Home, Sun, Moon, Globe,
-  Shield, ChevronDown, ChevronRight,
+  Shield, ChevronDown, ChevronRight, Link as LinkIcon,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -53,6 +53,7 @@ const toolGroups = [
       { path: '/filters', icon: Palette, key: 'nav.filters' },
       { path: '/rename', icon: FileText, key: 'nav.rename' },
       { path: '/collage', icon: LayoutGrid, key: 'nav.collage' },
+      { path: '/image-to-link', icon: LinkIcon, key: 'nav.imageToLink' },
     ],
   },
 ];
