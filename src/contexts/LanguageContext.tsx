@@ -23,6 +23,7 @@ const translations: Translations = {
   'nav.filters': { en: 'Filters', id: 'Filter' },
   'nav.rename': { en: 'Bulk Rename', id: 'Rename Massal' },
   'nav.collage': { en: 'Collage', id: 'Kolase' },
+  'nav.imageToLink': { en: 'Image to Link', id: 'Gambar ke Link' },
   
   // Hero Section
   'hero.title': { en: 'All-in-One Image Tools', id: 'Alat Gambar Lengkap' },
@@ -69,6 +70,17 @@ const translations: Translations = {
   'feature.rename.desc': { en: 'Rename multiple files at once', id: 'Rename banyak file sekaligus' },
   'feature.collage.title': { en: 'Create Collage', id: 'Buat Kolase' },
   'feature.collage.desc': { en: 'Merge images into a grid', id: 'Gabung gambar jadi grid' },
+  'feature.imageToLink.title': { en: 'Image to Link', id: 'Gambar ke Link' },
+  'feature.imageToLink.desc': { en: 'Upload image and get a shareable link', id: 'Upload gambar dan dapatkan link yang bisa dibagikan' },
+
+  // Image to Link
+  'imageToLink.readyToUpload': { en: 'images ready to upload', id: 'gambar siap diupload' },
+  'imageToLink.uploading': { en: 'Uploading...', id: 'Mengupload...' },
+  'imageToLink.generateLinks': { en: 'Generate Links', id: 'Buat Link' },
+  'imageToLink.generatedLinks': { en: 'Generated Links', id: 'Link yang Dibuat' },
+  'imageToLink.copyAll': { en: 'Copy All', id: 'Salin Semua' },
+  'imageToLink.allCopied': { en: 'All links copied!', id: 'Semua link tersalin!' },
+  'imageToLink.uploaded': { en: '{count} images uploaded successfully!', id: '{count} gambar berhasil diupload!' },
   
   // Benefits
   'benefits.title': { en: 'Why Use Our Tools?', id: 'Kenapa Pakai Tools Kami?' },

@@ -19,6 +19,7 @@ import RemoveBgPage from "./pages/RemoveBgPage";
 import FiltersPage from "./pages/FiltersPage";
 import RenamePage from "./pages/RenamePage";
 import CollagePage from "./pages/CollagePage";
+import ImageToLinkPage from "./pages/ImageToLinkPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
 
@@ -50,6 +51,7 @@ const App = () => (
                       <Route path="/filters" element={<FiltersPage />} />
                       <Route path="/rename" element={<RenamePage />} />
                       <Route path="/collage" element={<CollagePage />} />
+                      <Route path="/image-to-link" element={<ImageToLinkPage />} />
                       <Route path="/privacy" element={<PrivacyPage />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
