@@ -6,9 +6,10 @@
  import { Input } from '@/components/ui/input';
  import { Label } from '@/components/ui/label';
  import { Switch } from '@/components/ui/switch';
- import { resizeImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
- import { Download, Lock, Unlock, Loader2, X, Trash2 } from 'lucide-react';
- import { toast } from 'sonner';
+import { resizeImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
+import { downloadAsZip } from '@/lib/zipDownload';
+import { Download, Lock, Unlock, Loader2, X, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
  
  interface ImageFile {
    id: string;
@@ -124,11 +125,21 @@
      }
    };
  
-   const handleDownloadAll = () => {
-     images.forEach(img => {
-       if (img.result) handleDownload(img);
-     });
-   };
+    const handleDownloadAll = async () => {
+      const processed = images.filter(img => img.result);
+      if (processed.length <= 1) {
+        processed.forEach(img => handleDownload(img));
+        return;
+      }
+      const ext = processed[0]?.file.name.split('.').pop() || 'jpg';
+      await downloadAsZip(
+        processed.map(img => ({
+          name: img.file.name.replace(/\.[^.]+$/, '') + `-resized.${ext}`,
+          blob: img.result!.blob,
+        })),
+        'resized-images.zip'
+      );
+    };
  
     return (
       <div className="min-h-full page-gradient">

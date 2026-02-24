@@ -5,9 +5,10 @@
  import { Button } from '@/components/ui/button';
  import { Label } from '@/components/ui/label';
  import { Slider } from '@/components/ui/slider';
- import { compressImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
- import { Download, Loader2, Trash2 } from 'lucide-react';
- import { toast } from 'sonner';
+import { compressImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
+import { downloadAsZip } from '@/lib/zipDownload';
+import { Download, Loader2, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
  
  interface ImageFile {
    id: string;
@@ -103,11 +104,20 @@
      }
    };
  
-   const handleDownloadAll = () => {
-     images.forEach(img => {
-       if (img.result) handleDownload(img);
-     });
-   };
+    const handleDownloadAll = async () => {
+      const processed = images.filter(img => img.result);
+      if (processed.length <= 1) {
+        processed.forEach(img => handleDownload(img));
+        return;
+      }
+      await downloadAsZip(
+        processed.map(img => ({
+          name: img.file.name.replace(/\.[^.]+$/, '') + '-compressed.jpg',
+          blob: img.result!.blob,
+        })),
+        'compressed-images.zip'
+      );
+    };
  
    const calculateReduction = (original: number, compressed: number) => {
      return Math.round(((original - compressed) / original) * 100);
