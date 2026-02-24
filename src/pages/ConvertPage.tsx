@@ -15,6 +15,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { convertImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
 import { imagesToSinglePdf, imageToPdf, pdfToImages, PdfPage } from '@/lib/pdfProcessing';
+import { downloadAsZip } from '@/lib/zipDownload';
 import { Download, Loader2, Trash2, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -294,17 +295,26 @@ export default function ConvertPage() {
     }
   };
 
-  const handleDownloadAll = () => {
+  const handleDownloadAll = async () => {
     if (targetFormat === 'pdf' && pdfMode === 'single') {
-      // Download the single merged PDF
       const first = images.find(img => img.pdfBlob);
       if (first?.pdfBlob) {
         downloadImage(first.pdfBlob, 'merged.pdf');
       }
     } else {
-      images.forEach(img => {
-        if (img.result) handleDownload(img);
-      });
+      const processed = images.filter(img => img.result);
+      if (processed.length <= 1) {
+        processed.forEach(img => handleDownload(img));
+        return;
+      }
+      const ext = getExt(targetFormat);
+      await downloadAsZip(
+        processed.map(img => ({
+          name: img.file.name.replace(/\.[^.]+$/, '') + `.${ext}`,
+          blob: img.result!.blob,
+        })),
+        `converted-images.zip`
+      );
     }
   };
 
@@ -313,8 +323,19 @@ export default function ConvertPage() {
     downloadImage(page.blob, `${name}_page${index + 1}.jpg`);
   };
 
-  const handleDownloadAllPdfPages = () => {
-    pdfPages.forEach((page, i) => handleDownloadPdfPage(page, i));
+  const handleDownloadAllPdfPages = async () => {
+    if (pdfPages.length <= 1) {
+      pdfPages.forEach((page, i) => handleDownloadPdfPage(page, i));
+      return;
+    }
+    const name = pdfFiles[0]?.name?.replace(/\.pdf$/i, '') || 'page';
+    await downloadAsZip(
+      pdfPages.map((page, i) => ({
+        name: `${name}_page${i + 1}.jpg`,
+        blob: page.blob,
+      })),
+      `${name}-pages.zip`
+    );
   };
 
   const showPdfModeOption = targetFormat === 'pdf' && images.length > 1;
