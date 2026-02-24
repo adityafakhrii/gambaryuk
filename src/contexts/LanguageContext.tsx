@@ -81,6 +81,13 @@ const translations: Translations = {
   'imageToLink.copyAll': { en: 'Copy All', id: 'Salin Semua' },
   'imageToLink.allCopied': { en: 'All links copied!', id: 'Semua link tersalin!' },
   'imageToLink.uploaded': { en: '{count} images uploaded successfully!', id: '{count} gambar berhasil diupload!' },
+  'imageToLink.expiry': { en: 'Auto-delete after', id: 'Hapus otomatis setelah' },
+  'imageToLink.expiry.24h': { en: '24 hours', id: '24 jam' },
+  'imageToLink.expiry.7d': { en: '7 days', id: '7 hari' },
+  'imageToLink.expiry.30d': { en: '30 days', id: '30 hari' },
+  'imageToLink.expiry.90d': { en: '90 days', id: '90 hari' },
+  'imageToLink.expiry.forever': { en: 'Forever', id: 'Selamanya' },
+  'imageToLink.downloadAllZip': { en: 'Download All as ZIP', id: 'Unduh Semua sebagai ZIP' },
   
   // Benefits
   'benefits.title': { en: 'Why Use Our Tools?', id: 'Kenapa Pakai Tools Kami?' },
