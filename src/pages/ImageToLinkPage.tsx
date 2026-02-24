@@ -2,9 +2,11 @@ import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone } from '@/components/UploadZone';
 import { supabase } from '@/integrations/supabase/client';
-import { Upload, Link as LinkIcon, Copy, Check, ExternalLink, Trash2, Loader2 } from 'lucide-react';
+import { Upload, Link as LinkIcon, Copy, Check, ExternalLink, Trash2, Loader2, Download, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import JSZip from 'jszip';
 
 interface ImageFile {
   id: string;
@@ -22,12 +24,27 @@ interface UploadedImage {
   copied: boolean;
 }
 
+type ExpiryOption = '24h' | '7d' | '30d' | '90d' | 'forever';
+
+const getExpiryDate = (option: ExpiryOption): string | null => {
+  const now = new Date();
+  switch (option) {
+    case '24h': return new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
+    case '7d': return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    case '30d': return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    case '90d': return new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString();
+    case 'forever': return null;
+  }
+};
+
 const ImageToLinkPage = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [expiry, setExpiry] = useState<ExpiryOption>('7d');
+  const [downloadingZip, setDownloadingZip] = useState(false);
 
   const handleFilesSelected = useCallback((files: ImageFile[]) => {
     setImages((prev) => [...prev, ...files]);
@@ -59,6 +76,15 @@ const ImageToLinkPage = () => {
         const { data: urlData } = supabase.storage
           .from('shared-images')
           .getPublicUrl(fileName);
+
+        // Track in DB with expiry
+        await supabase.from('shared_image_files').insert({
+          file_name: fileName,
+          bucket_path: fileName,
+          original_name: img.file.name,
+          file_size: img.file.size,
+          expires_at: getExpiryDate(expiry),
+        });
 
         results.push({
           id: img.id,
@@ -103,9 +129,32 @@ const ImageToLinkPage = () => {
   const copyAll = async () => {
     const allLinks = uploadedImages.map((img) => img.url).join('\n');
     await navigator.clipboard.writeText(allLinks);
-    toast({
-      title: t('imageToLink.allCopied'),
-    });
+    toast({ title: t('imageToLink.allCopied') });
+  };
+
+  const downloadAllAsZip = async () => {
+    if (uploadedImages.length === 0) return;
+    setDownloadingZip(true);
+    try {
+      const zip = new JSZip();
+      for (const img of uploadedImages) {
+        const response = await fetch(img.url);
+        const blob = await response.blob();
+        zip.file(img.name, blob);
+      }
+      const content = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'images.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      toast({ title: 'Error', description: 'Failed to create ZIP', variant: 'destructive' });
+    } finally {
+      setDownloadingZip(false);
+    }
   };
 
   const removeUploaded = (id: string) => {
@@ -131,11 +180,27 @@ const ImageToLinkPage = () => {
       {/* Pending images */}
       {images.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <p className="text-sm text-muted-foreground">
               {images.length} {t('imageToLink.readyToUpload')}
             </p>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Expiry selector */}
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <Select value={expiry} onValueChange={(v) => setExpiry(v as ExpiryOption)}>
+                  <SelectTrigger className="h-8 w-[140px] text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="24h">{t('imageToLink.expiry.24h')}</SelectItem>
+                    <SelectItem value="7d">{t('imageToLink.expiry.7d')}</SelectItem>
+                    <SelectItem value="30d">{t('imageToLink.expiry.30d')}</SelectItem>
+                    <SelectItem value="90d">{t('imageToLink.expiry.90d')}</SelectItem>
+                    <SelectItem value="forever">{t('imageToLink.expiry.forever')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Button variant="outline" size="sm" onClick={() => setImages([])}>
                 {t('common.clearAll')}
               </Button>
@@ -172,15 +237,25 @@ const ImageToLinkPage = () => {
       {/* Uploaded images with links */}
       {uploadedImages.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
               <LinkIcon className="h-5 w-5 text-primary" />
               {t('imageToLink.generatedLinks')}
             </h2>
-            <Button variant="outline" size="sm" onClick={copyAll}>
-              <Copy className="h-3.5 w-3.5 mr-1.5" />
-              {t('imageToLink.copyAll')}
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={copyAll}>
+                <Copy className="h-3.5 w-3.5 mr-1.5" />
+                {t('imageToLink.copyAll')}
+              </Button>
+              <Button variant="outline" size="sm" onClick={downloadAllAsZip} disabled={downloadingZip}>
+                {downloadingZip ? (
+                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <Download className="h-3.5 w-3.5 mr-1.5" />
+                )}
+                {t('imageToLink.downloadAllZip')}
+              </Button>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -211,12 +286,7 @@ const ImageToLinkPage = () => {
                       <Copy className="h-4 w-4" />
                     )}
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8"
-                    asChild
-                  >
+                  <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
                     <a href={img.url} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4" />
                     </a>

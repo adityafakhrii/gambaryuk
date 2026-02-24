@@ -14,7 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      shared_image_files: {
+        Row: {
+          bucket_path: string
+          created_at: string
+          expires_at: string | null
+          file_name: string
+          file_size: number | null
+          id: string
+          original_name: string | null
+        }
+        Insert: {
+          bucket_path: string
+          created_at?: string
+          expires_at?: string | null
+          file_name: string
+          file_size?: number | null
+          id?: string
+          original_name?: string | null
+        }
+        Update: {
+          bucket_path?: string
+          created_at?: string
+          expires_at?: string | null
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          original_name?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
