@@ -6,6 +6,7 @@ import {
   Eraser, Palette, FileText, LayoutGrid, Home, Sun, Moon, Globe,
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
+  Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -58,6 +59,16 @@ const toolGroups = [
     ],
   },
   {
+    key: 'category.generate',
+    tools: [
+      { path: '/splitter', icon: Grid3X3, key: 'nav.splitter' },
+      { path: '/blur', icon: EyeOff, key: 'nav.blur' },
+      { path: '/meme', icon: Type, key: 'nav.meme' },
+      { path: '/compare', icon: ArrowLeftRight, key: 'nav.compare' },
+      { path: '/beautifier', icon: Sparkles, key: 'nav.beautifier' },
+    ],
+  },
+  {
     key: 'category.utility',
     tools: [
       { path: '/metadata', icon: Info, key: 'nav.metadata' },
@@ -80,6 +91,7 @@ export function AppSidebar() {
     'category.essential': true,
     'category.edit': true,
     'category.advanced': true,
+    'category.generate': true,
     'category.utility': true,
   });
 

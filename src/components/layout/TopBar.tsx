@@ -20,6 +20,11 @@ const routeLabels: Record<string, string> = {
   '/base64': 'feature.base64.title',
   '/qr-code': 'feature.qrCode.title',
   '/favicon': 'feature.favicon.title',
+  '/splitter': 'feature.splitter.title',
+  '/blur': 'feature.blur.title',
+  '/meme': 'feature.meme.title',
+  '/compare': 'feature.compare.title',
+  '/beautifier': 'feature.beautifier.title',
   '/privacy': 'privacy.title',
 };
 
