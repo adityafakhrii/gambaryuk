@@ -15,6 +15,11 @@ const routeLabels: Record<string, string> = {
   '/rename': 'feature.rename.title',
   '/collage': 'feature.collage.title',
   '/image-to-link': 'feature.imageToLink.title',
+  '/metadata': 'feature.metadata.title',
+  '/color-picker': 'feature.colorPicker.title',
+  '/base64': 'feature.base64.title',
+  '/qr-code': 'feature.qrCode.title',
+  '/favicon': 'feature.favicon.title',
   '/privacy': 'privacy.title',
 };
 

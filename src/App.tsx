@@ -20,6 +20,11 @@ import FiltersPage from "./pages/FiltersPage";
 import RenamePage from "./pages/RenamePage";
 import CollagePage from "./pages/CollagePage";
 import ImageToLinkPage from "./pages/ImageToLinkPage";
+import MetadataPage from "./pages/MetadataPage";
+import ColorPickerPage from "./pages/ColorPickerPage";
+import Base64Page from "./pages/Base64Page";
+import QrCodePage from "./pages/QrCodePage";
+import FaviconPage from "./pages/FaviconPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
 
@@ -53,6 +58,11 @@ const App = () => (
                       <Route path="/rename" element={<RenamePage />} />
                       <Route path="/collage" element={<CollagePage />} />
                       <Route path="/image-to-link" element={<ImageToLinkPage />} />
+                      <Route path="/metadata" element={<MetadataPage />} />
+                      <Route path="/color-picker" element={<ColorPickerPage />} />
+                      <Route path="/base64" element={<Base64Page />} />
+                      <Route path="/qr-code" element={<QrCodePage />} />
+                      <Route path="/favicon" element={<FaviconPage />} />
                       <Route path="/privacy" element={<PrivacyPage />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
