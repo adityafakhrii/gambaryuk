@@ -5,6 +5,7 @@ import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
   Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
   Images, Zap, Shield, Link as LinkIcon,
+  Info, Pipette, Binary, QrCode, Image as ImageIcon,
 } from 'lucide-react';
 
 const Index = () => {
@@ -23,6 +24,11 @@ const Index = () => {
     { icon: FileText, title: t('feature.rename.title'), description: t('feature.rename.desc'), path: '/rename' },
     { icon: LayoutGrid, title: t('feature.collage.title'), description: t('feature.collage.desc'), path: '/collage' },
     { icon: LinkIcon, title: t('feature.imageToLink.title'), description: t('feature.imageToLink.desc'), path: '/image-to-link' },
+    { icon: Info, title: t('feature.metadata.title'), description: t('feature.metadata.desc'), path: '/metadata' },
+    { icon: Pipette, title: t('feature.colorPicker.title'), description: t('feature.colorPicker.desc'), path: '/color-picker' },
+    { icon: Binary, title: t('feature.base64.title'), description: t('feature.base64.desc'), path: '/base64' },
+    { icon: QrCode, title: t('feature.qrCode.title'), description: t('feature.qrCode.desc'), path: '/qr-code' },
+    { icon: ImageIcon, title: t('feature.favicon.title'), description: t('feature.favicon.desc'), path: '/favicon' },
   ];
 
   const statItems = [

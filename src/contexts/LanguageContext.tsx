@@ -73,6 +73,54 @@ const translations: Translations = {
   'feature.imageToLink.title': { en: 'Image to Link', id: 'Gambar ke Link' },
   'feature.imageToLink.desc': { en: 'Upload image and get a shareable link', id: 'Upload gambar dan dapatkan link yang bisa dibagikan' },
 
+  // Fase 1 tools
+  'feature.metadata.title': { en: 'EXIF / Metadata Viewer', id: 'Lihat Metadata / EXIF' },
+  'feature.metadata.desc': { en: 'View image metadata, EXIF, camera info', id: 'Lihat metadata gambar, EXIF, info kamera' },
+  'feature.colorPicker.title': { en: 'Color Picker', id: 'Ambil Warna' },
+  'feature.colorPicker.desc': { en: 'Pick colors from any image', id: 'Ambil warna dari gambar apapun' },
+  'feature.base64.title': { en: 'Base64 Encode/Decode', id: 'Base64 Encode/Decode' },
+  'feature.base64.desc': { en: 'Convert image to/from Base64', id: 'Konversi gambar ke/dari Base64' },
+  'feature.qrCode.title': { en: 'QR Code Generator', id: 'Pembuat QR Code' },
+  'feature.qrCode.desc': { en: 'Generate QR code from text/URL', id: 'Buat QR code dari teks/URL' },
+  'feature.favicon.title': { en: 'Image to Icon', id: 'Gambar ke Ikon' },
+  'feature.favicon.desc': { en: 'Generate favicon & app icon set', id: 'Buat set favicon & ikon aplikasi' },
+
+  // Nav for new tools
+  'nav.metadata': { en: 'EXIF Viewer', id: 'Lihat EXIF' },
+  'nav.colorPicker': { en: 'Color Picker', id: 'Ambil Warna' },
+  'nav.base64': { en: 'Base64', id: 'Base64' },
+  'nav.qrCode': { en: 'QR Code', id: 'QR Code' },
+  'nav.favicon': { en: 'Image to Icon', id: 'Gambar ke Ikon' },
+
+  // Category
+  'category.utility': { en: 'Info & Utility', id: 'Info & Utilitas' },
+
+  // Color Picker page
+  'colorPicker.clickToPick': { en: 'Click anywhere to pick a color', id: 'Klik di mana saja untuk ambil warna' },
+  'colorPicker.dominant': { en: 'Dominant Colors', id: 'Warna Dominan' },
+  'colorPicker.picked': { en: 'Picked Colors', id: 'Warna Terpilih' },
+
+  // Base64 page
+  'base64.encode': { en: 'Image → Base64', id: 'Gambar → Base64' },
+  'base64.decode': { en: 'Base64 → Image', id: 'Base64 → Gambar' },
+  'base64.pasteHere': { en: 'Paste Base64 string here', id: 'Tempel string Base64 di sini' },
+
+  // QR Code page
+  'qrCode.content': { en: 'Text or URL', id: 'Teks atau URL' },
+  'qrCode.size': { en: 'Size', id: 'Ukuran' },
+  'qrCode.fgColor': { en: 'Foreground', id: 'Warna Depan' },
+  'qrCode.bgColor': { en: 'Background', id: 'Warna Latar' },
+  'qrCode.errorLevel': { en: 'Error Correction', id: 'Koreksi Error' },
+  'qrCode.logo': { en: 'Logo (optional)', id: 'Logo (opsional)' },
+  'qrCode.logoHint': { en: 'Drop logo image here', id: 'Letakkan logo di sini' },
+  'qrCode.generate': { en: 'Generate QR Code', id: 'Buat QR Code' },
+  'qrCode.preview': { en: 'QR code will appear here', id: 'QR code akan muncul di sini' },
+
+  // Favicon page
+  'favicon.generate': { en: 'Generate Icons', id: 'Buat Ikon' },
+  'favicon.results': { en: 'Generated Icons', id: 'Ikon yang Dibuat' },
+  'favicon.downloadAll': { en: 'Download All as ZIP', id: 'Unduh Semua sebagai ZIP' },
+
   // Image to Link
   'imageToLink.readyToUpload': { en: 'images ready to upload', id: 'gambar siap diupload' },
   'imageToLink.uploading': { en: 'Uploading...', id: 'Mengupload...' },

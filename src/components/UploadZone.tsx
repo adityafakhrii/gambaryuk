@@ -3,7 +3,7 @@ import { useCallback, useState, ReactNode } from 'react';
  import { Upload, Image, X } from 'lucide-react';
  import { cn } from '@/lib/utils';
  
- interface ImageFile {
+ export interface ImageFile {
    id: string;
    file: File;
    preview: string;

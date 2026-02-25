@@ -5,6 +5,7 @@ import {
   Maximize2, FileDown, RefreshCw, Crop, RotateCcw, Stamp,
   Eraser, Palette, FileText, LayoutGrid, Home, Sun, Moon, Globe,
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
+  Info, Pipette, Binary, QrCode, Image as ImageIcon,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -56,6 +57,16 @@ const toolGroups = [
       { path: '/image-to-link', icon: LinkIcon, key: 'nav.imageToLink' },
     ],
   },
+  {
+    key: 'category.utility',
+    tools: [
+      { path: '/metadata', icon: Info, key: 'nav.metadata' },
+      { path: '/color-picker', icon: Pipette, key: 'nav.colorPicker' },
+      { path: '/base64', icon: Binary, key: 'nav.base64' },
+      { path: '/qr-code', icon: QrCode, key: 'nav.qrCode' },
+      { path: '/favicon', icon: ImageIcon, key: 'nav.favicon' },
+    ],
+  },
 ];
 
 export function AppSidebar() {
@@ -69,6 +80,7 @@ export function AppSidebar() {
     'category.essential': true,
     'category.edit': true,
     'category.advanced': true,
+    'category.utility': true,
   });
 
   const toggleGroup = (key: string) => {
