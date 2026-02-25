@@ -121,6 +121,61 @@ const translations: Translations = {
   'favicon.results': { en: 'Generated Icons', id: 'Ikon yang Dibuat' },
   'favicon.downloadAll': { en: 'Download All as ZIP', id: 'Unduh Semua sebagai ZIP' },
 
+  // Fase 2 tools
+  'feature.splitter.title': { en: 'Image Splitter', id: 'Pemotong Gambar' },
+  'feature.splitter.desc': { en: 'Split image into grid for carousel', id: 'Potong gambar jadi grid untuk carousel' },
+  'feature.blur.title': { en: 'Blur / Censor', id: 'Blur / Sensor' },
+  'feature.blur.desc': { en: 'Blur or pixelate sensitive areas', id: 'Blur atau pixelate area sensitif' },
+  'feature.meme.title': { en: 'Meme Generator', id: 'Pembuat Meme' },
+  'feature.meme.desc': { en: 'Add text to images, meme style', id: 'Tambah teks ke gambar, gaya meme' },
+  'feature.compare.title': { en: 'Image Compare', id: 'Bandingkan Gambar' },
+  'feature.compare.desc': { en: 'Before/after comparison slider', id: 'Slider perbandingan sebelum/sesudah' },
+  'feature.beautifier.title': { en: 'Screenshot Beautifier', id: 'Percantik Screenshot' },
+  'feature.beautifier.desc': { en: 'Add mockup, gradient, shadow', id: 'Tambah mockup, gradien, bayangan' },
+
+  // Nav Fase 2
+  'nav.splitter': { en: 'Image Splitter', id: 'Pemotong Gambar' },
+  'nav.blur': { en: 'Blur / Censor', id: 'Blur / Sensor' },
+  'nav.meme': { en: 'Meme Generator', id: 'Pembuat Meme' },
+  'nav.compare': { en: 'Image Compare', id: 'Bandingkan Gambar' },
+  'nav.beautifier': { en: 'Beautifier', id: 'Percantik' },
+
+  // Category
+  'category.generate': { en: 'Generate & Transform', id: 'Buat & Transformasi' },
+
+  // Splitter page
+  'splitter.grid': { en: 'Grid Layout', id: 'Layout Grid' },
+  'splitter.split': { en: 'Split Image', id: 'Potong Gambar' },
+
+  // Blur page
+  'blur.gaussian': { en: 'Blur', id: 'Blur' },
+  'blur.pixelate': { en: 'Pixelate', id: 'Pixelate' },
+  'blur.intensity': { en: 'Intensity', id: 'Intensitas' },
+  'blur.undo': { en: 'Undo', id: 'Batalkan' },
+  'blur.dragHint': { en: 'Draw rectangles on the image to mark areas for blurring', id: 'Gambar kotak pada gambar untuk menandai area yang akan di-blur' },
+
+  // Meme page
+  'meme.topText': { en: 'Top Text', id: 'Teks Atas' },
+  'meme.bottomText': { en: 'Bottom Text', id: 'Teks Bawah' },
+  'meme.topPlaceholder': { en: 'TOP TEXT HERE', id: 'TEKS ATAS DI SINI' },
+  'meme.bottomPlaceholder': { en: 'BOTTOM TEXT HERE', id: 'TEKS BAWAH DI SINI' },
+  'meme.fontSize': { en: 'Font Size', id: 'Ukuran Font' },
+  'meme.generate': { en: 'Generate Meme', id: 'Buat Meme' },
+
+  // Compare page
+  'compare.uploadFirst': { en: 'Upload first image (Before)', id: 'Upload gambar pertama (Sebelum)' },
+  'compare.uploadSecond': { en: 'Upload second image (After)', id: 'Upload gambar kedua (Sesudah)' },
+  'compare.before': { en: 'Before', id: 'Sebelum' },
+  'compare.after': { en: 'After', id: 'Sesudah' },
+
+  // Beautifier page
+  'beautifier.bg': { en: 'Background', id: 'Latar Belakang' },
+  'beautifier.mockup': { en: 'Frame Style', id: 'Gaya Bingkai' },
+  'beautifier.padding': { en: 'Padding', id: 'Padding' },
+  'beautifier.radius': { en: 'Border Radius', id: 'Radius Sudut' },
+  'beautifier.shadow': { en: 'Shadow', id: 'Bayangan' },
+  'beautifier.generate': { en: 'Beautify', id: 'Percantik' },
+
   // Image to Link
   'imageToLink.readyToUpload': { en: 'images ready to upload', id: 'gambar siap diupload' },
   'imageToLink.uploading': { en: 'Uploading...', id: 'Mengupload...' },

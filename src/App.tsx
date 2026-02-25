@@ -25,6 +25,11 @@ import ColorPickerPage from "./pages/ColorPickerPage";
 import Base64Page from "./pages/Base64Page";
 import QrCodePage from "./pages/QrCodePage";
 import FaviconPage from "./pages/FaviconPage";
+import SplitterPage from "./pages/SplitterPage";
+import BlurPage from "./pages/BlurPage";
+import MemeGeneratorPage from "./pages/MemeGeneratorPage";
+import ComparePage from "./pages/ComparePage";
+import BeautifierPage from "./pages/BeautifierPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
 
@@ -63,6 +68,11 @@ const App = () => (
                       <Route path="/base64" element={<Base64Page />} />
                       <Route path="/qr-code" element={<QrCodePage />} />
                       <Route path="/favicon" element={<FaviconPage />} />
+                      <Route path="/splitter" element={<SplitterPage />} />
+                      <Route path="/blur" element={<BlurPage />} />
+                      <Route path="/meme" element={<MemeGeneratorPage />} />
+                      <Route path="/compare" element={<ComparePage />} />
+                      <Route path="/beautifier" element={<BeautifierPage />} />
                       <Route path="/privacy" element={<PrivacyPage />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />

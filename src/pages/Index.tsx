@@ -6,6 +6,7 @@ import {
   Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
   Images, Zap, Shield, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
+  Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
 } from 'lucide-react';
 
 const Index = () => {
@@ -29,6 +30,11 @@ const Index = () => {
     { icon: Binary, title: t('feature.base64.title'), description: t('feature.base64.desc'), path: '/base64' },
     { icon: QrCode, title: t('feature.qrCode.title'), description: t('feature.qrCode.desc'), path: '/qr-code' },
     { icon: ImageIcon, title: t('feature.favicon.title'), description: t('feature.favicon.desc'), path: '/favicon' },
+    { icon: Grid3X3, title: t('feature.splitter.title'), description: t('feature.splitter.desc'), path: '/splitter' },
+    { icon: EyeOff, title: t('feature.blur.title'), description: t('feature.blur.desc'), path: '/blur' },
+    { icon: Type, title: t('feature.meme.title'), description: t('feature.meme.desc'), path: '/meme' },
+    { icon: ArrowLeftRight, title: t('feature.compare.title'), description: t('feature.compare.desc'), path: '/compare' },
+    { icon: Sparkles, title: t('feature.beautifier.title'), description: t('feature.beautifier.desc'), path: '/beautifier' },
   ];
 
   const statItems = [
