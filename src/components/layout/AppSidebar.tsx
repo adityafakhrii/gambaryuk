@@ -24,7 +24,6 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useState } from 'react';
-import { useState } from 'react';
 
 const toolGroups = [
   {
