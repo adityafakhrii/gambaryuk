@@ -70,6 +70,26 @@ const Index = () => {
       {/* Hero - compact */}
       <section className="relative z-10 px-4 pt-8 pb-5 text-center">
         <div className="mx-auto max-w-2xl">
+          {/* Theme toggle pill */}
+          <div className="flex justify-center mb-4">
+            <button
+              onClick={toggleTheme}
+              className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/80 backdrop-blur px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all duration-300 shadow-soft hover:shadow-soft-lg"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? (
+                <>
+                  <Moon className="h-4 w-4" />
+                  <span className="hidden sm:inline">Dark Mode</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="h-4 w-4" />
+                  <span className="hidden sm:inline">Light Mode</span>
+                </>
+              )}
+            </button>
+          </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
             GambarYuk
           </h1>
