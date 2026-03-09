@@ -176,6 +176,63 @@ const translations: Translations = {
   'beautifier.shadow': { en: 'Shadow', id: 'Bayangan' },
   'beautifier.generate': { en: 'Beautify', id: 'Percantik' },
 
+  // Fase 3 tools
+  'feature.ocr.title': { en: 'Image to Text (OCR)', id: 'Gambar ke Teks (OCR)' },
+  'feature.ocr.desc': { en: 'Extract text from images using AI', id: 'Ekstrak teks dari gambar menggunakan AI' },
+  'feature.annotate.title': { en: 'Draw & Annotate', id: 'Gambar & Anotasi' },
+  'feature.annotate.desc': { en: 'Add text, arrows, shapes on images', id: 'Tambah teks, panah, bentuk pada gambar' },
+  'feature.upscale.title': { en: 'AI Upscale', id: 'AI Upscale' },
+  'feature.upscale.desc': { en: 'Enhance & upscale images with AI', id: 'Tingkatkan & perbesar gambar dengan AI' },
+  'feature.aiGen.title': { en: 'AI Image Generator', id: 'Pembuat Gambar AI' },
+  'feature.aiGen.desc': { en: 'Generate images from text prompts', id: 'Buat gambar dari prompt teks' },
+
+  // Nav Fase 3
+  'nav.ocr': { en: 'Image to Text', id: 'Gambar ke Teks' },
+  'nav.annotate': { en: 'Draw & Annotate', id: 'Gambar & Anotasi' },
+  'nav.upscale': { en: 'AI Upscale', id: 'AI Upscale' },
+  'nav.aiGen': { en: 'AI Generator', id: 'Pembuat AI' },
+
+  // Category
+  'category.ai': { en: 'AI Tools', id: 'Alat AI' },
+
+  // OCR page
+  'ocr.extract': { en: 'Extract Text', id: 'Ekstrak Teks' },
+  'ocr.result': { en: 'Extracted Text', id: 'Teks Terekstrak' },
+  'ocr.noText': { en: 'No text found in image', id: 'Tidak ada teks ditemukan di gambar' },
+  'ocr.error': { en: 'Failed to extract text. Please try again.', id: 'Gagal mengekstrak teks. Silakan coba lagi.' },
+
+  // Annotate page
+  'annotate.pen': { en: 'Pen', id: 'Pena' },
+  'annotate.line': { en: 'Line', id: 'Garis' },
+  'annotate.rect': { en: 'Rectangle', id: 'Kotak' },
+  'annotate.circle': { en: 'Circle', id: 'Lingkaran' },
+  'annotate.arrow': { en: 'Arrow', id: 'Panah' },
+  'annotate.text': { en: 'Text', id: 'Teks' },
+  'annotate.size': { en: 'Size', id: 'Ukuran' },
+  'annotate.undo': { en: 'Undo', id: 'Batalkan' },
+  'annotate.enterText': { en: 'Enter text first', id: 'Masukkan teks dulu' },
+  'annotate.textPlaceholder': { en: 'Type text...', id: 'Ketik teks...' },
+
+  // Upscale page
+  'upscale.scale': { en: 'Scale Factor', id: 'Faktor Skala' },
+  'upscale.enhance': { en: 'Enhance', id: 'Tingkatkan' },
+  'upscale.process': { en: 'Upscale Image', id: 'Upscale Gambar' },
+  'upscale.hint': { en: 'Result will appear here', id: 'Hasil akan muncul di sini' },
+  'upscale.noResult': { en: 'Failed to generate result', id: 'Gagal menghasilkan hasil' },
+  'upscale.error': { en: 'Upscale failed. Please try again.', id: 'Upscale gagal. Silakan coba lagi.' },
+
+  // AI Generator page
+  'aiGen.prompt': { en: 'Describe your image', id: 'Deskripsikan gambar Anda' },
+  'aiGen.promptPlaceholder': { en: 'A cat sitting on a rainbow cloud...', id: 'Kucing duduk di atas awan pelangi...' },
+  'aiGen.style': { en: 'Style', id: 'Gaya' },
+  'aiGen.generate': { en: 'Generate Image', id: 'Buat Gambar' },
+  'aiGen.generating': { en: 'Generating image...', id: 'Membuat gambar...' },
+  'aiGen.hint': { en: 'Your AI-generated image will appear here', id: 'Gambar AI Anda akan muncul di sini' },
+  'aiGen.enterPrompt': { en: 'Enter a prompt first', id: 'Masukkan prompt terlebih dahulu' },
+  'aiGen.noResult': { en: 'Failed to generate image', id: 'Gagal membuat gambar' },
+  'aiGen.error': { en: 'Generation failed. Please try again.', id: 'Pembuatan gagal. Silakan coba lagi.' },
+  'aiGen.history': { en: 'Previous Generations', id: 'Hasil Sebelumnya' },
+
   // Image to Link
   'imageToLink.readyToUpload': { en: 'images ready to upload', id: 'gambar siap diupload' },
   'imageToLink.uploading': { en: 'Uploading...', id: 'Mengupload...' },

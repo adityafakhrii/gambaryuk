@@ -7,6 +7,7 @@ import {
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
+  ScanText, PenTool, Wand2, BrainCircuit,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -78,6 +79,15 @@ const toolGroups = [
       { path: '/favicon', icon: ImageIcon, key: 'nav.favicon' },
     ],
   },
+  {
+    key: 'category.ai',
+    tools: [
+      { path: '/ocr', icon: ScanText, key: 'nav.ocr' },
+      { path: '/annotate', icon: PenTool, key: 'nav.annotate' },
+      { path: '/upscale', icon: Wand2, key: 'nav.upscale' },
+      { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen' },
+    ],
+  },
 ];
 
 export function AppSidebar() {
@@ -93,6 +103,7 @@ export function AppSidebar() {
     'category.advanced': true,
     'category.generate': true,
     'category.utility': true,
+    'category.ai': true,
   });
 
   const toggleGroup = (key: string) => {

@@ -1,1 +1,13 @@
 project_id = "kmjodkwdcxenijqgxnhh"
+
+[functions.ocr]
+verify_jwt = false
+
+[functions.upscale]
+verify_jwt = false
+
+[functions.generate-image]
+verify_jwt = false
+
+[functions.cleanup-expired-images]
+verify_jwt = false
