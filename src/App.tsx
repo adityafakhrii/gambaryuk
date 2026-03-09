@@ -2,42 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
-import Index from "./pages/Index";
-import ResizePage from "./pages/ResizePage";
-import CompressPage from "./pages/CompressPage";
-import ConvertPage from "./pages/ConvertPage";
-import CropPage from "./pages/CropPage";
-import RotatePage from "./pages/RotatePage";
-import WatermarkPage from "./pages/WatermarkPage";
-import RemoveBgPage from "./pages/RemoveBgPage";
-import FiltersPage from "./pages/FiltersPage";
-import RenamePage from "./pages/RenamePage";
-import CollagePage from "./pages/CollagePage";
-import ImageToLinkPage from "./pages/ImageToLinkPage";
-import MetadataPage from "./pages/MetadataPage";
-import ColorPickerPage from "./pages/ColorPickerPage";
-import Base64Page from "./pages/Base64Page";
-import QrCodePage from "./pages/QrCodePage";
-import FaviconPage from "./pages/FaviconPage";
-import SplitterPage from "./pages/SplitterPage";
-import BlurPage from "./pages/BlurPage";
-import MemeGeneratorPage from "./pages/MemeGeneratorPage";
-import ComparePage from "./pages/ComparePage";
-import BeautifierPage from "./pages/BeautifierPage";
-import OcrPage from "./pages/OcrPage";
-import AnnotatePage from "./pages/AnnotatePage";
-import UpscalePage from "./pages/UpscalePage";
-import AiGeneratorPage from "./pages/AiGeneratorPage";
-import PrivacyPage from "./pages/PrivacyPage";
-import AboutPage from "./pages/AboutPage";
-import NotFound from "./pages/NotFound";
-
+import AnimatedRoutes from "@/components/layout/AnimatedRoutes";
 
 const queryClient = new QueryClient();
 
@@ -55,38 +26,7 @@ const App = () => (
                 <div className="flex flex-col flex-1 min-w-0">
                   <TopBar />
                   <main className="flex-1 overflow-auto">
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/resize" element={<ResizePage />} />
-                      <Route path="/compress" element={<CompressPage />} />
-                      <Route path="/convert" element={<ConvertPage />} />
-                      <Route path="/crop" element={<CropPage />} />
-                      <Route path="/rotate" element={<RotatePage />} />
-                      <Route path="/watermark" element={<WatermarkPage />} />
-                      <Route path="/remove-bg" element={<RemoveBgPage />} />
-                      <Route path="/filters" element={<FiltersPage />} />
-                      <Route path="/rename" element={<RenamePage />} />
-                      <Route path="/collage" element={<CollagePage />} />
-                      <Route path="/image-to-link" element={<ImageToLinkPage />} />
-                      <Route path="/metadata" element={<MetadataPage />} />
-                      <Route path="/color-picker" element={<ColorPickerPage />} />
-                      <Route path="/base64" element={<Base64Page />} />
-                      <Route path="/qr-code" element={<QrCodePage />} />
-                      <Route path="/favicon" element={<FaviconPage />} />
-                      <Route path="/splitter" element={<SplitterPage />} />
-                      <Route path="/blur" element={<BlurPage />} />
-                      <Route path="/meme" element={<MemeGeneratorPage />} />
-                      <Route path="/compare" element={<ComparePage />} />
-                      <Route path="/beautifier" element={<BeautifierPage />} />
-                      <Route path="/ocr" element={<OcrPage />} />
-                      <Route path="/annotate" element={<AnnotatePage />} />
-                      <Route path="/upscale" element={<UpscalePage />} />
-                      <Route path="/ai-generator" element={<AiGeneratorPage />} />
-                      <Route path="/privacy" element={<PrivacyPage />} />
-                      <Route path="/about" element={<AboutPage />} />
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
+                    <AnimatedRoutes />
                   </main>
                 </div>
               </div>
