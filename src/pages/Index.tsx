@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useImageStats } from '@/hooks/useImageStats';
 import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
@@ -7,11 +8,12 @@ import {
   Images, Zap, Shield, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit,
+  ScanText, PenTool, Wand2, BrainCircuit, Sun, Moon,
 } from 'lucide-react';
 
 const Index = () => {
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const { stats } = useImageStats();
 
   const tools = [
