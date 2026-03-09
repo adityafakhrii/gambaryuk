@@ -116,9 +116,9 @@ export function AppSidebar() {
       {/* Header */}
       <SidebarHeader className="border-b border-border/50 px-3 py-4">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
-          <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 rounded-lg" />
+          <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 rounded-lg object-contain" />
           {!isCollapsed && (
-            <span className="font-bold text-foreground text-base truncate">
+            <span className="font-bold text-sidebar-foreground text-base truncate">
               GambarYuk
             </span>
           )}

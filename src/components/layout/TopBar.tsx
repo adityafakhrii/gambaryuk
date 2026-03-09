@@ -30,6 +30,7 @@ const routeLabels: Record<string, string> = {
   '/upscale': 'feature.upscale.title',
   '/ai-generator': 'feature.aiGen.title',
   '/privacy': 'privacy.title',
+  '/about': 'about.title',
 };
 
 export function TopBar() {
