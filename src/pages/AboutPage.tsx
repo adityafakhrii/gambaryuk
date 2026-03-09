@@ -5,7 +5,7 @@ export default function AboutPage() {
   const { t } = useLanguage();
 
   return (
-    <div className="page-gradient min-h-full">
+    <div className="min-h-full">
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-12 sm:py-16">
         {/* Header */}
         <div className="text-center mb-12">

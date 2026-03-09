@@ -342,7 +342,7 @@ export default function ConvertPage() {
   const showTransparency = !['jpeg', 'bmp', 'gif', 'ico', 'pdf'].includes(targetFormat);
 
   return (
-    <div className="min-h-full page-gradient">
+    <div className="min-h-full">
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <h1 className="text-2xl font-bold text-foreground md:text-3xl">
           {t('convert.title')}
