@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import logoImg from '@/assets/logo.png';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
   Maximize2, FileDown, RefreshCw, Crop, RotateCcw, Stamp,
