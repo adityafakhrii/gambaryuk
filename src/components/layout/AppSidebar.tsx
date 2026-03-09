@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import logoImg from '@/assets/logo.png';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
   Maximize2, FileDown, RefreshCw, Crop, RotateCcw, Stamp,
@@ -115,9 +116,7 @@ export function AppSidebar() {
       {/* Header */}
       <SidebarHeader className="border-b border-border/50 px-3 py-4">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
-          <div className="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-            GY
-          </div>
+          <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 rounded-lg" />
           {!isCollapsed && (
             <span className="font-bold text-foreground text-base truncate">
               GambarYuk
