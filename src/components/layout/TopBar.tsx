@@ -1,7 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { ChevronRight, Home } from 'lucide-react';
+import { ChevronRight, Home, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Button } from '@/components/ui/button';
 
 const routeLabels: Record<string, string> = {
   '/resize': 'feature.resize.title',
@@ -36,6 +38,7 @@ const routeLabels: Record<string, string> = {
 export function TopBar() {
   const location = useLocation();
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
 
   const isHome = location.pathname === '/';
   const currentLabel = routeLabels[location.pathname];
@@ -46,7 +49,7 @@ export function TopBar() {
       <div className="h-4 w-px bg-border/70 flex-shrink-0" />
 
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1 text-sm min-w-0 overflow-hidden">
+      <nav className="flex items-center gap-1 text-sm min-w-0 overflow-hidden flex-1">
         <Link
           to="/"
           className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
@@ -71,6 +74,26 @@ export function TopBar() {
           </>
         )}
       </nav>
+
+      {/* Theme toggle */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={toggleTheme}
+        className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground hover:bg-accent/10 flex-shrink-0"
+      >
+        {theme === 'light' ? (
+          <>
+            <Moon className="h-4 w-4" />
+            <span className="hidden sm:inline text-xs">Dark</span>
+          </>
+        ) : (
+          <>
+            <Sun className="h-4 w-4" />
+            <span className="hidden sm:inline text-xs">Light</span>
+          </>
+        )}
+      </Button>
     </header>
   );
 }

@@ -1,10 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import logoImg from '@/assets/logo.png';
-import { useTheme } from '@/contexts/ThemeContext';
 import {
   Maximize2, FileDown, RefreshCw, Crop, RotateCcw, Stamp,
-  Eraser, Palette, FileText, LayoutGrid, Home, Sun, Moon, Globe,
+  Eraser, Palette, FileText, LayoutGrid, Home, Globe,
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
@@ -93,7 +92,7 @@ const toolGroups = [
 
 export function AppSidebar() {
   const { t, language, setLanguage } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  
   const location = useLocation();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
@@ -214,41 +213,39 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
 
-        {/* Controls row */}
-        <div className={`flex items-center gap-1 ${isCollapsed ? 'flex-col' : 'px-1'}`}>
-          {/* Language */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                <Globe className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="top" align="start">
-              <DropdownMenuItem
-                onClick={() => setLanguage('en')}
-                className={language === 'en' ? 'bg-muted' : ''}
-              >
-                🇺🇸 English
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setLanguage('id')}
-                className={language === 'id' ? 'bg-muted' : ''}
-              >
-                🇮🇩 Indonesia
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <SidebarSeparator className="my-1" />
 
-          {/* Theme toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-          >
-            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-          </Button>
-        </div>
+        {/* Language switcher as text menu */}
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton tooltip={language === 'id' ? 'Ganti Bahasa' : 'Change Language'}>
+                  <Globe className="h-4 w-4 flex-shrink-0" />
+                  {!isCollapsed && (
+                    <span className="text-xs">
+                      {language === 'id' ? 'Bahasa: Indonesia' : 'Language: English'}
+                    </span>
+                  )}
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" align="start">
+                <DropdownMenuItem
+                  onClick={() => setLanguage('en')}
+                  className={language === 'en' ? 'bg-muted' : ''}
+                >
+                  🇺🇸 English
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setLanguage('id')}
+                  className={language === 'id' ? 'bg-muted' : ''}
+                >
+                  🇮🇩 Indonesia
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
