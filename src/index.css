@@ -159,11 +159,12 @@
       hsl(var(--primary-light)) 50%, 
       hsl(var(--background)) 100%
     );
+    background-attachment: fixed;
   }
 
   .page-gradient::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     width: 50%;
@@ -174,7 +175,7 @@
 
   .page-gradient::after {
     content: '';
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 50%;
