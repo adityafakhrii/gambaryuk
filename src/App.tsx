@@ -30,6 +30,10 @@ import BlurPage from "./pages/BlurPage";
 import MemeGeneratorPage from "./pages/MemeGeneratorPage";
 import ComparePage from "./pages/ComparePage";
 import BeautifierPage from "./pages/BeautifierPage";
+import OcrPage from "./pages/OcrPage";
+import AnnotatePage from "./pages/AnnotatePage";
+import UpscalePage from "./pages/UpscalePage";
+import AiGeneratorPage from "./pages/AiGeneratorPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
 
