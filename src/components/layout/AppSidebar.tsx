@@ -79,6 +79,15 @@ const toolGroups = [
       { path: '/favicon', icon: ImageIcon, key: 'nav.favicon' },
     ],
   },
+  {
+    key: 'category.ai',
+    tools: [
+      { path: '/ocr', icon: ScanText, key: 'nav.ocr' },
+      { path: '/annotate', icon: PenTool, key: 'nav.annotate' },
+      { path: '/upscale', icon: Wand2, key: 'nav.upscale' },
+      { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen' },
+    ],
+  },
 ];
 
 export function AppSidebar() {
