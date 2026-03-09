@@ -77,6 +77,10 @@ const App = () => (
                       <Route path="/meme" element={<MemeGeneratorPage />} />
                       <Route path="/compare" element={<ComparePage />} />
                       <Route path="/beautifier" element={<BeautifierPage />} />
+                      <Route path="/ocr" element={<OcrPage />} />
+                      <Route path="/annotate" element={<AnnotatePage />} />
+                      <Route path="/upscale" element={<UpscalePage />} />
+                      <Route path="/ai-generator" element={<AiGeneratorPage />} />
                       <Route path="/privacy" element={<PrivacyPage />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
