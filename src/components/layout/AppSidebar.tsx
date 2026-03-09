@@ -92,7 +92,7 @@ const toolGroups = [
 
 export function AppSidebar() {
   const { t, language, setLanguage } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  
   const location = useLocation();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
