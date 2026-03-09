@@ -3,7 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import logoImg from '@/assets/logo.png';
 import {
   Maximize2, FileDown, RefreshCw, Crop, RotateCcw, Stamp,
-  Eraser, Palette, FileText, LayoutGrid, Home, Sun, Moon, Globe,
+  Eraser, Palette, FileText, LayoutGrid, Home, Globe,
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
