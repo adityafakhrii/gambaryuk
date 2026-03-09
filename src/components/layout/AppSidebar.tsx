@@ -186,8 +186,20 @@ export function AppSidebar() {
 
       {/* Footer */}
       <SidebarFooter className="border-t border-border/50 px-2 py-3 space-y-1">
-        {/* Privacy */}
+        {/* About & Privacy */}
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={location.pathname === '/about'}
+              tooltip={t('nav.about')}
+            >
+              <Link to="/about" className="flex items-center gap-2 text-muted-foreground">
+                <Info className="h-4 w-4 flex-shrink-0" />
+                {!isCollapsed && <span className="text-xs">{t('nav.about')}</span>}
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
