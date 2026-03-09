@@ -25,7 +25,7 @@ const App = () => (
                 <AppSidebar />
                 <div className="flex flex-col flex-1 min-w-0">
                   <TopBar />
-                  <main className="flex-1 overflow-auto">
+                  <main className="flex-1 overflow-auto page-gradient">
                     <AnimatedRoutes />
                   </main>
                 </div>
