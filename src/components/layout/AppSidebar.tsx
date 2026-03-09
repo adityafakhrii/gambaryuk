@@ -211,41 +211,19 @@ export function AppSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu>
-
-        <SidebarSeparator className="my-1" />
-
-        {/* Language switcher as text menu */}
-        <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton tooltip={language === 'id' ? 'Ganti Bahasa' : 'Change Language'}>
-                  <Globe className="h-4 w-4 flex-shrink-0" />
-                  {!isCollapsed && (
-                    <span className="text-xs">
-                      {language === 'id' ? 'Bahasa: Indonesia' : 'Language: English'}
-                    </span>
-                  )}
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" align="start">
-                <DropdownMenuItem
-                  onClick={() => setLanguage('en')}
-                  className={language === 'en' ? 'bg-muted' : ''}
-                >
-                  🇺🇸 English
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setLanguage('id')}
-                  className={language === 'id' ? 'bg-muted' : ''}
-                >
-                  🇮🇩 Indonesia
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SidebarMenuButton
+              tooltip={language === 'id' ? 'Switch to English' : 'Ganti ke Indonesia'}
+              onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+            >
+              <Globe className="h-4 w-4 flex-shrink-0" />
+              {!isCollapsed && (
+                <span className="text-xs">
+                  {language === 'id' ? '🇮🇩 Indonesia' : '🇺🇸 English'}
+                </span>
+              )}
+            </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
