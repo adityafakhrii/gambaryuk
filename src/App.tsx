@@ -35,6 +35,7 @@ import AnnotatePage from "./pages/AnnotatePage";
 import UpscalePage from "./pages/UpscalePage";
 import AiGeneratorPage from "./pages/AiGeneratorPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import AboutPage from "./pages/AboutPage";
 import NotFound from "./pages/NotFound";
 
 
