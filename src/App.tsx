@@ -35,6 +35,7 @@ import AnnotatePage from "./pages/AnnotatePage";
 import UpscalePage from "./pages/UpscalePage";
 import AiGeneratorPage from "./pages/AiGeneratorPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import AboutPage from "./pages/AboutPage";
 import NotFound from "./pages/NotFound";
 
 
@@ -82,6 +83,7 @@ const App = () => (
                       <Route path="/upscale" element={<UpscalePage />} />
                       <Route path="/ai-generator" element={<AiGeneratorPage />} />
                       <Route path="/privacy" element={<PrivacyPage />} />
+                      <Route path="/about" element={<AboutPage />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>

@@ -113,26 +113,30 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary) / 0.25);
+    background: hsl(160 100% 20% / 0.4);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary) / 0.45);
+    background: hsl(160 100% 20% / 0.6);
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary) / 0.2);
+    background: hsl(160 67% 67% / 0.25);
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary) / 0.4);
+    background: hsl(160 67% 67% / 0.45);
   }
 
   /* Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary) / 0.25) transparent;
+    scrollbar-color: hsl(160 100% 20% / 0.4) transparent;
+  }
+
+  .dark * {
+    scrollbar-color: hsl(160 67% 67% / 0.25) transparent;
   }
 }
 

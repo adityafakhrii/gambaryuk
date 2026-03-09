@@ -233,6 +233,19 @@ const translations: Translations = {
   'aiGen.error': { en: 'Generation failed. Please try again.', id: 'Pembuatan gagal. Silakan coba lagi.' },
   'aiGen.history': { en: 'Previous Generations', id: 'Hasil Sebelumnya' },
 
+  // About page
+  'nav.about': { en: 'About', id: 'Tentang' },
+  'about.title': { en: 'About GambarYuk', id: 'Tentang GambarYuk' },
+  'about.subtitle': { en: 'Free image editing platform, built with passion.', id: 'Platform edit gambar gratis, dibuat dengan passion.' },
+  'about.whatIs': { en: 'What is GambarYuk?', id: 'Apa itu GambarYuk?' },
+  'about.description': { en: 'GambarYuk is a free, ad-free online image editing platform with 25+ tools. All processing happens directly in your browser — your images never leave your device. Fast, private, and professional.', id: 'GambarYuk adalah platform edit gambar online gratis tanpa iklan dengan 25+ tools. Semua proses terjadi langsung di browser kamu — gambar kamu tidak pernah keluar dari device. Cepat, privat, dan profesional.' },
+  'about.creator': { en: 'Created By', id: 'Dibuat Oleh' },
+  'about.creatorBio': { en: 'A fullstack developer who is also active in exploring AI integration, guiding through mentoring, and sharing knowledge via educational content.', id: 'Seorang fullstack developer yang juga aktif mengeksplorasi integrasi AI, membimbing melalui mentoring, dan berbagi pengetahuan lewat konten edukatif.' },
+  'about.skill.ai': { en: 'AI Integration', id: 'Integrasi AI' },
+  'about.skill.mentoring': { en: 'Mentoring', id: 'Mentoring' },
+  'about.skill.content': { en: 'Edu Content', id: 'Konten Edukatif' },
+  'about.techStack': { en: 'Tech Stack', id: 'Tech Stack' },
+
   // Image to Link
   'imageToLink.readyToUpload': { en: 'images ready to upload', id: 'gambar siap diupload' },
   'imageToLink.uploading': { en: 'Uploading...', id: 'Mengupload...' },

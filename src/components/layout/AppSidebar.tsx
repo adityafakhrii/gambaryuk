@@ -116,9 +116,9 @@ export function AppSidebar() {
       {/* Header */}
       <SidebarHeader className="border-b border-border/50 px-3 py-4">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
-          <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 rounded-lg" />
+          <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 rounded-lg object-contain" />
           {!isCollapsed && (
-            <span className="font-bold text-foreground text-base truncate">
+            <span className="font-bold text-sidebar-foreground text-base truncate">
               GambarYuk
             </span>
           )}
@@ -186,8 +186,20 @@ export function AppSidebar() {
 
       {/* Footer */}
       <SidebarFooter className="border-t border-border/50 px-2 py-3 space-y-1">
-        {/* Privacy */}
+        {/* About & Privacy */}
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={location.pathname === '/about'}
+              tooltip={t('nav.about')}
+            >
+              <Link to="/about" className="flex items-center gap-2 text-muted-foreground">
+                <Info className="h-4 w-4 flex-shrink-0" />
+                {!isCollapsed && <span className="text-xs">{t('nav.about')}</span>}
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
