@@ -165,7 +165,7 @@ const CollagePage = () => {
   const requiredImages = config.cols * config.rows;
 
   return (
-    <div className="min-h-full page-gradient">
+    <div className="min-h-full">
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('collage.title')}</h1>

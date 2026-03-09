@@ -66,7 +66,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-full page-gradient flex flex-col">
+    <div className="min-h-full flex flex-col">
       {/* Hero - compact */}
       <section className="relative z-10 px-4 pt-8 pb-5 text-center">
         <div className="mx-auto max-w-2xl">

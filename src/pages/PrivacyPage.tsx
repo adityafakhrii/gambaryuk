@@ -52,7 +52,7 @@ const PrivacyPage = () => {
   const isId = true; // We'll use the language context
 
   return (
-    <div className="min-h-full page-gradient flex flex-col">
+    <div className="min-h-full flex flex-col">
       <main className="relative z-10 flex-1 px-4 py-12">
         <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-12">
