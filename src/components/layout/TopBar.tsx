@@ -25,6 +25,10 @@ const routeLabels: Record<string, string> = {
   '/meme': 'feature.meme.title',
   '/compare': 'feature.compare.title',
   '/beautifier': 'feature.beautifier.title',
+  '/ocr': 'feature.ocr.title',
+  '/annotate': 'feature.annotate.title',
+  '/upscale': 'feature.upscale.title',
+  '/ai-generator': 'feature.aiGen.title',
   '/privacy': 'privacy.title',
 };
 

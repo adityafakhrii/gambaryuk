@@ -36,6 +36,10 @@ const Index = () => {
     { icon: Type, title: t('feature.meme.title'), description: t('feature.meme.desc'), path: '/meme' },
     { icon: ArrowLeftRight, title: t('feature.compare.title'), description: t('feature.compare.desc'), path: '/compare' },
     { icon: Sparkles, title: t('feature.beautifier.title'), description: t('feature.beautifier.desc'), path: '/beautifier' },
+    { icon: ScanText, title: t('feature.ocr.title'), description: t('feature.ocr.desc'), path: '/ocr' },
+    { icon: PenTool, title: t('feature.annotate.title'), description: t('feature.annotate.desc'), path: '/annotate' },
+    { icon: Wand2, title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale' },
+    { icon: BrainCircuit, title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' },
   ];
 
   const statItems = [

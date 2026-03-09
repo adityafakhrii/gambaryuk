@@ -103,6 +103,7 @@ export function AppSidebar() {
     'category.advanced': true,
     'category.generate': true,
     'category.utility': true,
+    'category.ai': true,
   });
 
   const toggleGroup = (key: string) => {
