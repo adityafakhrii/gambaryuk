@@ -1,14 +1,16 @@
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useImageStats } from '@/hooks/useImageStats';
+import { Input } from '@/components/ui/input';
 import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
   Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
   Images, Zap, Shield, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit, Sun, Moon,
+  ScanText, PenTool, Wand2, BrainCircuit, Sun, Moon, Search,
 } from 'lucide-react';
 
 const Index = () => {
