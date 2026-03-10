@@ -68,6 +68,16 @@ const Index = () => {
     },
   ];
 
+  const filteredTools = useMemo(() => {
+    if (!searchQuery.trim()) return tools;
+    const q = searchQuery.toLowerCase();
+    return tools.filter(
+      (tool) =>
+        tool.title.toLowerCase().includes(q) ||
+        tool.description.toLowerCase().includes(q)
+    );
+  }, [searchQuery, tools]);
+
   return (
     <div className="min-h-full flex flex-col">
       {/* Hero - compact */}
