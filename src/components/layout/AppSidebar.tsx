@@ -178,15 +178,30 @@ export function AppSidebar() {
 
       {/* Footer */}
       <SidebarFooter className="border-t border-border/50 px-2 py-3 space-y-1">
-        {/* About & Privacy */}
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip={language === 'id' ? 'Dukung Kami' : 'Support Us'}
+            >
+              <a
+                href="https://saweria.co/adityafakhri"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sidebar-foreground/70"
+              >
+                <Heart className="h-4 w-4 flex-shrink-0" />
+                {!isCollapsed && <span className="text-xs">{language === 'id' ? 'Dukung Kami' : 'Support Us'}</span>}
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               isActive={location.pathname === '/about'}
               tooltip={t('nav.about')}
             >
-              <Link to="/about" className="flex items-center gap-2 text-muted-foreground">
+              <Link to="/about" className="flex items-center gap-2 text-sidebar-foreground/70">
                 <Info className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">{t('nav.about')}</span>}
               </Link>
