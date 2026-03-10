@@ -31,6 +31,7 @@ const App = () => (
                   </main>
                 </div>
               </div>
+              <Walkthrough />
             </SidebarProvider>
           </BrowserRouter>
         </TooltipProvider>

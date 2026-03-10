@@ -160,7 +160,7 @@ export function AppSidebar() {
                       <SidebarMenuButton
                         asChild
                         isActive={location.pathname === tool.path}
-                        tooltip={t(tool.key)}
+                        tooltip={`${t(tool.key)} — ${t(tool.descKey)}`}
                       >
                         <Link to={tool.path} className="flex items-center gap-2">
                           <tool.icon className="h-4 w-4 flex-shrink-0" />

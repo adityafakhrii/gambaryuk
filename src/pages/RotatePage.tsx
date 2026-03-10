@@ -89,6 +89,7 @@ const RotatePage = () => {
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('rotate.title')}</h1>
+          <p className="text-sm text-muted-foreground mt-1">{t('feature.rotate.desc')}</p>
         </div>
 
         {uploadedImages.length === 0 ? (

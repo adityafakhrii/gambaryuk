@@ -347,6 +347,7 @@ export default function ConvertPage() {
         <h1 className="text-2xl font-bold text-foreground md:text-3xl">
           {t('convert.title')}
         </h1>
+        <p className="text-sm text-muted-foreground mt-1">{t('feature.convert.desc')}</p>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
           {/* Main Area */}
