@@ -71,11 +71,43 @@ const Index = () => {
   const filteredTools = useMemo(() => {
     if (!searchQuery.trim()) return tools;
     const q = searchQuery.toLowerCase();
-    return tools.filter(
-      (tool) =>
-        tool.title.toLowerCase().includes(q) ||
-        tool.description.toLowerCase().includes(q)
-    );
+
+    // Natural language keyword mapping
+    const keywordMap: Record<string, string[]> = {
+      '/resize': ['resize', 'ubah ukuran', 'perbesar', 'perkecil', 'dimensi', 'dimension', 'scale', 'size image', 'ukuran gambar', 'resolusi', 'resolution', 'pixel'],
+      '/compress': ['compress', 'kompres', 'kecilkan', 'kecilin', 'reduce', 'smaller', 'file size', 'ukuran file', 'optimize', 'optimasi', 'ringan', 'lightweight', 'loading', 'kecil'],
+      '/convert': ['convert', 'konversi', 'jpg', 'jpeg', 'png', 'webp', 'format', 'ubah format', 'ganti format', 'change format', 'tipe file', 'file type'],
+      '/crop': ['crop', 'potong', 'cut', 'trim', 'pangkas', 'ratio', 'rasio', 'square', 'kotak'],
+      '/rotate': ['rotate', 'putar', 'flip', 'balik', 'mirror', 'cermin', 'landscape', 'portrait', '90', '180', 'miring'],
+      '/watermark': ['watermark', 'tanda air', 'logo', 'brand', 'copyright', 'hak cipta', 'stamp', 'cap'],
+      '/remove-bg': ['remove bg', 'background', 'latar', 'hapus latar', 'transparent', 'transparan', 'cutout', 'sticker', 'stiker', 'tanpa background'],
+      '/filters': ['filter', 'efek', 'effect', 'brightness', 'contrast', 'saturation', 'kecerahan', 'kontras', 'saturasi', 'vintage', 'sepia', 'grayscale', 'hitam putih', 'black white', 'edit warna', 'color edit'],
+      '/rename': ['rename', 'ganti nama', 'ubah nama', 'bulk rename', 'batch rename', 'massal'],
+      '/collage': ['collage', 'kolase', 'gabung', 'merge', 'combine', 'grid', 'layout', 'kumpulkan'],
+      '/image-to-link': ['link', 'share', 'bagikan', 'url', 'upload', 'hosting', 'online'],
+      '/metadata': ['metadata', 'exif', 'info', 'informasi', 'camera', 'kamera', 'data gambar', 'detail', 'properties'],
+      '/color-picker': ['color', 'warna', 'picker', 'ambil warna', 'palette', 'hex', 'rgb', 'eyedropper', 'pipet'],
+      '/base64': ['base64', 'encode', 'decode', 'string', 'text', 'code', 'kode'],
+      '/qr-code': ['qr', 'qr code', 'barcode', 'scan', 'kode qr'],
+      '/favicon': ['favicon', 'icon', 'ikon', 'app icon', 'ico', 'pwa'],
+      '/splitter': ['split', 'potong grid', 'carousel', 'instagram', 'feed', 'bagi', 'pecah'],
+      '/blur': ['blur', 'sensor', 'censor', 'pixelate', 'pixel', 'samarkan', 'hide', 'sembunyikan', 'privacy', 'privasi'],
+      '/meme': ['meme', 'text', 'teks', 'funny', 'lucu', 'caption', 'tulisan'],
+      '/compare': ['compare', 'bandingkan', 'before after', 'sebelum sesudah', 'slider', 'perbandingan', 'diff'],
+      '/beautifier': ['beautify', 'percantik', 'screenshot', 'mockup', 'frame', 'bingkai', 'shadow', 'bayangan', 'gradient', 'gradien'],
+      '/ocr': ['ocr', 'text from image', 'extract text', 'baca teks', 'scan text', 'teks dari gambar', 'recognize', 'tulisan'],
+      '/annotate': ['annotate', 'anotasi', 'draw', 'gambar', 'arrow', 'panah', 'shape', 'bentuk', 'coret', 'tulis di gambar', 'mark', 'tandai'],
+      '/upscale': ['upscale', 'enhance', 'tingkatkan', 'perbesar', 'hd', 'high resolution', 'resolusi tinggi', 'quality', 'kualitas', 'jernih', 'tajam', 'sharp', 'ai enhance'],
+      '/ai-generator': ['ai', 'generate', 'buat gambar', 'create image', 'artificial intelligence', 'text to image', 'prompt', 'ai gambar'],
+    };
+
+    return tools.filter((tool) => {
+      // Match title/description
+      if (tool.title.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q)) return true;
+      // Match keywords
+      const keywords = keywordMap[tool.path] || [];
+      return keywords.some((kw) => q.includes(kw) || kw.includes(q));
+    });
   }, [searchQuery, tools]);
 
   return (
