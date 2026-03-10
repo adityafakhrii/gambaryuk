@@ -142,7 +142,7 @@ export function AppSidebar() {
             {!isCollapsed && (
               <SidebarGroupLabel
                 onClick={() => toggleGroup(group.key)}
-                className="cursor-pointer flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors select-none"
+                className="cursor-pointer flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors select-none"
               >
                 <span>{t(group.key)}</span>
                 {openGroups[group.key] ? (
