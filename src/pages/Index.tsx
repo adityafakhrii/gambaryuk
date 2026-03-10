@@ -178,6 +178,7 @@ const Index = () => {
               </Link>
             ))}
           </div>
+          )}
         </div>
       </section>
 
