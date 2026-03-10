@@ -7,7 +7,7 @@ import {
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit,
+  ScanText, PenTool, Wand2, BrainCircuit, Heart,
 } from 'lucide-react';
 import {
   Sidebar,
