@@ -174,7 +174,7 @@ const Index = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder={t('nav.home') === 'Home' ? 'Search tools...' : 'Cari tools...'}
+              placeholder={t('nav.home') === 'Home' ? 'Describe what you need... e.g. "make image smaller"' : 'Deskripsikan kebutuhanmu... misal "kecilin gambar"'}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 h-10 rounded-xl border-border/50 bg-card/80 backdrop-blur shadow-soft"
