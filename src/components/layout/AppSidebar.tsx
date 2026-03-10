@@ -7,7 +7,7 @@ import {
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit,
+  ScanText, PenTool, Wand2, BrainCircuit, Heart,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -142,7 +142,7 @@ export function AppSidebar() {
             {!isCollapsed && (
               <SidebarGroupLabel
                 onClick={() => toggleGroup(group.key)}
-                className="cursor-pointer flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors select-none"
+                className="cursor-pointer flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors select-none"
               >
                 <span>{t(group.key)}</span>
                 {openGroups[group.key] ? (
@@ -178,15 +178,30 @@ export function AppSidebar() {
 
       {/* Footer */}
       <SidebarFooter className="border-t border-border/50 px-2 py-3 space-y-1">
-        {/* About & Privacy */}
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip={language === 'id' ? 'Dukung Kami' : 'Support Us'}
+            >
+              <a
+                href="https://saweria.co/adityafakhri"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sidebar-foreground/70"
+              >
+                <Heart className="h-4 w-4 flex-shrink-0" />
+                {!isCollapsed && <span className="text-xs">{language === 'id' ? 'Dukung Kami' : 'Support Us'}</span>}
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               isActive={location.pathname === '/about'}
               tooltip={t('nav.about')}
             >
-              <Link to="/about" className="flex items-center gap-2 text-muted-foreground">
+              <Link to="/about" className="flex items-center gap-2 text-sidebar-foreground/70">
                 <Info className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">{t('nav.about')}</span>}
               </Link>
@@ -198,7 +213,7 @@ export function AppSidebar() {
               isActive={location.pathname === '/privacy'}
               tooltip="Privacy Policy"
             >
-              <Link to="/privacy" className="flex items-center gap-2 text-muted-foreground">
+              <Link to="/privacy" className="flex items-center gap-2 text-sidebar-foreground/70">
                 <Shield className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">Privacy Policy</span>}
               </Link>
