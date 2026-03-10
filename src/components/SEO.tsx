@@ -7,8 +7,8 @@ interface SEOProps {
     image?: string;
 }
 
-export function SEO({ title, description, path = '', image = '/og-image.jpg' }: SEOProps) {
-    const siteUrl = 'https://gambaryuk.com'; // Replace with actual production URL
+export function SEO({ title, description, path = '', image = '/og-image.png' }: SEOProps) {
+    const siteUrl = 'https://gambaryuk.adityafakhri.com'; // Replace with actual production URL
     const url = `${siteUrl}${path}`;
     const fullTitle = `${title} | GambarYuk`;
 

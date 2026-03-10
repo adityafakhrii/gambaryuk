@@ -32,7 +32,7 @@ const routes = [
     '/about'
 ];
 
-const DOMAIN = 'https://gambaryuk.com';
+const DOMAIN = 'https://gambaryuk.adityafakhri.com';
 const today = new Date().toISOString().split('T')[0];
 
 let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
