@@ -8,6 +8,7 @@ import { Sparkles, Download, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { downloadImage } from '@/lib/imageProcessing';
+import { aiRateLimiter } from '@/lib/rateLimiter';
 
 const UpscalePage = () => {
   const { t } = useLanguage();
@@ -33,6 +34,13 @@ const UpscalePage = () => {
         reader.onload = () => resolve(reader.result as string);
         reader.readAsDataURL(file);
       });
+
+      const { allowed, retryAfterMs } = aiRateLimiter.check();
+      if (!allowed) {
+        toast.error(`Rate limited. Try again in ${Math.ceil(retryAfterMs / 1000)}s`);
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase.functions.invoke('upscale', {
         body: { image: base64, scale: parseInt(scale) },

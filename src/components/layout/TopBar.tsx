@@ -70,7 +70,7 @@ export function TopBar() {
         {isHome && (
           <>
             <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0 sm:hidden" />
-            <span className="text-foreground font-medium sm:hidden">Beranda</span>
+            <span className="text-foreground font-medium sm:hidden">{t('nav.home')}</span>
           </>
         )}
       </nav>

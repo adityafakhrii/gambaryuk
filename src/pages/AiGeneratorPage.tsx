@@ -8,6 +8,7 @@ import { Wand2, Download, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { downloadImage } from '@/lib/imageProcessing';
+import { aiRateLimiter } from '@/lib/rateLimiter';
 
 const styles = [
   { value: 'realistic', label: 'Realistic' },
@@ -35,6 +36,13 @@ const AiGeneratorPage = () => {
     setResultUrl(null);
 
     try {
+      const { allowed, retryAfterMs } = aiRateLimiter.check();
+      if (!allowed) {
+        toast.error(`Rate limited. Try again in ${Math.ceil(retryAfterMs / 1000)}s`);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-image', {
         body: { prompt: prompt.trim(), style },
       });

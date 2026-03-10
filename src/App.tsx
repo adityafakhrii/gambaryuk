@@ -10,34 +10,49 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import AnimatedRoutes from "@/components/layout/AnimatedRoutes";
 import { Walkthrough } from "@/components/Walkthrough";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+
+import { HelmetProvider } from 'react-helmet-async';
 
 const queryClient = new QueryClient();
 
+function KeyboardShortcuts() {
+  useKeyboardShortcuts();
+  return null;
+}
+
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <SidebarProvider defaultOpen={true}>
-              <div className="min-h-screen flex w-full bg-background">
-                <AppSidebar />
-                <div className="flex flex-col flex-1 min-w-0">
-                  <TopBar />
-                  <main className="flex-1 overflow-auto page-gradient">
-                    <AnimatedRoutes />
-                  </main>
-                </div>
-              </div>
-              <Walkthrough />
-            </SidebarProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </LanguageProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <LanguageProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <KeyboardShortcuts />
+              <BrowserRouter>
+                <SidebarProvider defaultOpen={true}>
+                  <div className="min-h-screen flex w-full bg-background">
+                    <AppSidebar />
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <TopBar />
+                      <main className="flex-1 overflow-auto page-gradient">
+                        <AnimatedRoutes />
+                      </main>
+                    </div>
+                  </div>
+                  <Walkthrough />
+                </SidebarProvider>
+              </BrowserRouter>
+            </TooltipProvider>
+          </LanguageProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  </HelmetProvider>
 );
 
 export default App;
+

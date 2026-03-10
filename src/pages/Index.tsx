@@ -2,21 +2,19 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useImageStats } from '@/hooks/useImageStats';
 import { Input } from '@/components/ui/input';
 import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
   Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
-  Images, Zap, Shield, Link as LinkIcon,
+  Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit, Sun, Moon, Search,
+  ScanText, PenTool, Wand2, BrainCircuit, Search,
 } from 'lucide-react';
 
 const Index = () => {
   const { t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
-  const { stats } = useImageStats();
   const [searchQuery, setSearchQuery] = useState('');
 
   const tools = [
@@ -47,26 +45,6 @@ const Index = () => {
     { icon: BrainCircuit, title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' },
   ];
 
-  const statItems = [
-    {
-      icon: Images,
-      label: 'Gambar Diproses',
-      value: stats.totalProcessed.toLocaleString('id-ID'),
-      suffix: 'file',
-    },
-    {
-      icon: Zap,
-      label: 'Total Tools',
-      value: tools.length.toString(),
-      suffix: 'tools',
-    },
-    {
-      icon: Shield,
-      label: 'Data Tersimpan',
-      value: '0',
-      suffix: 'byte',
-    },
-  ];
 
   const filteredTools = useMemo(() => {
     if (!searchQuery.trim()) return tools;
@@ -115,57 +93,19 @@ const Index = () => {
       {/* Hero - compact */}
       <section className="relative z-10 px-4 pt-8 pb-5 text-center">
         <div className="mx-auto max-w-2xl">
-          {/* Theme toggle pill */}
-          <div className="flex justify-center mb-4">
-            <button
-              onClick={toggleTheme}
-              className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/80 backdrop-blur px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all duration-300 shadow-soft hover:shadow-soft-lg"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? (
-                <>
-                  <Moon className="h-4 w-4" />
-                  <span className="hidden sm:inline">Dark Mode</span>
-                </>
-              ) : (
-                <>
-                  <Sun className="h-4 w-4" />
-                  <span className="hidden sm:inline">Light Mode</span>
-                </>
-              )}
-            </button>
-          </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
             GambarYuk
           </h1>
-          <p className="mt-1.5 text-sm md:text-base text-muted-foreground">
-            {t('app.slogan')}
+          <p className="mt-1.5 text-base md:text-lg font-bold text-foreground">
+            Tanpa Iklan, Tanpa Login, 100% GRATIS!
+          </p>
+          <p className="mt-1 text-sm md:text-base text-muted-foreground">
+            Edit Gambar? Langsung Upload Gas!
           </p>
         </div>
       </section>
 
-      {/* Stats Row */}
-      <section className="relative z-10 px-4 pb-6">
-        <div className="mx-auto max-w-2xl">
-          <div className="grid grid-cols-3 gap-3">
-            {statItems.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-xl border border-border/50 bg-card/80 backdrop-blur px-3 py-3 text-center shadow-soft"
-              >
-                <div className="flex justify-center mb-1">
-                  <stat.icon className="h-4 w-4 text-primary" />
-                </div>
-                <div className="text-lg font-bold text-foreground leading-none">
-                  {stat.value}
-                  <span className="text-xs font-normal text-muted-foreground ml-1">{stat.suffix}</span>
-                </div>
-                <div className="text-xs text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* Search + Tools Grid */}
       <section className="relative z-10 flex-1 px-4 pb-8">
@@ -173,6 +113,7 @@ const Index = () => {
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              id="tool-search"
               type="text"
               placeholder={t('nav.home') === 'Home' ? 'Describe what you need... e.g. "make image smaller"' : 'Deskripsikan kebutuhanmu... misal "kecilin gambar"'}
               value={searchQuery}
@@ -185,31 +126,31 @@ const Index = () => {
               {t('nav.home') === 'Home' ? 'No tools found.' : 'Tools tidak ditemukan.'}
             </div>
           ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {filteredTools.map((tool, index) => (
-              <Link
-                key={tool.path}
-                to={tool.path}
-                className="group animate-fade-in"
-                style={{ animationDelay: `${0.04 * index}s` }}
-              >
-                <div className="h-full rounded-2xl border border-border/50 bg-card p-4 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-2.5 transition-all duration-300 group-hover:bg-primary/5 group-hover:border-primary/30">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md">
-                    <tool.icon className="h-5 w-5 transition-transform duration-300 group-hover:rotate-[-8deg]" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {filteredTools.map((tool, index) => (
+                <Link
+                  key={tool.path}
+                  to={tool.path}
+                  className="group animate-fade-in"
+                  style={{ animationDelay: `${0.04 * index}s` }}
+                >
+                  <div className="h-full rounded-2xl border border-border/50 bg-card p-4 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-2.5 transition-all duration-300 group-hover:bg-primary/5 group-hover:border-primary/30">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md">
+                      <tool.icon className="h-5 w-5 transition-transform duration-300 group-hover:rotate-[-8deg]" />
+                    </div>
+                    <h3 className="text-xs font-semibold text-foreground leading-tight transition-colors duration-200 group-hover:text-primary">
+                      {tool.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-snug hidden sm:block line-clamp-2">
+                      {tool.description}
+                    </p>
+                    <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                      <ArrowRight className="h-3 w-3" />
+                    </div>
                   </div>
-                  <h3 className="text-xs font-semibold text-foreground leading-tight transition-colors duration-200 group-hover:text-primary">
-                    {tool.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-snug hidden sm:block line-clamp-2">
-                    {tool.description}
-                  </p>
-                  <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                    <ArrowRight className="h-3 w-3" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
           )}
         </div>
       </section>

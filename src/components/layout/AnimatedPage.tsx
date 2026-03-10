@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
+import { SEO } from '@/components/SEO';
 
 const pageVariants = {
   initial: {
@@ -11,7 +12,7 @@ const pageVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-    ease: [0.25, 0.46, 0.45, 0.94] as const,
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
     },
   },
   exit: {
@@ -24,16 +25,28 @@ const pageVariants = {
   },
 };
 
-export default function AnimatedPage({ children }: { children: ReactNode }) {
+interface AnimatedPageProps {
+  children: ReactNode;
+  seo?: {
+    title: string;
+    description: string;
+    path: string;
+  };
+}
+
+export default function AnimatedPage({ children, seo }: AnimatedPageProps) {
   return (
-    <motion.div
-      variants={pageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="min-h-full"
-    >
-      {children}
-    </motion.div>
+    <>
+      {seo && <SEO title={seo.title} description={seo.description} path={seo.path} />}
+      <motion.div
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="min-h-full"
+      >
+        {children}
+      </motion.div>
+    </>
   );
 }

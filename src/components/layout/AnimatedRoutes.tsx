@@ -1,73 +1,79 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 import AnimatedPage from './AnimatedPage';
+import { PageSkeleton } from '@/components/ui/page-skeleton';
 
-import Index from '@/pages/Index';
-import ResizePage from '@/pages/ResizePage';
-import CompressPage from '@/pages/CompressPage';
-import ConvertPage from '@/pages/ConvertPage';
-import CropPage from '@/pages/CropPage';
-import RotatePage from '@/pages/RotatePage';
-import WatermarkPage from '@/pages/WatermarkPage';
-import RemoveBgPage from '@/pages/RemoveBgPage';
-import FiltersPage from '@/pages/FiltersPage';
-import RenamePage from '@/pages/RenamePage';
-import CollagePage from '@/pages/CollagePage';
-import ImageToLinkPage from '@/pages/ImageToLinkPage';
-import MetadataPage from '@/pages/MetadataPage';
-import ColorPickerPage from '@/pages/ColorPickerPage';
-import Base64Page from '@/pages/Base64Page';
-import QrCodePage from '@/pages/QrCodePage';
-import FaviconPage from '@/pages/FaviconPage';
-import SplitterPage from '@/pages/SplitterPage';
-import BlurPage from '@/pages/BlurPage';
-import MemeGeneratorPage from '@/pages/MemeGeneratorPage';
-import ComparePage from '@/pages/ComparePage';
-import BeautifierPage from '@/pages/BeautifierPage';
-import OcrPage from '@/pages/OcrPage';
-import AnnotatePage from '@/pages/AnnotatePage';
-import UpscalePage from '@/pages/UpscalePage';
-import AiGeneratorPage from '@/pages/AiGeneratorPage';
-import PrivacyPage from '@/pages/PrivacyPage';
-import AboutPage from '@/pages/AboutPage';
-import NotFound from '@/pages/NotFound';
+const Index = lazy(() => import('@/pages/Index'));
+const ResizePage = lazy(() => import('@/pages/ResizePage'));
+const CompressPage = lazy(() => import('@/pages/CompressPage'));
+const ConvertPage = lazy(() => import('@/pages/ConvertPage'));
+const CropPage = lazy(() => import('@/pages/CropPage'));
+const RotatePage = lazy(() => import('@/pages/RotatePage'));
+const WatermarkPage = lazy(() => import('@/pages/WatermarkPage'));
+const RemoveBgPage = lazy(() => import('@/pages/RemoveBgPage'));
+const FiltersPage = lazy(() => import('@/pages/FiltersPage'));
+const RenamePage = lazy(() => import('@/pages/RenamePage'));
+const CollagePage = lazy(() => import('@/pages/CollagePage'));
+const ImageToLinkPage = lazy(() => import('@/pages/ImageToLinkPage'));
+const MetadataPage = lazy(() => import('@/pages/MetadataPage'));
+const ColorPickerPage = lazy(() => import('@/pages/ColorPickerPage'));
+const Base64Page = lazy(() => import('@/pages/Base64Page'));
+const QrCodePage = lazy(() => import('@/pages/QrCodePage'));
+const FaviconPage = lazy(() => import('@/pages/FaviconPage'));
+const SplitterPage = lazy(() => import('@/pages/SplitterPage'));
+const BlurPage = lazy(() => import('@/pages/BlurPage'));
+const MemeGeneratorPage = lazy(() => import('@/pages/MemeGeneratorPage'));
+const ComparePage = lazy(() => import('@/pages/ComparePage'));
+const BeautifierPage = lazy(() => import('@/pages/BeautifierPage'));
+const OcrPage = lazy(() => import('@/pages/OcrPage'));
+const AnnotatePage = lazy(() => import('@/pages/AnnotatePage'));
+const UpscalePage = lazy(() => import('@/pages/UpscalePage'));
+const AiGeneratorPage = lazy(() => import('@/pages/AiGeneratorPage'));
+const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
+const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const NotFound = lazy(() => import('@/pages/NotFound'));
 
 export default function AnimatedRoutes() {
   const location = useLocation();
+  const { t } = useLanguage();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedPage><Index /></AnimatedPage>} />
-        <Route path="/resize" element={<AnimatedPage><ResizePage /></AnimatedPage>} />
-        <Route path="/compress" element={<AnimatedPage><CompressPage /></AnimatedPage>} />
-        <Route path="/convert" element={<AnimatedPage><ConvertPage /></AnimatedPage>} />
-        <Route path="/crop" element={<AnimatedPage><CropPage /></AnimatedPage>} />
-        <Route path="/rotate" element={<AnimatedPage><RotatePage /></AnimatedPage>} />
-        <Route path="/watermark" element={<AnimatedPage><WatermarkPage /></AnimatedPage>} />
-        <Route path="/remove-bg" element={<AnimatedPage><RemoveBgPage /></AnimatedPage>} />
-        <Route path="/filters" element={<AnimatedPage><FiltersPage /></AnimatedPage>} />
-        <Route path="/rename" element={<AnimatedPage><RenamePage /></AnimatedPage>} />
-        <Route path="/collage" element={<AnimatedPage><CollagePage /></AnimatedPage>} />
-        <Route path="/image-to-link" element={<AnimatedPage><ImageToLinkPage /></AnimatedPage>} />
-        <Route path="/metadata" element={<AnimatedPage><MetadataPage /></AnimatedPage>} />
-        <Route path="/color-picker" element={<AnimatedPage><ColorPickerPage /></AnimatedPage>} />
-        <Route path="/base64" element={<AnimatedPage><Base64Page /></AnimatedPage>} />
-        <Route path="/qr-code" element={<AnimatedPage><QrCodePage /></AnimatedPage>} />
-        <Route path="/favicon" element={<AnimatedPage><FaviconPage /></AnimatedPage>} />
-        <Route path="/splitter" element={<AnimatedPage><SplitterPage /></AnimatedPage>} />
-        <Route path="/blur" element={<AnimatedPage><BlurPage /></AnimatedPage>} />
-        <Route path="/meme" element={<AnimatedPage><MemeGeneratorPage /></AnimatedPage>} />
-        <Route path="/compare" element={<AnimatedPage><ComparePage /></AnimatedPage>} />
-        <Route path="/beautifier" element={<AnimatedPage><BeautifierPage /></AnimatedPage>} />
-        <Route path="/ocr" element={<AnimatedPage><OcrPage /></AnimatedPage>} />
-        <Route path="/annotate" element={<AnimatedPage><AnnotatePage /></AnimatedPage>} />
-        <Route path="/upscale" element={<AnimatedPage><UpscalePage /></AnimatedPage>} />
-        <Route path="/ai-generator" element={<AnimatedPage><AiGeneratorPage /></AnimatedPage>} />
-        <Route path="/privacy" element={<AnimatedPage><PrivacyPage /></AnimatedPage>} />
-        <Route path="/about" element={<AnimatedPage><AboutPage /></AnimatedPage>} />
-        <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
-      </Routes>
-    </AnimatePresence>
+    <Suspense fallback={<PageSkeleton />}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<AnimatedPage seo={{ title: 'GambarYuk', description: t('app.slogan'), path: '/' }}><Index /></AnimatedPage>} />
+          <Route path="/resize" element={<AnimatedPage seo={{ title: t('feature.resize.title'), description: t('feature.resize.desc'), path: '/resize' }}><ResizePage /></AnimatedPage>} />
+          <Route path="/compress" element={<AnimatedPage seo={{ title: t('feature.compress.title'), description: t('feature.compress.desc'), path: '/compress' }}><CompressPage /></AnimatedPage>} />
+          <Route path="/convert" element={<AnimatedPage seo={{ title: t('feature.convert.title'), description: t('feature.convert.desc'), path: '/convert' }}><ConvertPage /></AnimatedPage>} />
+          <Route path="/crop" element={<AnimatedPage seo={{ title: t('feature.crop.title'), description: t('feature.crop.desc'), path: '/crop' }}><CropPage /></AnimatedPage>} />
+          <Route path="/rotate" element={<AnimatedPage seo={{ title: t('feature.rotate.title'), description: t('feature.rotate.desc'), path: '/rotate' }}><RotatePage /></AnimatedPage>} />
+          <Route path="/watermark" element={<AnimatedPage seo={{ title: t('feature.watermark.title'), description: t('feature.watermark.desc'), path: '/watermark' }}><WatermarkPage /></AnimatedPage>} />
+          <Route path="/remove-bg" element={<AnimatedPage seo={{ title: t('feature.removeBg.title'), description: t('feature.removeBg.desc'), path: '/remove-bg' }}><RemoveBgPage /></AnimatedPage>} />
+          <Route path="/filters" element={<AnimatedPage seo={{ title: t('feature.filters.title'), description: t('feature.filters.desc'), path: '/filters' }}><FiltersPage /></AnimatedPage>} />
+          <Route path="/rename" element={<AnimatedPage seo={{ title: t('feature.rename.title'), description: t('feature.rename.desc'), path: '/rename' }}><RenamePage /></AnimatedPage>} />
+          <Route path="/collage" element={<AnimatedPage seo={{ title: t('feature.collage.title'), description: t('feature.collage.desc'), path: '/collage' }}><CollagePage /></AnimatedPage>} />
+          <Route path="/image-to-link" element={<AnimatedPage seo={{ title: t('feature.imageToLink.title'), description: t('feature.imageToLink.desc'), path: '/image-to-link' }}><ImageToLinkPage /></AnimatedPage>} />
+          <Route path="/metadata" element={<AnimatedPage seo={{ title: t('feature.metadata.title'), description: t('feature.metadata.desc'), path: '/metadata' }}><MetadataPage /></AnimatedPage>} />
+          <Route path="/color-picker" element={<AnimatedPage seo={{ title: t('feature.colorPicker.title'), description: t('feature.colorPicker.desc'), path: '/color-picker' }}><ColorPickerPage /></AnimatedPage>} />
+          <Route path="/base64" element={<AnimatedPage seo={{ title: t('feature.base64.title'), description: t('feature.base64.desc'), path: '/base64' }}><Base64Page /></AnimatedPage>} />
+          <Route path="/qr-code" element={<AnimatedPage seo={{ title: t('feature.qrCode.title'), description: t('feature.qrCode.desc'), path: '/qr-code' }}><QrCodePage /></AnimatedPage>} />
+          <Route path="/favicon" element={<AnimatedPage seo={{ title: t('feature.favicon.title'), description: t('feature.favicon.desc'), path: '/favicon' }}><FaviconPage /></AnimatedPage>} />
+          <Route path="/splitter" element={<AnimatedPage seo={{ title: t('feature.splitter.title'), description: t('feature.splitter.desc'), path: '/splitter' }}><SplitterPage /></AnimatedPage>} />
+          <Route path="/blur" element={<AnimatedPage seo={{ title: t('feature.blur.title'), description: t('feature.blur.desc'), path: '/blur' }}><BlurPage /></AnimatedPage>} />
+          <Route path="/meme" element={<AnimatedPage seo={{ title: t('feature.meme.title'), description: t('feature.meme.desc'), path: '/meme' }}><MemeGeneratorPage /></AnimatedPage>} />
+          <Route path="/compare" element={<AnimatedPage seo={{ title: t('feature.compare.title'), description: t('feature.compare.desc'), path: '/compare' }}><ComparePage /></AnimatedPage>} />
+          <Route path="/beautifier" element={<AnimatedPage seo={{ title: t('feature.beautifier.title'), description: t('feature.beautifier.desc'), path: '/beautifier' }}><BeautifierPage /></AnimatedPage>} />
+          <Route path="/ocr" element={<AnimatedPage seo={{ title: t('feature.ocr.title'), description: t('feature.ocr.desc'), path: '/ocr' }}><OcrPage /></AnimatedPage>} />
+          <Route path="/annotate" element={<AnimatedPage seo={{ title: t('feature.annotate.title'), description: t('feature.annotate.desc'), path: '/annotate' }}><AnnotatePage /></AnimatedPage>} />
+          <Route path="/upscale" element={<AnimatedPage seo={{ title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale' }}><UpscalePage /></AnimatedPage>} />
+          <Route path="/ai-generator" element={<AnimatedPage seo={{ title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' }}><AiGeneratorPage /></AnimatedPage>} />
+          <Route path="/privacy" element={<AnimatedPage seo={{ title: t('nav.privacyPolicy'), description: 'Privacy Policy untuk GambarYuk', path: '/privacy' }}><PrivacyPage /></AnimatedPage>} />
+          <Route path="/about" element={<AnimatedPage seo={{ title: 'Tentang', description: 'Tentang GambarYuk', path: '/about' }}><AboutPage /></AnimatedPage>} />
+          <Route path="*" element={<AnimatedPage seo={{ title: '404 Không Ditemukan', description: 'Halaman tidak ditemukan', path: '' }}><NotFound /></AnimatedPage>} />
+        </Routes>
+      </AnimatePresence>
+    </Suspense>
   );
 }

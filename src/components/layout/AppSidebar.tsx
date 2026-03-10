@@ -85,7 +85,7 @@ const toolGroups = [
 
 export function AppSidebar() {
   const { t, language, setLanguage } = useLanguage();
-  
+
   const location = useLocation();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
@@ -215,7 +215,7 @@ export function AppSidebar() {
             >
               <Link to="/privacy" className="flex items-center gap-2 text-sidebar-foreground/70">
                 <Shield className="h-4 w-4 flex-shrink-0" />
-                {!isCollapsed && <span className="text-xs">Privacy Policy</span>}
+                {!isCollapsed && <span className="text-xs">{t('nav.privacyPolicy')}</span>}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

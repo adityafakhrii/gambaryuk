@@ -54,7 +54,7 @@ export default function ConvertPage() {
   const [targetFormat, setTargetFormat] = useState<Format>('webp');
   const [preserveTransparency, setPreserveTransparency] = useState(true);
   const [pdfMode, setPdfMode] = useState<'single' | 'separate'>('single');
-  
+
   // PDF file input state
   const [pdfFiles, setPdfFiles] = useState<File[]>([]);
   const [pdfPages, setPdfPages] = useState<PdfPage[]>([]);
@@ -344,10 +344,12 @@ export default function ConvertPage() {
   return (
     <div className="min-h-full">
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
-        <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-          {t('convert.title')}
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">{t('feature.convert.desc')}</p>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
+            {t('convert.title')}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">{t('feature.convert.desc')}</p>
+        </div>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
           {/* Main Area */}
@@ -356,7 +358,7 @@ export default function ConvertPage() {
             {images.length === 0 && pdfFiles.length === 0 && (
               <div className="space-y-4">
                 <UploadZone onFilesSelected={handleFilesSelected} className="min-h-[240px]" />
-                
+
                 <div className="relative flex items-center justify-center">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t border-border" />

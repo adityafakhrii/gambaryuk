@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScanText, Copy, Check, Download, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { aiRateLimiter } from '@/lib/rateLimiter';
 
 const OcrPage = () => {
   const { t } = useLanguage();
@@ -32,6 +33,13 @@ const OcrPage = () => {
         reader.onload = () => resolve(reader.result as string);
         reader.readAsDataURL(file);
       });
+
+      const { allowed, retryAfterMs } = aiRateLimiter.check();
+      if (!allowed) {
+        toast.error(`Rate limited. Try again in ${Math.ceil(retryAfterMs / 1000)}s`);
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase.functions.invoke('ocr', {
         body: { image: base64 },

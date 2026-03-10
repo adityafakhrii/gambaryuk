@@ -24,31 +24,31 @@ const translations: Translations = {
   'nav.rename': { en: 'Bulk Rename', id: 'Rename Massal' },
   'nav.collage': { en: 'Collage', id: 'Kolase' },
   'nav.imageToLink': { en: 'Image to Link', id: 'Gambar ke Link' },
-  
+
   // Hero Section
   'hero.title': { en: 'All-in-One Image Tools', id: 'Alat Gambar Lengkap' },
   'hero.subtitle': { en: 'Resize, Compress, Convert — Instantly.', id: 'Ubah Ukuran, Kompres, Konversi — Instan.' },
   'hero.description': { en: 'Optimize your images without hassle. Fast, lightweight, and professional.', id: 'Optimasi gambar lo tanpa ribet. Cepat, ringan, dan profesional.' },
   'hero.cta': { en: 'Upload Image Now', id: 'Upload Gambar Sekarang' },
-  
+
   // App Branding
   'app.slogan': { en: 'Edit images? Just upload and go! AD-FREE, 100% FREE!', id: 'Edit gambar? Langsung upload gas! TANPA IKLAN, 100% GRATIS!' },
-  
+
   // Footer
   'footer.privacy': { en: 'Your images never leave your device', id: 'Gambar kamu nggak pernah keluar dari device kamu' },
   'footer.browserOnly': { en: 'All processing happens in your browser — zero data stored.', id: 'Semua proses terjadi di browser kamu — nol data tersimpan.' },
-  
+
   // Privacy Page
   'privacy.title': { en: 'Privacy Policy', id: 'Kebijakan Privasi' },
   'privacy.subtitle': { en: 'We take your privacy seriously. Here\'s exactly what happens with your images.', id: 'Kami serius soal privasi kamu. Ini penjelasan lengkap tentang apa yang terjadi dengan gambar kamu.' },
   'privacy.tldr': { en: 'Your images never leave your browser. GambarYuk has no server, no database, and no way to access your files. Everything is processed locally on your device using JavaScript. When you close the tab, everything is gone. Period.', id: 'Gambar kamu nggak pernah keluar dari browser. GambarYuk nggak punya server, nggak punya database, dan nggak bisa akses file kamu. Semua diproses secara lokal di perangkat kamu pakai JavaScript. Kalau tab ditutup, semua hilang. Titik.' },
   'privacy.lastUpdated': { en: 'Last updated: February 2026', id: 'Terakhir diperbarui: Februari 2026' },
-  
+
   // Feature Categories
   'category.essential': { en: 'Essential Tools', id: 'Alat Utama' },
   'category.edit': { en: 'Edit Tools', id: 'Alat Edit' },
   'category.advanced': { en: 'Advanced Tools', id: 'Alat Lanjutan' },
-  
+
   // Feature Cards
   'feature.resize.title': { en: 'Resize Image', id: 'Ubah Ukuran Gambar' },
   'feature.resize.desc': { en: 'Change dimensions for any platform', id: 'Ubah dimensi untuk platform apapun' },
@@ -261,7 +261,7 @@ const translations: Translations = {
   'imageToLink.expiry.90d': { en: '90 days', id: '90 hari' },
   'imageToLink.expiry.forever': { en: 'Forever', id: 'Selamanya' },
   'imageToLink.downloadAllZip': { en: 'Download All as ZIP', id: 'Unduh Semua sebagai ZIP' },
-  
+
   // Benefits
   'benefits.title': { en: 'Why Use Our Tools?', id: 'Kenapa Pakai Tools Kami?' },
   'benefits.fast.title': { en: 'Lightning Fast', id: 'Super Cepat' },
@@ -270,13 +270,13 @@ const translations: Translations = {
   'benefits.private.desc': { en: 'Images never leave your device. 100% secure.', id: 'Gambar tidak pernah keluar dari device kamu. 100% aman.' },
   'benefits.free.title': { en: 'Always Free', id: 'Selalu Gratis' },
   'benefits.free.desc': { en: 'No limits, no watermarks, no registration required.', id: 'Tanpa batas, tanpa watermark, tanpa registrasi.' },
-  
+
   // Upload Zone
   'upload.title': { en: 'Drop your images here', id: 'Letakkan gambar kamu di sini' },
   'upload.subtitle': { en: 'or click to browse', id: 'atau klik untuk memilih' },
   'upload.formats': { en: 'Supports JPG, PNG, WEBP', id: 'Mendukung JPG, PNG, WEBP' },
   'upload.batch': { en: 'Upload multiple files at once', id: 'Upload banyak file sekaligus' },
-  
+
   // Resize Tool
   'resize.title': { en: 'Resize Image', id: 'Ubah Ukuran Gambar' },
   'resize.width': { en: 'Width', id: 'Lebar' },
@@ -288,7 +288,7 @@ const translations: Translations = {
   'resize.youtube': { en: 'YouTube Thumbnail', id: 'Thumbnail YouTube' },
   'resize.banner': { en: 'Website Banner', id: 'Banner Website' },
   'resize.custom': { en: 'Custom', id: 'Kustom' },
-  
+
   // Compress Tool
   'compress.title': { en: 'Compress Image', id: 'Kompres Gambar' },
   'compress.quality': { en: 'Quality', id: 'Kualitas' },
@@ -300,13 +300,13 @@ const translations: Translations = {
   'compress.after': { en: 'After', id: 'Sesudah' },
   'compress.reduction': { en: 'Size reduced by', id: 'Ukuran berkurang' },
   'compress.success': { en: 'File size reduced — web loading will be faster 🚀', id: 'Ukuran file berkurang — loading web akan lebih cepat 🚀' },
-  
+
   // Convert Tool
   'convert.title': { en: 'Convert Format', id: 'Konversi Format' },
   'convert.from': { en: 'Current Format', id: 'Format Saat Ini' },
   'convert.to': { en: 'Convert To', id: 'Konversi Ke' },
   'convert.transparency': { en: 'Preserve transparency', id: 'Pertahankan transparansi' },
-  
+
   // Crop Tool
   'crop.title': { en: 'Crop Image', id: 'Potong Gambar' },
   'crop.ratio': { en: 'Aspect Ratio', id: 'Rasio Aspek' },
@@ -315,7 +315,7 @@ const translations: Translations = {
   'crop.landscape': { en: 'Landscape (16:9)', id: 'Landscape (16:9)' },
   'crop.portrait': { en: 'Portrait (9:16)', id: 'Portrait (9:16)' },
   'crop.apply': { en: 'Apply Crop', id: 'Terapkan Crop' },
-  
+
   // Rotate Tool
   'rotate.title': { en: 'Rotate & Flip', id: 'Putar & Balik' },
   'rotate.left': { en: 'Rotate Left 90°', id: 'Putar Kiri 90°' },
@@ -324,7 +324,7 @@ const translations: Translations = {
   'rotate.flipH': { en: 'Flip Horizontal', id: 'Balik Horizontal' },
   'rotate.flipV': { en: 'Flip Vertical', id: 'Balik Vertikal' },
   'rotate.custom': { en: 'Custom Angle', id: 'Sudut Kustom' },
-  
+
   // Watermark Tool
   'watermark.title': { en: 'Add Watermark', id: 'Tambah Tanda Air' },
   'watermark.text': { en: 'Text Watermark', id: 'Watermark Teks' },
@@ -334,14 +334,14 @@ const translations: Translations = {
   'watermark.opacity': { en: 'Opacity', id: 'Transparansi' },
   'watermark.size': { en: 'Size', id: 'Ukuran' },
   'watermark.color': { en: 'Color', id: 'Warna' },
-  
+
   // Remove Background Tool
   'removeBg.title': { en: 'Remove Background', id: 'Hapus Latar Belakang' },
   'removeBg.processing': { en: 'Processing... This may take a moment', id: 'Memproses... Mohon tunggu sebentar' },
   'removeBg.success': { en: 'Background removed successfully!', id: 'Latar belakang berhasil dihapus!' },
   'removeBg.transparent': { en: 'Transparent Background', id: 'Latar Transparan' },
   'removeBg.solid': { en: 'Solid Color Background', id: 'Latar Warna Solid' },
-  
+
   // Filters Tool
   'filters.title': { en: 'Image Filters', id: 'Filter Gambar' },
   'filters.brightness': { en: 'Brightness', id: 'Kecerahan' },
@@ -353,7 +353,7 @@ const translations: Translations = {
   'filters.invert': { en: 'Invert', id: 'Balik Warna' },
   'filters.vintage': { en: 'Vintage', id: 'Vintage' },
   'filters.reset': { en: 'Reset All', id: 'Reset Semua' },
-  
+
   // Bulk Rename Tool
   'rename.title': { en: 'Bulk Rename', id: 'Rename Massal' },
   'rename.pattern': { en: 'Naming Pattern', id: 'Pola Penamaan' },
@@ -361,7 +361,7 @@ const translations: Translations = {
   'rename.preview': { en: 'Preview Names', id: 'Preview Nama' },
   'rename.tokens': { en: 'Available tokens: {name}, {index}, {date}, {width}, {height}', id: 'Token tersedia: {name}, {index}, {date}, {width}, {height}' },
   'rename.downloadZip': { en: 'Download as ZIP', id: 'Unduh sebagai ZIP' },
-  
+
   // Collage Tool
   'collage.title': { en: 'Create Collage', id: 'Buat Kolase' },
   'collage.template': { en: 'Template', id: 'Template' },
@@ -369,7 +369,7 @@ const translations: Translations = {
   'collage.bgColor': { en: 'Background Color', id: 'Warna Latar' },
   'collage.generate': { en: 'Generate Collage', id: 'Buat Kolase' },
   'collage.minImages': { en: 'Upload at least 2 images', id: 'Upload minimal 2 gambar' },
-  
+
   // Common
   'common.download': { en: 'Download', id: 'Unduh' },
   'common.downloadAll': { en: 'Download All', id: 'Unduh Semua' },
@@ -386,12 +386,27 @@ const translations: Translations = {
   'common.clearAll': { en: 'Clear All', id: 'Hapus Semua' },
   'common.apply': { en: 'Apply', id: 'Terapkan' },
   'common.getStarted': { en: 'Get started', id: 'Mulai' },
-  
+
   // Errors
   'error.unsupported': { en: 'Unsupported file format', id: 'Format file tidak didukung' },
   'error.tooLarge': { en: 'File too large (max 10MB)', id: 'File terlalu besar (maks 10MB)' },
   'error.uploadFailed': { en: 'Upload failed. Please try again.', id: 'Upload gagal. Silakan coba lagi.' },
-  
+
+  // Stats
+  'stats.imagesProcessed': { en: 'Images Processed', id: 'Gambar Diproses' },
+  'stats.totalTools': { en: 'Total Tools', id: 'Total Tools' },
+  'stats.dataStored': { en: 'Data Stored', id: 'Data Tersimpan' },
+
+  // Misc UI
+  'common.addMore': { en: '+ Add more', id: '+ Tambah lagi' },
+  'nav.privacyPolicy': { en: 'Privacy Policy', id: 'Kebijakan Privasi' },
+
+  // 404 page
+  'notFound.title': { en: 'Page Not Found', id: 'Halaman Tidak Ditemukan' },
+  'notFound.description': { en: "The page you're looking for doesn't exist or has been moved.", id: 'Halaman yang kamu cari tidak ada atau sudah dipindahkan.' },
+  'notFound.backHome': { en: 'Back to Home', id: 'Kembali ke Beranda' },
+  'notFound.popularTools': { en: 'Popular Tools', id: 'Tools Populer' },
+
   // Theme & Language
   'theme.light': { en: 'Light', id: 'Terang' },
   'theme.dark': { en: 'Dark', id: 'Gelap' },
