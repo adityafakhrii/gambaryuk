@@ -9,6 +9,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import AnimatedRoutes from "@/components/layout/AnimatedRoutes";
+import { Walkthrough } from "@/components/Walkthrough";
 
 const queryClient = new QueryClient();
 
