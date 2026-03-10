@@ -213,7 +213,7 @@ export function AppSidebar() {
               isActive={location.pathname === '/privacy'}
               tooltip="Privacy Policy"
             >
-              <Link to="/privacy" className="flex items-center gap-2 text-muted-foreground">
+              <Link to="/privacy" className="flex items-center gap-2 text-sidebar-foreground/70">
                 <Shield className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">Privacy Policy</span>}
               </Link>
