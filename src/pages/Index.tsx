@@ -135,11 +135,26 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Tools Grid */}
+      {/* Search + Tools Grid */}
       <section className="relative z-10 flex-1 px-4 pb-8">
         <div className="mx-auto max-w-4xl">
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder={t('nav.home') === 'Home' ? 'Search tools...' : 'Cari tools...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 h-10 rounded-xl border-border/50 bg-card/80 backdrop-blur shadow-soft"
+            />
+          </div>
+          {filteredTools.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground text-sm">
+              {t('nav.home') === 'Home' ? 'No tools found.' : 'Tools tidak ditemukan.'}
+            </div>
+          ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {tools.map((tool, index) => (
+            {filteredTools.map((tool, index) => (
               <Link
                 key={tool.path}
                 to={tool.path}
