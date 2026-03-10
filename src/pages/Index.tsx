@@ -1,20 +1,23 @@
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useImageStats } from '@/hooks/useImageStats';
+import { Input } from '@/components/ui/input';
 import {
   Maximize2, FileDown, RefreshCw, ArrowRight,
   Crop, RotateCcw, Stamp, Eraser, Palette, FileText, LayoutGrid,
   Images, Zap, Shield, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit, Sun, Moon,
+  ScanText, PenTool, Wand2, BrainCircuit, Sun, Moon, Search,
 } from 'lucide-react';
 
 const Index = () => {
   const { t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const { stats } = useImageStats();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const tools = [
     { icon: Maximize2, title: t('feature.resize.title'), description: t('feature.resize.desc'), path: '/resize' },
@@ -64,6 +67,16 @@ const Index = () => {
       suffix: 'byte',
     },
   ];
+
+  const filteredTools = useMemo(() => {
+    if (!searchQuery.trim()) return tools;
+    const q = searchQuery.toLowerCase();
+    return tools.filter(
+      (tool) =>
+        tool.title.toLowerCase().includes(q) ||
+        tool.description.toLowerCase().includes(q)
+    );
+  }, [searchQuery, tools]);
 
   return (
     <div className="min-h-full flex flex-col">
@@ -122,11 +135,26 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Tools Grid */}
+      {/* Search + Tools Grid */}
       <section className="relative z-10 flex-1 px-4 pb-8">
         <div className="mx-auto max-w-4xl">
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder={t('nav.home') === 'Home' ? 'Search tools...' : 'Cari tools...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 h-10 rounded-xl border-border/50 bg-card/80 backdrop-blur shadow-soft"
+            />
+          </div>
+          {filteredTools.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground text-sm">
+              {t('nav.home') === 'Home' ? 'No tools found.' : 'Tools tidak ditemukan.'}
+            </div>
+          ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {tools.map((tool, index) => (
+            {filteredTools.map((tool, index) => (
               <Link
                 key={tool.path}
                 to={tool.path}
@@ -150,6 +178,7 @@ const Index = () => {
               </Link>
             ))}
           </div>
+          )}
         </div>
       </section>
 
