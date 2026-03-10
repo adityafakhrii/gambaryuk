@@ -17,6 +17,7 @@ const Index = () => {
   const { t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const { stats } = useImageStats();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const tools = [
     { icon: Maximize2, title: t('feature.resize.title'), description: t('feature.resize.desc'), path: '/resize' },
