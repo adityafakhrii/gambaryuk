@@ -99,7 +99,29 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const resultImage = data.choices?.[0]?.message?.images?.[0]?.image_url?.url || null;
+    const message = data.choices?.[0]?.message;
+    
+    let resultImage = message?.images?.[0]?.image_url?.url 
+      || message?.images?.[0]?.url
+      || message?.images?.[0]
+      || null;
+    
+    if (!resultImage && Array.isArray(message?.content)) {
+      for (const part of message.content) {
+        if (part.type === "image_url") {
+          resultImage = part.image_url?.url || null;
+          break;
+        }
+        if (part.type === "image" && part.url) {
+          resultImage = part.url;
+          break;
+        }
+      }
+    }
+    
+    if (!resultImage && typeof message?.content === "string" && message.content.startsWith("data:image/")) {
+      resultImage = message.content;
+    }
 
     return new Response(JSON.stringify({ image: resultImage }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
