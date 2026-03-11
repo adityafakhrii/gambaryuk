@@ -193,7 +193,7 @@ const WatermarkPage = () => {
                 <TabsContent value="text" className="space-y-4">
                   {/* Quick text options */}
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Teks Cepat</label>
+                    <label className="text-sm font-medium text-foreground mb-2 block">{t('watermark.quickText')}</label>
                     <div className="flex flex-wrap gap-1.5">
                       {quickTexts.map((qt) => (
                         <Button
@@ -263,7 +263,7 @@ const WatermarkPage = () => {
 
                 <TabsContent value="image" className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Upload Logo/Gambar</label>
+                    <label className="text-sm font-medium text-foreground mb-2 block">{t('watermark.uploadLogo')}</label>
                     <input
                       ref={watermarkInputRef}
                       type="file"
@@ -292,7 +292,7 @@ const WatermarkPage = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground">Ukuran Logo: {imageScale}%</label>
+                    <label className="text-sm font-medium text-foreground">{t('watermark.logoSize')}: {imageScale}%</label>
                     <Slider
                       value={[imageScale]}
                       max={50}
