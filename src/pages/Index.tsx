@@ -44,8 +44,6 @@ const Index = () => {
     { icon: PenTool, title: t('feature.annotate.title'), description: t('feature.annotate.desc'), path: '/annotate' },
     { icon: Wand2, title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale' },
     { icon: BrainCircuit, title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' },
-    { icon: Layers, title: t('feature.smartEditor.title'), description: t('feature.smartEditor.desc'), path: '/smart-editor' },
-    { icon: Sparkles, title: t('feature.smartLogo.title'), description: t('feature.smartLogo.desc'), path: '/smart-logo' },
   ];
 
 
@@ -80,8 +78,6 @@ const Index = () => {
       '/annotate': ['annotate', 'anotasi', 'draw', 'gambar', 'arrow', 'panah', 'shape', 'bentuk', 'coret', 'tulis di gambar', 'mark', 'tandai'],
       '/upscale': ['upscale', 'enhance', 'tingkatkan', 'perbesar', 'hd', 'high resolution', 'resolusi tinggi', 'quality', 'kualitas', 'jernih', 'tajam', 'sharp', 'ai enhance'],
       '/ai-generator': ['ai', 'generate', 'buat gambar', 'create image', 'artificial intelligence', 'text to image', 'prompt', 'ai gambar'],
-      '/smart-editor': ['smart', 'editor', 'layer', 'ai edit', 'magic grab', 'magic layer', 'canva'],
-      '/smart-logo': ['logo', 'smart logo', 'auto contrast', 'watermark', 'tempel logo'],
     };
 
     return tools.filter((tool) => {

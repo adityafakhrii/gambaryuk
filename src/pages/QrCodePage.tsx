@@ -5,62 +5,85 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Download, QrCode } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Download, QrCode, Link as LinkIcon, Image as ImageIcon, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import QRCode from 'qrcode';
+import { supabase } from '@/integrations/supabase/client';
 
 const QrCodePage = () => {
   const { t } = useLanguage();
   const [text, setText] = useState('https://');
-  const [size, setSize] = useState(300);
-  const [fgColor, setFgColor] = useState('#000000');
-  const [bgColor, setBgColor] = useState('#ffffff');
-  const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M');
   const [qrDataUrl, setQrDataUrl] = useState('');
-  const [logoFile, setLogoFile] = useState<ImageFile | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  const [qrMode, setQrMode] = useState<'text' | 'image'>('image');
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedImageFile, setUploadedImageFile] = useState<ImageFile | null>(null);
 
-  const generateQr = async () => {
-    if (!text.trim()) return;
+  const generateQrFromText = async (targetText: string = text) => {
+    if (!targetText.trim()) return;
     try {
-      const dataUrl = await QRCode.toDataURL(text, {
-        width: size,
+      const dataUrl = await QRCode.toDataURL(targetText, {
+        width: 300,
         margin: 2,
-        color: { dark: fgColor, light: bgColor },
-        errorCorrectionLevel: errorLevel,
+        color: { dark: '#000000', light: '#ffffff' },
+        errorCorrectionLevel: 'M',
       });
+      setQrDataUrl(dataUrl);
 
-      if (logoFile) {
-        // Draw QR then overlay logo
-        const canvas = canvasRef.current!;
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext('2d')!;
-
-        const qrImg = new Image();
-        qrImg.onload = () => {
-          ctx.drawImage(qrImg, 0, 0, size, size);
-
-          const logo = new Image();
-          logo.onload = () => {
-            const logoSize = size * 0.2;
-            const x = (size - logoSize) / 2;
-            // White background behind logo
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(x - 4, x - 4, logoSize + 8, logoSize + 8);
-            ctx.drawImage(logo, x, x, logoSize, logoSize);
-            setQrDataUrl(canvas.toDataURL('image/png'));
-          };
-          logo.src = logoFile.preview;
-        };
-        qrImg.src = dataUrl;
-      } else {
-        setQrDataUrl(dataUrl);
+      if(targetText === text) {
+         toast.success(t('common.success'));
       }
-
-      toast.success(t('common.success'));
     } catch {
       toast.error('Failed to generate QR code');
+    }
+  };
+
+  const generateQrFromImage = async () => {
+    if (!uploadedImageFile) {
+        toast.error(t('qrCode.selectImageFirst'));
+        return;
+    }
+
+    setIsUploading(true);
+    try {
+        const ext = uploadedImageFile.file.name.split('.').pop() || 'jpg';
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+        const { error } = await supabase.storage
+          .from('shared-images')
+          .upload(fileName, uploadedImageFile.file, {
+            cacheControl: '31536000',
+            upsert: false,
+          });
+
+        if (error) throw error;
+
+        const { data: urlData } = supabase.storage
+          .from('shared-images')
+          .getPublicUrl(fileName);
+
+        const publicUrl = urlData.publicUrl;
+        
+        // Track in DB with expiry (30 days default for QR images)
+        await supabase.from('shared_image_files').insert({
+          file_name: fileName,
+          bucket_path: fileName,
+          original_name: uploadedImageFile.file.name,
+          file_size: uploadedImageFile.file.size,
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        });
+
+        // Generate QR code using the new public URL
+        setText(publicUrl); // Update the text input so it's visible what the QR points to
+        await generateQrFromText(publicUrl);
+        toast.success(t('qrCode.uploadSuccess'));
+
+    } catch (err) {
+        console.error('Upload Error:', err);
+        toast.error(t('qrCode.uploadError'));
+    } finally {
+        setIsUploading(false);
     }
   };
 
@@ -73,10 +96,10 @@ const QrCodePage = () => {
     } else {
       QRCode.toString(text, {
         type: 'svg',
-        width: size,
+        width: 300,
         margin: 2,
-        color: { dark: fgColor, light: bgColor },
-        errorCorrectionLevel: errorLevel,
+        color: { dark: '#000000', light: '#ffffff' },
+        errorCorrectionLevel: 'M',
       }).then(svg => {
         const blob = new Blob([svg], { type: 'image/svg+xml' });
         const url = URL.createObjectURL(blob);
@@ -101,66 +124,69 @@ const QrCodePage = () => {
           {/* Controls */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft space-y-4">
-              <div>
-                <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.content')}</label>
-                <Input
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  placeholder="https://example.com"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.size')}: {size}px</label>
-                <Slider value={[size]} onValueChange={([v]) => setSize(v)} min={128} max={1024} step={32} />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.fgColor')}</label>
-                  <div className="flex items-center gap-2">
-                    <input type="color" value={fgColor} onChange={(e) => setFgColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />
-                    <Input value={fgColor} onChange={(e) => setFgColor(e.target.value)} className="font-mono text-sm" />
+              
+              <Tabs value={qrMode} onValueChange={(v) => setQrMode(v as 'text' | 'image')} className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-4">
+                  <TabsTrigger value="image" className="flex items-center gap-2"><ImageIcon className="w-4 h-4"/> {t('qrCode.uploadImage')}</TabsTrigger>
+                  <TabsTrigger value="text" className="flex items-center gap-2"><LinkIcon className="w-4 h-4"/> {t('qrCode.linkOrText')}</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="text" className="mt-0">
+                  <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.content')}</label>
+                  <Input
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="https://example.com"
+                  />
+                  <Button className="w-full mt-4" onClick={() => generateQrFromText()} disabled={!text.trim()}>
+                    <QrCode className="h-4 w-4 mr-2" /> {t('qrCode.generate')}
+                  </Button>
+                </TabsContent>
+                
+                <TabsContent value="image" className="mt-0 space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-foreground block mb-2">{t('qrCode.uploadImageTitle')}</label>
+                    <UploadZone
+                        onFilesSelected={(files) => setUploadedImageFile(files[0] || null)}
+                        multiple={false}
+                        className="py-6 min-h-[140px]"
+                    >
+                        {uploadedImageFile ? (
+                           <div className="flex flex-col items-center justify-center space-y-3 w-full h-full relative group">
+                              <img src={uploadedImageFile.preview} className="max-h-[120px] rounded-lg object-contain" alt="preview" />
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setUploadedImageFile(null);
+                                  setQrDataUrl('');
+                                }}
+                                className="absolute top-2 right-2 p-1.5 bg-background/80 hover:bg-destructive/90 hover:text-destructive-foreground text-foreground rounded-md backdrop-blur opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+                                title={t('qrCode.removeImage')}
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                              <p className="text-sm text-foreground mb-1 bg-background/80 px-2 py-1 rounded backdrop-blur max-w-[90%] truncate">
+                                  {uploadedImageFile.file.name}
+                              </p>
+                           </div>
+                        ) : (
+                           <div className="flex flex-col items-center justify-center space-y-2">
+                             <p className="text-sm text-foreground mb-1">{t('qrCode.uploadHint')}</p>
+                             <p className="text-xs text-muted-foreground">{t('qrCode.uploadDesc')}</p>
+                           </div>
+                        )}
+                        
+                    </UploadZone>
                   </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.bgColor')}</label>
-                  <div className="flex items-center gap-2">
-                    <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />
-                    <Input value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="font-mono text-sm" />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.errorLevel')}</label>
-                <Select value={errorLevel} onValueChange={(v) => setErrorLevel(v as 'L' | 'M' | 'Q' | 'H')}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="L">Low (7%)</SelectItem>
-                    <SelectItem value="M">Medium (15%)</SelectItem>
-                    <SelectItem value="Q">Quartile (25%)</SelectItem>
-                    <SelectItem value="H">High (30%)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-foreground block mb-1">{t('qrCode.logo')}</label>
-                <UploadZone
-                  onFilesSelected={(files) => setLogoFile(files[0] || null)}
-                  multiple={false}
-                  className="min-h-0 py-4"
-                >
-                  <p className="text-xs text-muted-foreground">
-                    {logoFile ? logoFile.file.name : t('qrCode.logoHint')}
-                  </p>
-                </UploadZone>
-              </div>
-
-              <Button className="w-full" onClick={generateQr} disabled={!text.trim()}>
-                <QrCode className="h-4 w-4 mr-2" /> {t('qrCode.generate')}
-              </Button>
+                  <Button className="w-full" onClick={generateQrFromImage} disabled={!uploadedImageFile || isUploading}>
+                    {isUploading ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> {t('qrCode.uploading')}</>
+                    ) : (
+                        <><QrCode className="h-4 w-4 mr-2" /> {t('qrCode.uploadSubmit')}</>
+                    )}
+                  </Button>
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
 
@@ -186,7 +212,6 @@ const QrCodePage = () => {
                 </div>
               )}
             </div>
-            <canvas ref={canvasRef} className="hidden" />
           </div>
         </div>
       </div>

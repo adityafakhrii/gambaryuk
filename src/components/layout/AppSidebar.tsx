@@ -79,8 +79,6 @@ const toolGroups = [
       { path: '/annotate', icon: PenTool, key: 'nav.annotate', descKey: 'feature.annotate.desc' },
       { path: '/upscale', icon: Wand2, key: 'nav.upscale', descKey: 'feature.upscale.desc' },
       { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen', descKey: 'feature.aiGen.desc' },
-      { path: '/smart-editor', icon: LayoutGrid, key: 'nav.smartEditor', descKey: 'feature.smartEditor.desc' },
-      { path: '/smart-logo', icon: Sparkles, key: 'nav.smartLogo', descKey: 'feature.smartLogo.desc' },
     ],
   },
 ];

@@ -31,7 +31,6 @@ const routeLabels: Record<string, string> = {
   '/annotate': 'feature.annotate.title',
   '/upscale': 'feature.upscale.title',
   '/ai-generator': 'feature.aiGen.title',
-  '/smart-editor': 'feature.smartEditor.title',
   '/privacy': 'privacy.title',
   '/about': 'about.title',
 };

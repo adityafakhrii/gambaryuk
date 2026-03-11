@@ -116,6 +116,17 @@ const translations: Translations = {
   'qrCode.logoHint': { en: 'Drop logo image here', id: 'Letakkan logo di sini' },
   'qrCode.generate': { en: 'Generate QR Code', id: 'Buat QR Code' },
   'qrCode.preview': { en: 'QR code will appear here', id: 'QR code akan muncul di sini' },
+  'qrCode.uploadImage': { en: 'Image', id: 'Gambar' },
+  'qrCode.linkOrText': { en: 'Link / Text', id: 'Link / Teks' },
+  'qrCode.uploadImageTitle': { en: 'Upload Image (Convert to QR Code)', id: 'Upload Foto (Jadikan QR Code)' },
+  'qrCode.uploadHint': { en: 'Click or drag image here', id: 'Klik atau seret gambar ke sini' },
+  'qrCode.uploadDesc': { en: 'Automatically uploaded and converted into a link', id: 'Otomatis di-upload dan dibuatkan link' },
+  'qrCode.uploading': { en: 'Uploading & Processing...', id: 'Sedang Mengunggah & Memproses...' },
+  'qrCode.uploadSubmit': { en: 'Upload & Generate QR Code', id: 'Upload & Generate QR Code' },
+  'qrCode.selectImageFirst': { en: 'Please select an image first', id: 'Mohon pilih gambar terlebih dahulu' },
+  'qrCode.uploadSuccess': { en: 'Image successfully uploaded and QR Code generated!', id: 'Gambar berhasil diunggah dan QR Code dibuat!' },
+  'qrCode.uploadError': { en: 'Failed to upload image. Make sure size is under 5MB.', id: 'Gagal mengunggah gambar. Pastikan ukuran di bawah 5MB.' },
+  'qrCode.removeImage': { en: 'Remove image', id: 'Hapus gambar' },
 
   // Favicon page
   'favicon.generate': { en: 'Generate Icons', id: 'Buat Ikon' },
@@ -202,16 +213,6 @@ const translations: Translations = {
   'ocr.result': { en: 'Extracted Text', id: 'Teks Terekstrak' },
   'ocr.noText': { en: 'No text extracted', id: 'Belum ada teks yang diekstrak' },
   'ocr.error': { en: 'Failed to extract text. Please try again.', id: 'Gagal mengekstrak teks. Silakan coba lagi.' },
-
-  // Smart AI Editor
-  'nav.smartEditor': { en: 'Smart Editor', id: 'Smart Editor' },
-  'feature.smartEditor.title': { en: 'Smart AI Editor', id: 'Smart AI Editor' },
-  'feature.smartEditor.desc': { en: 'Layers, magic background removal, and smart objects placement', id: 'Layer, hapus background cerdas, dan pengaturan objek' },
-
-  // Smart Logo Tool
-  'nav.smartLogo': { en: 'Smart Logo', id: 'Smart Logo' },
-  'feature.smartLogo.title': { en: 'Smart Logo Placer', id: 'Smart Logo Placer' },
-  'feature.smartLogo.desc': { en: 'Adapt logo colors based on background', id: 'Adaptasi warna logo otomatis sesuai background' },
 
   // Annotate page
   'annotate.pen': { en: 'Pen', id: 'Pena' },
