@@ -11,3 +11,9 @@ verify_jwt = false
 
 [functions.cleanup-expired-images]
 verify_jwt = false
+
+[functions.remove-watermark]
+verify_jwt = false
+
+[functions.remove-bg]
+verify_jwt = false
