@@ -23,13 +23,7 @@ function isRateLimited(ip: string): boolean {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
-  const apikey = req.headers.get("apikey");
-  const expectedKey = Deno.env.get("SUPABASE_ANON_KEY");
-  if (!apikey || apikey !== expectedKey) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  // Rate limiting provides protection for this public endpoint
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (isRateLimited(ip)) {
@@ -81,6 +75,8 @@ serve(async (req) => {
 
     if (!response.ok) {
       const status = response.status;
+      const t = await response.text();
+      console.error("AI gateway error:", status, t);
       if (status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
           status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -91,8 +87,11 @@ serve(async (req) => {
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", status, t);
+      if (status === 400) {
+        return new Response(JSON.stringify({ error: "Gambar tidak dapat diproses. Pastikan gambar valid dan cukup besar." }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       return new Response(JSON.stringify({ error: "AI processing failed" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
