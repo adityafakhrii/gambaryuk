@@ -32,7 +32,8 @@ const translations: Translations = {
   'hero.cta': { en: 'Upload Image Now', id: 'Upload Gambar Sekarang' },
 
   // App Branding
-  'app.slogan': { en: 'Edit images? Just upload and go! AD-FREE, 100% FREE!', id: 'Edit gambar? Langsung upload gas! TANPA IKLAN, 100% GRATIS!' },
+  'app.slogan.main': { en: 'Edit images? Just upload and go!', id: 'Edit Gambar? Langsung Upload Gas!' },
+  'app.slogan.highlight': { en: 'AD-FREE, NO LOGIN, 100% FREE!', id: 'Tanpa Iklan, Tanpa Login, 100% GRATIS!' },
 
   // Footer
   'footer.privacy': { en: 'Your images never leave your device', id: 'Gambar kamu nggak pernah keluar dari device kamu' },
@@ -236,15 +237,24 @@ const translations: Translations = {
   // About page
   'nav.about': { en: 'About', id: 'Tentang' },
   'about.title': { en: 'About GambarYuk', id: 'Tentang GambarYuk' },
-  'about.subtitle': { en: 'Free image editing platform, built with passion.', id: 'Platform edit gambar gratis, dibuat dengan passion.' },
+  'about.subtitle': { en: 'A lightweight and complete image editor, straight from your browser.', id: 'Editor gambar ringan & lengkap, langsung dari browser kamu.' },
   'about.whatIs': { en: 'What is GambarYuk?', id: 'Apa itu GambarYuk?' },
-  'about.description': { en: 'GambarYuk is a free, ad-free online image editing platform with 25+ tools. All processing happens directly in your browser — your images never leave your device. Fast, private, and professional.', id: 'GambarYuk adalah platform edit gambar online gratis tanpa iklan dengan 25+ tools. Semua proses terjadi langsung di browser kamu — gambar kamu tidak pernah keluar dari device. Cepat, privat, dan profesional.' },
+  'about.description': { en: 'GambarYuk is a free online image editing platform with 25+ tools. Ad-free, no login required, and 100% free. All processing happens directly in your browser — your images never leave your device. Fast, private, and professional.', id: 'GambarYuk adalah platform edit gambar online gratis dengan 25+ tools. Tanpa iklan, tanpa login, dan 100% gratis. Semua proses terjadi langsung di browser kamu — gambar kamu tidak pernah keluar dari device. Cepat, privat, dan profesional.' },
   'about.creator': { en: 'Created By', id: 'Dibuat Oleh' },
-  'about.creatorBio': { en: 'A fullstack developer who is also active in exploring AI integration, guiding through mentoring, and sharing knowledge via educational content.', id: 'Seorang fullstack developer yang juga aktif mengeksplorasi integrasi AI, membimbing melalui mentoring, dan berbagi pengetahuan lewat konten edukatif.' },
+  'about.creatorBio': { en: 'A fullstack developer who is also active in exploring AI integration, guiding through mentoring, and sharing knowledge via educational content.', id: 'Seorang fullstack developer yang juga aktif mengeksplorasi integrasi AI, membimbing melalui mentoring, dan berbagi edukasi.' },
+
+  // Custom skills
   'about.skill.ai': { en: 'AI Integration', id: 'Integrasi AI' },
   'about.skill.mentoring': { en: 'Mentoring', id: 'Mentoring' },
-  'about.skill.content': { en: 'Edu Content', id: 'Konten Edukatif' },
-  'about.techStack': { en: 'Tech Stack', id: 'Tech Stack' },
+  'about.skill.content': { en: 'Edu Content', id: 'Konten Edukasi' },
+
+  // Tech stack
+  'about.techStack': { en: 'Built With', id: 'Dibuat Dengan' },
+
+  // Support
+  'about.support': { en: 'Support the Creator', id: 'Traktir Kopi' },
+  'about.supportDesc': { en: 'If GambarYuk helped you save time, consider buying me a coffee to keep this project alive and ad-free!', id: 'Kalau GambarYuk ngebantu hemat waktu kamu, traktir kopi dong biar project ini tetap hidup dan bebas iklan!' },
+  'about.supportBtn': { en: 'Buy me a Coffee', id: 'Traktir Kopi' },
 
   // Image to Link
   'imageToLink.readyToUpload': { en: 'images ready to upload', id: 'gambar siap diupload' },
@@ -270,6 +280,23 @@ const translations: Translations = {
   'benefits.private.desc': { en: 'Images never leave your device. 100% secure.', id: 'Gambar tidak pernah keluar dari device kamu. 100% aman.' },
   'benefits.free.title': { en: 'Always Free', id: 'Selalu Gratis' },
   'benefits.free.desc': { en: 'No limits, no watermarks, no registration required.', id: 'Tanpa batas, tanpa watermark, tanpa registrasi.' },
+
+  // PDF Upload Texts (Convert Page)
+  'upload.pdfTitle': { en: 'Upload PDF file', id: 'Upload file PDF' },
+  'upload.pdfDesc': { en: 'Convert PDF to JPG, PNG, WEBP images', id: 'Konversi PDF ke gambar JPG, PNG, WEBP' },
+  'upload.or': { en: 'OR', id: 'ATAU' },
+
+  // Format Infos
+  'format.jpeg.desc': { en: 'Best for photos. Small size, no transparency.', id: 'Terbaik untuk foto. Ukuran kecil, tanpa transparansi.' },
+  'format.png.desc': { en: 'Supports transparency. Ideal for graphics & logos.', id: 'Mendukung transparansi. Ideal untuk grafis & logo.' },
+  'format.webp.desc': { en: 'Modern format. Great compression with transparency.', id: 'Format modern. Kompresi bagus dengan transparansi.' },
+  'format.pdf.desc': { en: 'Portable document. Good for printing & sharing.', id: 'Dokumen portabel. Cocok untuk cetak & berbagi.' },
+  'format.avif.desc': { en: 'Newest format. Best compression, limited browser support.', id: 'Format terbaru. Kompresi terbaik, dukungan browser terbatas.' },
+  'format.gif.desc': { en: 'Supports animation. Limited colors (256).', id: 'Mendukung animasi. Warna terbatas (256).' },
+  'format.bmp.desc': { en: 'Uncompressed bitmap format. Large size.', id: 'Format bitmap tanpa kompresi. Ukuran besar.' },
+  'format.ico.desc': { en: 'For website favicons. Small size.', id: 'Untuk favicon website. Ukuran kecil.' },
+  'format.svg.desc': { en: 'Vector format. Can be zoomed without blur (traced).', id: 'Format vektor. Bisa di-zoom tanpa pecah (traced).' },
+  'format.tiff.desc': { en: 'High quality for printing. Very large size.', id: 'Kualitas tinggi untuk cetak. Ukuran sangat besar.' },
 
   // Upload Zone
   'upload.title': { en: 'Drop your images here', id: 'Letakkan gambar kamu di sini' },

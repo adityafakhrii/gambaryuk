@@ -10,6 +10,7 @@ import {
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
   ScanText, PenTool, Wand2, BrainCircuit, Search,
+  Shield, Zap, Lock
 } from 'lucide-react';
 
 const Index = () => {
@@ -90,62 +91,69 @@ const Index = () => {
 
   return (
     <div className="min-h-full flex flex-col">
-      {/* Hero - compact */}
-      <section className="relative z-10 px-4 pt-8 pb-5 text-center">
-        <div className="mx-auto max-w-2xl">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
-            GambarYuk
-          </h1>
-          <p className="mt-1.5 text-base md:text-lg font-bold text-foreground">
-            Tanpa Iklan, Tanpa Login, 100% GRATIS!
-          </p>
-          <p className="mt-1 text-sm md:text-base text-muted-foreground">
-            Edit Gambar? Langsung Upload Gas!
-          </p>
+      {/* Dashboard Header */}
+      <section className="relative z-10 px-1 pt-2 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-sidebar-foreground">
+              GambarYuk!
+            </h1>
+            <p className="mt-2 text-base md:text-lg text-muted-foreground font-medium">
+              {t('app.slogan.main')} <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded ml-1">{t('app.slogan.highlight')}</span>
+            </p>
+          </div>
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="tool-search"
+              type="text"
+              placeholder={t('nav.home') === 'Home' ? 'Search tool...' : 'Cari alat...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 h-10 w-full rounded-full border-border bg-card shadow-sm text-sm"
+            />
+          </div>
         </div>
       </section>
 
 
 
-      {/* Search + Tools Grid */}
-      <section className="relative z-10 flex-1 px-4 pb-8">
-        <div className="mx-auto max-w-4xl">
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              id="tool-search"
-              type="text"
-              placeholder={t('nav.home') === 'Home' ? 'Describe what you need... e.g. "make image smaller"' : 'Deskripsikan kebutuhanmu... misal "kecilin gambar"'}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 rounded-xl border-border/50 bg-card/80 backdrop-blur shadow-soft"
-            />
+      {/* Tools Grid */}
+      <section className="relative z-10 flex-1 px-1 pb-8">
+        <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold text-sidebar-foreground">
+              {t('nav.home') === 'Home' ? 'Available Tools' : 'Alat Tersedia'}
+            </h2>
           </div>
+
           {filteredTools.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground text-sm">
-              {t('nav.home') === 'Home' ? 'No tools found.' : 'Tools tidak ditemukan.'}
+            <div className="text-center py-12 text-muted-foreground text-sm border-2 border-dashed border-border rounded-xl">
+              {t('nav.home') === 'Home' ? 'No tools found matching your search.' : 'Tools tidak ditemukan.'}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {filteredTools.map((tool, index) => (
                 <Link
                   key={tool.path}
                   to={tool.path}
-                  className="group animate-fade-in"
-                  style={{ animationDelay: `${0.04 * index}s` }}
+                  className="group animate-fade-in flex flex-col"
+                  style={{ animationDelay: `${0.02 * index}s` }}
                 >
-                  <div className="h-full rounded-2xl border border-border/50 bg-card p-4 shadow-soft hover-card-enhanced flex flex-col items-center text-center gap-2.5 transition-all duration-300 group-hover:bg-primary/5 group-hover:border-primary/30">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md">
-                      <tool.icon className="h-5 w-5 transition-transform duration-300 group-hover:rotate-[-8deg]" />
+                  <div className="h-full rounded-xl border border-border/50 bg-background/50 p-4 transition-all duration-300 group-hover:bg-card group-hover:-translate-y-1 group-hover:border-primary group-hover:ring-1 group-hover:ring-primary group-hover:shadow-md flex flex-col items-start gap-3 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-3xl -z-10 group-hover:from-primary/10 transition-colors" />
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background border border-border/60 text-sidebar-foreground transition-all duration-300 group-hover:border-primary/30 group-hover:text-primary shadow-sm">
+                      <tool.icon className="h-4 w-4" />
                     </div>
-                    <h3 className="text-xs font-semibold text-foreground leading-tight transition-colors duration-200 group-hover:text-primary">
-                      {tool.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground leading-snug hidden sm:block line-clamp-2">
-                      {tool.description}
-                    </p>
-                    <div className="mt-auto flex items-center text-xs font-medium text-primary opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                      <ArrowRight className="h-3 w-3" />
+
+                    <div>
+                      <h3 className="text-sm font-bold text-sidebar-foreground leading-tight transition-colors duration-200 group-hover:text-primary mb-1">
+                        {tool.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground leading-snug line-clamp-2">
+                        {tool.description}
+                      </p>
                     </div>
                   </div>
                 </Link>

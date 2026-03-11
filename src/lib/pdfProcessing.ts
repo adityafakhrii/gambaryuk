@@ -71,7 +71,7 @@ export async function pdfToImages(
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const viewport = page.getViewport({ scale });
-    
+
     const canvas = document.createElement('canvas');
     canvas.width = viewport.width;
     canvas.height = viewport.height;
@@ -113,4 +113,32 @@ async function toDataUrl(url: string): Promise<string> {
   const ctx = canvas.getContext('2d')!;
   ctx.drawImage(img, 0, 0);
   return canvas.toDataURL('image/jpeg', 0.92);
+}
+
+/**
+ * Extract the first page of a PDF as a JPEG preview URL
+ */
+export async function extractPdfFirstPage(
+  pdfFile: File,
+  scale: number = 1
+): Promise<string> {
+  const arrayBuffer = await pdfFile.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const page = await pdf.getPage(1);
+  const viewport = page.getViewport({ scale });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  const ctx = canvas.getContext('2d')!;
+
+  await page.render({ canvasContext: ctx, viewport }).promise;
+
+  return new Promise<string>((resolve, reject) => {
+    canvas.toBlob(
+      (b) => (b ? resolve(URL.createObjectURL(b)) : reject(new Error('Failed to render PDF preview'))),
+      'image/jpeg',
+      0.8
+    );
+  });
 }

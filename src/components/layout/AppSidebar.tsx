@@ -104,9 +104,9 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border/50">
+    <Sidebar variant="floating" collapsible="icon" className="border-none">
       {/* Header */}
-      <SidebarHeader className="border-b border-border/50 px-3 py-4">
+      <SidebarHeader className="px-3 py-4">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
           <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 rounded-lg object-contain" />
           {!isCollapsed && (
@@ -117,7 +117,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="px-2 py-2">
+      <SidebarContent className="px-2 py-2 group-data-[collapsible=icon]:px-0">
         {/* Home */}
         <SidebarMenu>
           <SidebarMenuItem>
@@ -177,24 +177,8 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter className="border-t border-border/50 px-2 py-3 space-y-1">
+      <SidebarFooter className="px-2 py-3 space-y-1">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              tooltip={language === 'id' ? 'Dukung Kami' : 'Support Us'}
-            >
-              <a
-                href="https://saweria.co/adityafakhri"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sidebar-foreground/70"
-              >
-                <Heart className="h-4 w-4 flex-shrink-0" />
-                {!isCollapsed && <span className="text-xs">{language === 'id' ? 'Dukung Kami' : 'Support Us'}</span>}
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild

@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { convertImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
-import { imagesToSinglePdf, imageToPdf, pdfToImages, PdfPage } from '@/lib/pdfProcessing';
+import { imagesToSinglePdf, imageToPdf, pdfToImages, PdfPage, extractPdfFirstPage } from '@/lib/pdfProcessing';
 import { downloadAsZip } from '@/lib/zipDownload';
 import { Download, Loader2, Trash2, FileText } from 'lucide-react';
 import { toast } from 'sonner';
@@ -33,30 +33,36 @@ interface ProcessedFile extends ImageFile {
   pdfBlob?: Blob; // for image-to-pdf result
 }
 
-type Format = 'jpeg' | 'png' | 'webp' | 'bmp' | 'gif' | 'ico' | 'svg' | 'avif' | 'tiff' | 'pdf';
+interface PdfFileState {
+  file: File;
+  preview?: string;
+}
 
-const formats: { value: Format; label: string; description: string }[] = [
-  { value: 'jpeg', label: 'JPEG (.jpg)', description: 'Terbaik untuk foto. Ukuran kecil, tanpa transparansi.' },
-  { value: 'png', label: 'PNG (.png)', description: 'Mendukung transparansi. Ideal untuk grafis & logo.' },
-  { value: 'webp', label: 'WebP (.webp)', description: 'Format modern. Kompresi bagus dengan transparansi.' },
-  { value: 'pdf', label: 'PDF (.pdf)', description: 'Dokumen portabel. Cocok untuk cetak & berbagi.' },
-  { value: 'avif', label: 'AVIF (.avif)', description: 'Format terbaru. Kompresi terbaik, dukungan browser terbatas.' },
-  { value: 'gif', label: 'GIF (.gif)', description: 'Mendukung animasi. Warna terbatas (256).' },
-  { value: 'bmp', label: 'BMP (.bmp)', description: 'Format bitmap tanpa kompresi. Ukuran besar.' },
-  { value: 'ico', label: 'ICO (.ico)', description: 'Untuk favicon website. Ukuran kecil.' },
-  { value: 'svg', label: 'SVG (.svg)', description: 'Format vektor. Bisa di-zoom tanpa pecah (traced).' },
-  { value: 'tiff', label: 'TIFF (.tiff)', description: 'Kualitas tinggi untuk cetak. Ukuran sangat besar.' },
-];
+type Format = 'jpeg' | 'png' | 'webp' | 'bmp' | 'gif' | 'ico' | 'svg' | 'avif' | 'tiff' | 'pdf';
 
 export default function ConvertPage() {
   const { t } = useLanguage();
+
+  const formats: { value: Format; label: string; description: string }[] = [
+    { value: 'jpeg', label: 'JPEG (.jpg)', description: t('format.jpeg.desc') },
+    { value: 'png', label: 'PNG (.png)', description: t('format.png.desc') },
+    { value: 'webp', label: 'WebP (.webp)', description: t('format.webp.desc') },
+    { value: 'pdf', label: 'PDF (.pdf)', description: t('format.pdf.desc') },
+    { value: 'avif', label: 'AVIF (.avif)', description: t('format.avif.desc') },
+    { value: 'gif', label: 'GIF (.gif)', description: t('format.gif.desc') },
+    { value: 'bmp', label: 'BMP (.bmp)', description: t('format.bmp.desc') },
+    { value: 'ico', label: 'ICO (.ico)', description: t('format.ico.desc') },
+    { value: 'svg', label: 'SVG (.svg)', description: t('format.svg.desc') },
+    { value: 'tiff', label: 'TIFF (.tiff)', description: t('format.tiff.desc') },
+  ];
+
   const [images, setImages] = useState<ProcessedFile[]>([]);
   const [targetFormat, setTargetFormat] = useState<Format>('webp');
   const [preserveTransparency, setPreserveTransparency] = useState(true);
   const [pdfMode, setPdfMode] = useState<'single' | 'separate'>('single');
 
   // PDF file input state
-  const [pdfFiles, setPdfFiles] = useState<File[]>([]);
+  const [pdfFiles, setPdfFiles] = useState<PdfFileState[]>([]);
   const [pdfPages, setPdfPages] = useState<PdfPage[]>([]);
   const [pdfProcessing, setPdfProcessing] = useState(false);
 
@@ -68,7 +74,7 @@ export default function ConvertPage() {
     setPdfPages([]);
   }, []);
 
-  const handlePdfUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePdfUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
     const pdfs = Array.from(files).filter(f => f.type === 'application/pdf');
@@ -76,10 +82,29 @@ export default function ConvertPage() {
       toast.error('Hanya file PDF yang diterima');
       return;
     }
-    setPdfFiles(pdfs);
+
+    // Create initial state
+    const newPdfStates: PdfFileState[] = pdfs.map(f => ({ file: f }));
+    setPdfFiles(newPdfStates);
     setImages([]);
     setPdfPages([]);
     setTargetFormat('jpeg');
+
+    // Load previews asynchronously
+    for (let i = 0; i < pdfs.length; i++) {
+      try {
+        const previewUrl = await extractPdfFirstPage(pdfs[i], 0.5); // scale 0.5 for small preview
+        setPdfFiles(current => {
+          const updated = [...current];
+          if (updated[i]) {
+            updated[i] = { ...updated[i], preview: previewUrl };
+          }
+          return updated;
+        });
+      } catch (err) {
+        console.error('Failed to extract PDF preview', err);
+      }
+    }
   }, []);
 
   const handleRemoveImage = (id: string) => {
@@ -99,6 +124,9 @@ export default function ConvertPage() {
     setImages([]);
     pdfPages.forEach(p => URL.revokeObjectURL(p.url));
     setPdfPages([]);
+    pdfFiles.forEach(p => {
+      if (p.preview) URL.revokeObjectURL(p.preview);
+    });
     setPdfFiles([]);
   };
 
@@ -133,8 +161,8 @@ export default function ConvertPage() {
     setPdfProcessing(true);
     try {
       const allPages: PdfPage[] = [];
-      for (const pdf of pdfFiles) {
-        const pages = await pdfToImages(pdf);
+      for (const pdfState of pdfFiles) {
+        const pages = await pdfToImages(pdfState.file);
         allPages.push(...pages);
       }
       setPdfPages(allPages);
@@ -319,7 +347,7 @@ export default function ConvertPage() {
   };
 
   const handleDownloadPdfPage = (page: PdfPage, index: number) => {
-    const name = pdfFiles[0]?.name?.replace(/\.pdf$/i, '') || 'page';
+    const name = pdfFiles[0]?.file?.name?.replace(/\.pdf$/i, '') || 'page';
     downloadImage(page.blob, `${name}_page${index + 1}.jpg`);
   };
 
@@ -328,7 +356,7 @@ export default function ConvertPage() {
       pdfPages.forEach((page, i) => handleDownloadPdfPage(page, i));
       return;
     }
-    const name = pdfFiles[0]?.name?.replace(/\.pdf$/i, '') || 'page';
+    const name = pdfFiles[0]?.file?.name?.replace(/\.pdf$/i, '') || 'page';
     await downloadAsZip(
       pdfPages.map((page, i) => ({
         name: `${name}_page${i + 1}.jpg`,
@@ -360,17 +388,23 @@ export default function ConvertPage() {
                 <UploadZone onFilesSelected={handleFilesSelected} className="min-h-[240px]" />
 
                 <div className="relative flex items-center justify-center">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-border" />
+                  <div className="absolute inset-x-0 flex items-center">
+                    <div className="w-full border-t border-border/50" />
                   </div>
-                  <span className="relative bg-background px-4 text-sm text-muted-foreground">atau</span>
+                  <div className="relative bg-background px-4 py-1 rounded-full text-center">
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
+                      {t('upload.or') || 'ATAU'}
+                    </span>
+                  </div>
                 </div>
 
-                <label className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-card p-8 transition-colors hover:border-primary/50 hover:bg-primary/5">
-                  <FileText className="h-8 w-8 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium text-foreground">Upload file PDF</p>
-                    <p className="text-sm text-muted-foreground">Konversi PDF ke gambar JPG</p>
+                <label className="flex flex-col cursor-pointer items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border/50 bg-card shadow-soft p-8 transition-all duration-200 hover:border-primary/50 hover:bg-muted/50">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all">
+                    <FileText className="h-8 w-8" />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold text-foreground">{t('upload.pdfTitle')}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{t('upload.pdfDesc')}</p>
                   </div>
                   <input
                     type="file"
@@ -401,12 +435,20 @@ export default function ConvertPage() {
 
                 {/* PDF file cards */}
                 <div className="space-y-2">
-                  {pdfFiles.map((pdf, i) => (
+                  {pdfFiles.map((pdfState, i) => (
                     <div key={i} className="rounded-xl border border-border bg-card p-4 flex items-center gap-3">
-                      <FileText className="h-6 w-6 text-primary shrink-0" />
+                      {pdfState.preview ? (
+                        <div className="h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border/50 shadow-sm bg-white flex items-center justify-center">
+                          <img src={pdfState.preview} alt="PDF Preview" className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                          <FileText className="h-6 w-6" />
+                        </div>
+                      )}
                       <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{pdf.name}</p>
-                        <p className="text-xs text-muted-foreground">{formatFileSize(pdf.size)}</p>
+                        <p className="text-sm font-medium truncate">{pdfState.file.name}</p>
+                        <p className="text-xs text-muted-foreground">{formatFileSize(pdfState.file.size)}</p>
                       </div>
                     </div>
                   ))}

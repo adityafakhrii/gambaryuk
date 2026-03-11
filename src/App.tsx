@@ -34,11 +34,11 @@ const App = () => (
               <KeyboardShortcuts />
               <BrowserRouter>
                 <SidebarProvider defaultOpen={true}>
-                  <div className="min-h-screen flex w-full bg-background">
+                  <div className="min-h-screen flex w-full bg-background transition-colors">
                     <AppSidebar />
-                    <div className="flex flex-col flex-1 min-w-0">
+                    <div className="flex flex-col flex-1 min-w-0 overflow-hidden p-2 pl-0 gap-2">
                       <TopBar />
-                      <main className="flex-1 overflow-auto page-gradient">
+                      <main className="flex-1 overflow-auto bg-card rounded-2xl shadow-sm border border-border/50 relative p-4 md:p-6 lg:p-8">
                         <AnimatedRoutes />
                       </main>
                     </div>
