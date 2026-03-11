@@ -75,6 +75,8 @@ serve(async (req) => {
 
     if (!response.ok) {
       const status = response.status;
+      const t = await response.text();
+      console.error("AI gateway error:", status, t);
       if (status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
           status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -85,8 +87,11 @@ serve(async (req) => {
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", status, t);
+      if (status === 400) {
+        return new Response(JSON.stringify({ error: "Gambar tidak dapat diproses. Pastikan gambar valid dan cukup besar." }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       return new Response(JSON.stringify({ error: "AI processing failed" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
