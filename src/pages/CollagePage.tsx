@@ -29,18 +29,18 @@ const CollagePage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const allTemplates: TemplateConfig[] = [
-    { value: '2x1', label: '2 foto (horizontal)', cols: 2, rows: 1, minImages: 2 },
-    { value: '1x2', label: '2 foto (vertikal)', cols: 1, rows: 2, minImages: 2 },
-    { value: '1x3', label: '3 foto (vertikal)', cols: 1, rows: 3, minImages: 3 },
-    { value: '3x1', label: '3 foto (horizontal)', cols: 3, rows: 1, minImages: 3 },
-    { value: '2x2', label: '4 foto (grid 2×2)', cols: 2, rows: 2, minImages: 4 },
-    { value: '1x4', label: '4 foto (vertikal)', cols: 1, rows: 4, minImages: 4 },
-    { value: '4x1', label: '4 foto (horizontal)', cols: 4, rows: 1, minImages: 4 },
-    { value: '2x3', label: '6 foto (grid 2×3)', cols: 2, rows: 3, minImages: 6 },
-    { value: '3x2', label: '6 foto (grid 3×2)', cols: 3, rows: 2, minImages: 6 },
-    { value: '2x4', label: '8 foto (grid 2×4)', cols: 2, rows: 4, minImages: 8 },
-    { value: '4x2', label: '8 foto (grid 4×2)', cols: 4, rows: 2, minImages: 8 },
-    { value: '3x3', label: '9 foto (grid 3×3)', cols: 3, rows: 3, minImages: 9 },
+    { value: '2x1', label: `2 ${t('collage.photos')} (${t('collage.horizontal')})`, cols: 2, rows: 1, minImages: 2 },
+    { value: '1x2', label: `2 ${t('collage.photos')} (${t('collage.vertical')})`, cols: 1, rows: 2, minImages: 2 },
+    { value: '1x3', label: `3 ${t('collage.photos')} (${t('collage.vertical')})`, cols: 1, rows: 3, minImages: 3 },
+    { value: '3x1', label: `3 ${t('collage.photos')} (${t('collage.horizontal')})`, cols: 3, rows: 1, minImages: 3 },
+    { value: '2x2', label: `4 ${t('collage.photos')} (grid 2×2)`, cols: 2, rows: 2, minImages: 4 },
+    { value: '1x4', label: `4 ${t('collage.photos')} (${t('collage.vertical')})`, cols: 1, rows: 4, minImages: 4 },
+    { value: '4x1', label: `4 ${t('collage.photos')} (${t('collage.horizontal')})`, cols: 4, rows: 1, minImages: 4 },
+    { value: '2x3', label: `6 ${t('collage.photos')} (grid 2×3)`, cols: 2, rows: 3, minImages: 6 },
+    { value: '3x2', label: `6 ${t('collage.photos')} (grid 3×2)`, cols: 3, rows: 2, minImages: 6 },
+    { value: '2x4', label: `8 ${t('collage.photos')} (grid 2×4)`, cols: 2, rows: 4, minImages: 8 },
+    { value: '4x2', label: `8 ${t('collage.photos')} (grid 4×2)`, cols: 4, rows: 2, minImages: 8 },
+    { value: '3x3', label: `9 ${t('collage.photos')} (grid 3×3)`, cols: 3, rows: 3, minImages: 9 },
   ];
 
   // Filter templates based on uploaded image count
@@ -170,7 +170,7 @@ const CollagePage = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('collage.title')}</h1>
           <p className="text-muted-foreground mt-2">
-            Upload minimal 2 foto untuk membuat collage
+            {t('collage.uploadDesc')}
           </p>
         </div>
 
@@ -185,26 +185,26 @@ const CollagePage = () => {
                   <div className="flex justify-between items-center mb-2">
                     <label className="text-sm font-medium text-foreground">{t('collage.template')}</label>
                     <span className="text-xs text-muted-foreground">
-                      {uploadedImages.length} foto
+                      {uploadedImages.length} {t('collage.photos')}
                     </span>
                   </div>
                   
                   {availableTemplates.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                      Upload minimal 2 foto
+                      {t('collage.minImages')}
                     </p>
                   ) : (
                     <div className="grid grid-cols-1 gap-1.5 max-h-48 overflow-y-auto">
-                      {availableTemplates.map((t) => (
+                      {availableTemplates.map((tpl) => (
                         <Button
-                          key={t.value}
-                          variant={template === t.value ? 'default' : 'outline'}
+                          key={tpl.value}
+                          variant={template === tpl.value ? 'default' : 'outline'}
                           size="sm"
-                          onClick={() => setTemplate(t.value)}
+                          onClick={() => setTemplate(tpl.value)}
                           className="justify-between text-xs h-8"
                         >
-                          <span>{t.label}</span>
-                          <span className="opacity-60">{t.minImages} foto</span>
+                          <span>{tpl.label}</span>
+                          <span className="opacity-60">{tpl.minImages} {t('collage.photos')}</span>
                         </Button>
                       ))}
                     </div>
@@ -277,14 +277,14 @@ const CollagePage = () => {
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Akan menggunakan {Math.min(uploadedImages.length, requiredImages)} dari {uploadedImages.length} foto
+                  {t('collage.usingPhotos').replace('{count}', String(Math.min(uploadedImages.length, requiredImages))).replace('{total}', String(uploadedImages.length))}
                 </p>
               </div>
             </Card>
 
             {/* Preview */}
             <Card className="p-6 hover-card-enhanced lg:col-span-2">
-              <h3 className="font-semibold text-foreground mb-4">Foto yang diupload</h3>
+              <h3 className="font-semibold text-foreground mb-4">{t('collage.uploadedPhotos')}</h3>
               
               {/* Uploaded Images Grid */}
               <div className="grid grid-cols-4 gap-2 mb-6">
@@ -306,7 +306,7 @@ const CollagePage = () => {
                     </span>
                     {index >= requiredImages && (
                       <span className="absolute inset-0 flex items-center justify-center bg-background/60 rounded-lg text-xs text-muted-foreground">
-                        Tidak dipakai
+                        {t('collage.unused')}
                       </span>
                     )}
                   </div>

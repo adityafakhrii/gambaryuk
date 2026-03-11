@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
@@ -10,8 +10,21 @@ const ComparePage = () => {
   const [imageB, setImageB] = useState<ImageFile | null>(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [step, setStep] = useState<'a' | 'b' | 'compare'>('a');
+  const [containerWidth, setContainerWidth] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+
+  useEffect(() => {
+    if (step === 'compare' && containerRef.current) {
+      const observer = new ResizeObserver((entries) => {
+        if (entries[0]) {
+          setContainerWidth(entries[0].contentRect.width);
+        }
+      });
+      observer.observe(containerRef.current);
+      return () => observer.disconnect();
+    }
+  }, [step]);
 
   const handleSelectA = (files: ImageFile[]) => {
     if (files.length > 0) {
@@ -85,10 +98,13 @@ const ComparePage = () => {
 
         {step === 'compare' && imageA && imageB && (
           <div className="space-y-4">
-            <div className="flex justify-end">
-              <Button variant="ghost" size="sm" onClick={reset}>
-                <Trash2 className="h-4 w-4 mr-1" /> {t('common.clearAll')}
-              </Button>
+            <div className="flex justify-between items-center bg-muted/30 p-2 rounded-xl border border-border/50">
+               <div className="text-sm text-muted-foreground px-2">
+                 Slide to compare Before & After
+               </div>
+               <Button variant="ghost" size="sm" onClick={reset} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                 <Trash2 className="h-4 w-4 mr-1" /> {t('common.clearAll')}
+               </Button>
             </div>
 
             {/* Comparison slider */}
@@ -97,19 +113,21 @@ const ComparePage = () => {
               className="relative rounded-2xl overflow-hidden border border-border/50 shadow-soft cursor-col-resize select-none"
               onMouseDown={handleMouseDown}
             >
-              {/* Image B (full background) */}
-              <img src={imageB.preview} alt="After" className="w-full block" draggable={false} />
+              <div className="flex w-full">
+                {/* Image B (full background) */}
+                <img src={imageB.preview} alt="After" className="w-full h-auto block" draggable={false} />
+              </div>
 
               {/* Image A (clipped) */}
               <div
-                className="absolute inset-0 overflow-hidden"
+                className="absolute inset-y-0 left-0 overflow-hidden"
                 style={{ width: `${sliderPos}%` }}
               >
                 <img
                   src={imageA.preview}
                   alt="Before"
-                  className="block"
-                  style={{ width: containerRef.current ? `${containerRef.current.offsetWidth}px` : '100%', maxWidth: 'none' }}
+                  className="block w-full h-full object-cover object-left"
+                  style={{ width: containerWidth > 0 ? `${containerWidth}px` : '100vw', maxWidth: 'none' }}
                   draggable={false}
                 />
               </div>

@@ -112,7 +112,7 @@ const Base64Page = () => {
                 {/* Output */}
                 <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-foreground">Base64 Output</span>
+                    <span className="text-sm font-semibold text-foreground">{t('base64.output')}</span>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={copyAsHtml}>
                         {'<img>'}

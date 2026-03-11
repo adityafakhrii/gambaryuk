@@ -270,8 +270,8 @@ export default function CompressPage() {
                     className="w-full"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Smaller file</span>
-                    <span>Better quality</span>
+                    <span>{t('compress.smallerFile')}</span>
+                    <span>{t('compress.betterQuality')}</span>
                   </div>
                 </div>
               </div>

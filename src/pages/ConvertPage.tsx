@@ -597,20 +597,20 @@ export default function ConvertPage() {
                 {/* PDF merge option */}
                 {showPdfModeOption && (
                   <div className="space-y-3">
-                    <Label className="text-sm font-medium">Opsi PDF</Label>
+                    <Label className="text-sm font-medium">{t('convert.pdfOptions')}</Label>
                     <RadioGroup value={pdfMode} onValueChange={(v) => setPdfMode(v as 'single' | 'separate')}>
                       <div className="flex items-start gap-3 rounded-lg border border-border p-3">
                         <RadioGroupItem value="single" id="pdf-single" className="mt-0.5" />
                         <Label htmlFor="pdf-single" className="cursor-pointer">
-                          <p className="text-sm font-medium">Gabung jadi 1 PDF</p>
-                          <p className="text-xs text-muted-foreground">Semua gambar digabung dalam satu file PDF</p>
+                          <p className="text-sm font-medium">{t('convert.mergePdf')}</p>
+                          <p className="text-xs text-muted-foreground">{t('convert.mergeDesc')}</p>
                         </Label>
                       </div>
                       <div className="flex items-start gap-3 rounded-lg border border-border p-3">
                         <RadioGroupItem value="separate" id="pdf-separate" className="mt-0.5" />
                         <Label htmlFor="pdf-separate" className="cursor-pointer">
-                          <p className="text-sm font-medium">Pisah per file</p>
-                          <p className="text-xs text-muted-foreground">Setiap gambar jadi 1 file PDF terpisah</p>
+                          <p className="text-sm font-medium">{t('convert.splitPdf')}</p>
+                          <p className="text-xs text-muted-foreground">{t('convert.splitDesc')}</p>
                         </Label>
                       </div>
                     </RadioGroup>
@@ -619,10 +619,10 @@ export default function ConvertPage() {
               </div>
 
               <div className="mt-6 rounded-xl bg-muted/50 p-4">
-                <h3 className="text-sm font-medium text-foreground">Format Info</h3>
+                <h3 className="text-sm font-medium text-foreground">{t('convert.formatInfo')}</h3>
                 <p className="mt-2 text-xs text-muted-foreground">
                   {isPdfSource
-                    ? 'PDF akan dirender halaman per halaman menjadi gambar JPG beresolusi tinggi.'
+                    ? t('convert.pdfSourceDesc')
                     : formats.find(f => f.value === targetFormat)?.description}
                 </p>
               </div>

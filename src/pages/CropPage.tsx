@@ -252,7 +252,7 @@ const CropPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('crop.title')}</h1>
           <p className="text-muted-foreground mt-2">
-            Pilih ukuran sesuai platform sosial media
+            {t('feature.crop.desc')}
           </p>
         </div>
 
@@ -262,7 +262,7 @@ const CropPage = () => {
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Controls */}
             <Card className="p-6 hover-card-enhanced">
-              <h3 className="font-semibold text-foreground mb-4">Ukuran Social Media</h3>
+              <h3 className="font-semibold text-foreground mb-4">{t('crop.socialMedia')}</h3>
               
               <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
                 {['', 'Instagram', 'TikTok', 'YouTube', 'Facebook', 'Twitter/X', 'LinkedIn', 'WhatsApp', 'Pinterest'].map(platform => {
@@ -302,7 +302,7 @@ const CropPage = () => {
               <div className="mt-6 pt-4 border-t border-border">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                   <Move className="w-4 h-4" />
-                  <span>Geser gambar untuk memposisikan area crop</span>
+                  <span>{t('crop.dragHint')}</span>
                 </div>
                 
                 <p className="text-sm text-foreground">

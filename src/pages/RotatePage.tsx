@@ -98,7 +98,7 @@ const RotatePage = () => {
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Controls */}
             <Card className="p-6 hover-card-enhanced">
-              <h3 className="font-semibold text-foreground mb-4">Rotasi</h3>
+              <h3 className="font-semibold text-foreground mb-4">{t('rotate.rotation')}</h3>
               <div className="grid grid-cols-3 gap-2 mb-4">
                 <Button
                   variant="outline"
@@ -136,7 +136,7 @@ const RotatePage = () => {
                 />
               </div>
 
-              <h3 className="font-semibold text-foreground mb-4">Flip</h3>
+              <h3 className="font-semibold text-foreground mb-4">{t('rotate.flip')}</h3>
               <div className="grid grid-cols-2 gap-2 mb-6">
                 <Button
                   variant={flipH ? 'default' : 'outline'}

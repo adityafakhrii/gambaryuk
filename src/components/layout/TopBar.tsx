@@ -100,12 +100,12 @@ export function TopBar() {
         {theme === 'light' ? (
           <>
             <Moon className="h-4 w-4" />
-            <span className="hidden sm:inline text-xs">Dark</span>
+            <span className="hidden sm:inline text-xs">{t('theme.dark')}</span>
           </>
         ) : (
           <>
             <Sun className="h-4 w-4" />
-            <span className="hidden sm:inline text-xs">Light</span>
+            <span className="hidden sm:inline text-xs">{t('theme.light')}</span>
           </>
         )}
       </Button>

@@ -19,6 +19,7 @@ const translations: Translations = {
   'nav.crop': { en: 'Crop', id: 'Potong' },
   'nav.rotate': { en: 'Rotate & Flip', id: 'Putar & Balik' },
   'nav.watermark': { en: 'Watermark', id: 'Tanda Air' },
+  'nav.removeWatermark': { en: 'Remove Watermark', id: 'Hapus Watermark' },
   'nav.removeBg': { en: 'Remove Background', id: 'Hapus Latar' },
   'nav.filters': { en: 'Filters', id: 'Filter' },
   'nav.rename': { en: 'Bulk Rename', id: 'Rename Massal' },
@@ -63,6 +64,8 @@ const translations: Translations = {
   'feature.rotate.desc': { en: 'Rotate 90°/180° and flip', id: 'Putar 90°/180° dan balik' },
   'feature.watermark.title': { en: 'Add Watermark', id: 'Tambah Tanda Air' },
   'feature.watermark.desc': { en: 'Add text or logo watermark', id: 'Tambah teks atau logo watermark' },
+  'feature.removeWatermark.title': { en: 'Remove Watermark', id: 'Hapus Watermark' },
+  'feature.removeWatermark.desc': { en: 'Batch remove bottom watermarks', id: 'Hapus watermark bawah massal' },
   'feature.removeBg.title': { en: 'Remove Background', id: 'Hapus Latar Belakang' },
   'feature.removeBg.desc': { en: 'Auto remove image background', id: 'Hapus latar belakang otomatis' },
   'feature.filters.title': { en: 'Image Filters', id: 'Filter Gambar' },
@@ -331,6 +334,8 @@ const translations: Translations = {
   // Compress Tool
   'compress.title': { en: 'Compress Image', id: 'Kompres Gambar' },
   'compress.quality': { en: 'Quality', id: 'Kualitas' },
+  'compress.smallerFile': { en: 'Smaller file', id: 'Ukuran lebih kecil' },
+  'compress.betterQuality': { en: 'Better quality', id: 'Kualitas lebih baik' },
   'compress.mode': { en: 'Compression Mode', id: 'Mode Kompresi' },
   'compress.balanced': { en: 'Balanced (Recommended)', id: 'Seimbang (Rekomendasi)' },
   'compress.maximum': { en: 'Maximum Compression', id: 'Kompresi Maksimal' },
@@ -345,6 +350,13 @@ const translations: Translations = {
   'convert.from': { en: 'Current Format', id: 'Format Saat Ini' },
   'convert.to': { en: 'Convert To', id: 'Konversi Ke' },
   'convert.transparency': { en: 'Preserve transparency', id: 'Pertahankan transparansi' },
+  'convert.pdfOptions': { en: 'PDF Options', id: 'Opsi PDF' },
+  'convert.mergePdf': { en: 'Merge into 1 PDF', id: 'Gabung jadi 1 PDF' },
+  'convert.mergeDesc': { en: 'All images merged into a single PDF file', id: 'Semua gambar digabung dalam satu file PDF' },
+  'convert.splitPdf': { en: 'Separate files', id: 'Pisah per file' },
+  'convert.splitDesc': { en: 'Each image becomes a separate PDF file', id: 'Setiap gambar jadi 1 file PDF terpisah' },
+  'convert.formatInfo': { en: 'Format Info', id: 'Format Info' },
+  'convert.pdfSourceDesc': { en: 'PDF will be rendered page by page into high-resolution JPG images.', id: 'PDF akan dirender halaman per halaman menjadi gambar JPG beresolusi tinggi.' },
 
   // Crop Tool
   'crop.title': { en: 'Crop Image', id: 'Potong Gambar' },
@@ -354,6 +366,8 @@ const translations: Translations = {
   'crop.landscape': { en: 'Landscape (16:9)', id: 'Landscape (16:9)' },
   'crop.portrait': { en: 'Portrait (9:16)', id: 'Portrait (9:16)' },
   'crop.apply': { en: 'Apply Crop', id: 'Terapkan Crop' },
+  'crop.socialMedia': { en: 'Social Media Sizes', id: 'Ukuran Social Media' },
+  'crop.dragHint': { en: 'Drag the image to position the crop area', id: 'Geser gambar untuk memposisikan area crop' },
 
   // Rotate Tool
   'rotate.title': { en: 'Rotate & Flip', id: 'Putar & Balik' },
@@ -363,6 +377,8 @@ const translations: Translations = {
   'rotate.flipH': { en: 'Flip Horizontal', id: 'Balik Horizontal' },
   'rotate.flipV': { en: 'Flip Vertical', id: 'Balik Vertikal' },
   'rotate.custom': { en: 'Custom Angle', id: 'Sudut Kustom' },
+  'rotate.rotation': { en: 'Rotation', id: 'Rotasi' },
+  'rotate.flip': { en: 'Flip', id: 'Flip' },
 
   // Watermark Tool
   'watermark.title': { en: 'Add Watermark', id: 'Tambah Tanda Air' },
@@ -373,13 +389,26 @@ const translations: Translations = {
   'watermark.opacity': { en: 'Opacity', id: 'Transparansi' },
   'watermark.size': { en: 'Size', id: 'Ukuran' },
   'watermark.color': { en: 'Color', id: 'Warna' },
+  'watermark.quickText': { en: 'Quick Text', id: 'Teks Cepat' },
+  'watermark.uploadLogo': { en: 'Upload Logo/Image', id: 'Upload Logo/Gambar' },
+  'watermark.logoSize': { en: 'Logo Size', id: 'Ukuran Logo' },
 
   // Remove Background Tool
   'removeBg.title': { en: 'Remove Background', id: 'Hapus Latar Belakang' },
-  'removeBg.processing': { en: 'Processing... This may take a moment', id: 'Memproses... Mohon tunggu sebentar' },
+  'removeBg.processing': { en: 'Remove background from image automatically', id: 'Hapus latar belakang dari gambar secara otomatis' },
   'removeBg.success': { en: 'Background removed successfully!', id: 'Latar belakang berhasil dihapus!' },
-  'removeBg.transparent': { en: 'Transparent Background', id: 'Latar Transparan' },
-  'removeBg.solid': { en: 'Solid Color Background', id: 'Latar Warna Solid' },
+  'removeBg.noResult': { en: 'Failed to process image, no result returned.', id: 'Gagal memproses gambar, tidak ada hasil yang dikembalikan.' },
+  'removeBg.error': { en: 'An error occurred during background removal.', id: 'Terjadi kesalahan saat penghapusan latar belakang.' },
+  'removeBg.processBtn': { en: 'Remove Background', id: 'Hapus Latar' },
+  'removeBg.processingLabel': { en: 'Processing...', id: 'Sedang Memproses...' },
+  'removeBg.hint': { en: 'Upload an image and click Process to see the magic!', id: 'Unggah gambar dan klik Proses untuk melihat keajaibannya!' },
+
+  // Remove Watermark Tool
+  'removeWatermark.title': { en: 'Remove Watermark', id: 'Hapus Watermark' },
+  'removeWatermark.notebookLmBtn': { en: 'Remove NotebookLM Watermark', id: 'Hapus Watermark NotebookLM' },
+  'removeWatermark.cropBottom': { en: 'Crop from bottom', id: 'Potong dari bawah' },
+  'removeWatermark.pixels': { en: 'Pixels', id: 'Piksel' },
+  'removeWatermark.percentage': { en: 'Percentage', id: 'Persentase' },
 
   // Filters Tool
   'filters.title': { en: 'Image Filters', id: 'Filter Gambar' },
@@ -392,6 +421,9 @@ const translations: Translations = {
   'filters.invert': { en: 'Invert', id: 'Balik Warna' },
   'filters.vintage': { en: 'Vintage', id: 'Vintage' },
   'filters.reset': { en: 'Reset All', id: 'Reset Semua' },
+  'filters.presets': { en: 'Filter Presets', id: 'Preset Filter' },
+  'filters.manual': { en: 'Manual Adjustment', id: 'Pengaturan Manual' },
+  'filters.preview': { en: 'Preview', id: 'Preview' },
 
   // Bulk Rename Tool
   'rename.title': { en: 'Bulk Rename', id: 'Rename Massal' },
@@ -400,14 +432,23 @@ const translations: Translations = {
   'rename.preview': { en: 'Preview Names', id: 'Preview Nama' },
   'rename.tokens': { en: 'Available tokens: {name}, {index}, {date}, {width}, {height}', id: 'Token tersedia: {name}, {index}, {date}, {width}, {height}' },
   'rename.downloadZip': { en: 'Download as ZIP', id: 'Unduh sebagai ZIP' },
+  'rename.quickPattern': { en: 'Quick Pattern', id: 'Pola Cepat' },
+  'rename.tokenHint': { en: 'Tokens (click to add)', id: 'Token (klik untuk tambah)' },
 
   // Collage Tool
   'collage.title': { en: 'Create Collage', id: 'Buat Kolase' },
+  'collage.uploadDesc': { en: 'Upload at least 2 photos to create a collage', id: 'Upload minimal 2 foto untuk membuat collage' },
   'collage.template': { en: 'Template', id: 'Template' },
   'collage.gap': { en: 'Gap / Spacing', id: 'Jarak / Spasi' },
   'collage.bgColor': { en: 'Background Color', id: 'Warna Latar' },
   'collage.generate': { en: 'Generate Collage', id: 'Buat Kolase' },
-  'collage.minImages': { en: 'Upload at least 2 images', id: 'Upload minimal 2 gambar' },
+  'collage.minImages': { en: 'Upload at least 2 photos', id: 'Upload minimal 2 foto' },
+  'collage.horizontal': { en: 'horizontal', id: 'horizontal' },
+  'collage.vertical': { en: 'vertical', id: 'vertikal' },
+  'collage.photos': { en: 'photos', id: 'foto' },
+  'collage.uploadedPhotos': { en: 'Uploaded Photos', id: 'Foto yang diupload' },
+  'collage.usingPhotos': { en: 'Will use {count} out of {total} photos', id: 'Akan menggunakan {count} dari {total} foto' },
+  'collage.unused': { en: 'Not used', id: 'Tidak dipakai' },
 
   // Common
   'common.download': { en: 'Download', id: 'Unduh' },

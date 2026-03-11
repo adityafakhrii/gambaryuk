@@ -7,7 +7,7 @@ import {
   Shield, ChevronDown, ChevronRight, Link as LinkIcon,
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
-  ScanText, PenTool, Wand2, BrainCircuit, Heart,
+  ScanText, PenTool, Wand2, BrainCircuit, Heart, Scissors,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -40,6 +40,7 @@ const toolGroups = [
       { path: '/crop', icon: Crop, key: 'nav.crop', descKey: 'feature.crop.desc' },
       { path: '/rotate', icon: RotateCcw, key: 'nav.rotate', descKey: 'feature.rotate.desc' },
       { path: '/watermark', icon: Stamp, key: 'nav.watermark', descKey: 'feature.watermark.desc' },
+      { path: '/remove-watermark', icon: Scissors, key: 'nav.removeWatermark', descKey: 'feature.removeWatermark.desc' },
     ],
   },
   {

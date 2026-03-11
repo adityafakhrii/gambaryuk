@@ -150,7 +150,7 @@ const FiltersPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('filters.title')}</h1>
           <p className="text-muted-foreground mt-2">
-            Pilih preset atau atur filter secara manual
+            {t('feature.filters.desc')}
           </p>
         </div>
 
@@ -160,7 +160,7 @@ const FiltersPage = () => {
           <div className="grid gap-6 lg:grid-cols-4">
             {/* Presets */}
             <Card className="p-4 hover-card-enhanced lg:col-span-1">
-              <h3 className="font-semibold text-foreground mb-3">Preset Filter</h3>
+              <h3 className="font-semibold text-foreground mb-3">{t('filters.presets')}</h3>
               <div className="grid grid-cols-2 gap-1.5 max-h-96 overflow-y-auto pr-1">
                 {presets.map((preset) => (
                   <Button
@@ -179,7 +179,7 @@ const FiltersPage = () => {
 
             {/* Adjustments */}
             <Card className="p-4 hover-card-enhanced lg:col-span-1">
-              <h3 className="font-semibold text-foreground mb-3">Pengaturan Manual</h3>
+              <h3 className="font-semibold text-foreground mb-3">{t('filters.manual')}</h3>
               <div className="space-y-3">
                 <div>
                   <label className="text-xs font-medium text-foreground">{t('filters.brightness')}: {filters.brightness}%</label>
@@ -276,7 +276,7 @@ const FiltersPage = () => {
             <Card className="p-4 hover-card-enhanced lg:col-span-2">
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Preview</h3>
+                  <h3 className="font-semibold text-foreground mb-2">{t('filters.preview')}</h3>
                   <div className="relative overflow-hidden rounded-lg bg-muted">
                     {selectedImage && (
                       <img

@@ -142,7 +142,7 @@ const RenamePage = () => {
               <div className="space-y-4">
                 {/* Quick Patterns */}
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Pola Cepat</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">{t('rename.quickPattern')}</label>
                   <div className="grid grid-cols-2 gap-2">
                     {quickPatterns.map((qp) => (
                       <Button
@@ -160,7 +160,7 @@ const RenamePage = () => {
 
                 {/* Token Buttons */}
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Token (klik untuk tambah)</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">{t('rename.tokenHint')}</label>
                   <div className="flex flex-wrap gap-1.5">
                     {tokens.map((token) => (
                       <Button

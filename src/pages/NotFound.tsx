@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Home, Maximize2, FileDown, RefreshCw, Crop, ArrowLeft } from "lucide-react";
+import { FileDown, RefreshCw, Eraser, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const popularTools = [
-  { path: '/resize', icon: Maximize2, key: 'nav.resize' },
   { path: '/compress', icon: FileDown, key: 'nav.compress' },
   { path: '/convert', icon: RefreshCw, key: 'nav.convert' },
-  { path: '/crop', icon: Crop, key: 'nav.crop' },
+  { path: '/remove-bg', icon: Eraser, key: 'nav.removeBg' },
 ];
 
 const NotFound = () => {
@@ -16,15 +15,10 @@ const NotFound = () => {
   return (
     <div className="flex min-h-full items-center justify-center px-4 py-16">
       <div className="w-full max-w-md text-center space-y-8">
-        {/* Animated 404 */}
-        <div className="relative">
-          <div className="text-[8rem] font-black leading-none text-primary/10 select-none">
+        {/* 404 Header */}
+        <div className="flex justify-center mb-6">
+          <div className="text-[10rem] font-black leading-none text-primary/10 select-none tracking-tighter">
             404
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary animate-float">
-              <Home className="h-10 w-10" />
-            </div>
           </div>
         </div>
 

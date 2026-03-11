@@ -14,6 +14,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 import { HelmetProvider } from 'react-helmet-async';
+import { PWAReloadPrompt } from "@/components/PWAReloadPrompt";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <KeyboardShortcuts />
+              <PWAReloadPrompt />
               <BrowserRouter>
                 <SidebarProvider defaultOpen={true}>
                   <div className="min-h-screen flex w-full bg-background transition-colors">

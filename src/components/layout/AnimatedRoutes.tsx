@@ -12,6 +12,7 @@ const ConvertPage = lazy(() => import('@/pages/ConvertPage'));
 const CropPage = lazy(() => import('@/pages/CropPage'));
 const RotatePage = lazy(() => import('@/pages/RotatePage'));
 const WatermarkPage = lazy(() => import('@/pages/WatermarkPage'));
+const RemoveWatermarkPage = lazy(() => import('@/pages/RemoveWatermarkPage'));
 const RemoveBgPage = lazy(() => import('@/pages/RemoveBgPage'));
 const FiltersPage = lazy(() => import('@/pages/FiltersPage'));
 const RenamePage = lazy(() => import('@/pages/RenamePage'));
@@ -51,6 +52,7 @@ export default function AnimatedRoutes() {
           <Route path="/crop" element={<AnimatedPage seo={{ title: t('feature.crop.title'), description: t('feature.crop.desc'), path: '/crop' }}><CropPage /></AnimatedPage>} />
           <Route path="/rotate" element={<AnimatedPage seo={{ title: t('feature.rotate.title'), description: t('feature.rotate.desc'), path: '/rotate' }}><RotatePage /></AnimatedPage>} />
           <Route path="/watermark" element={<AnimatedPage seo={{ title: t('feature.watermark.title'), description: t('feature.watermark.desc'), path: '/watermark' }}><WatermarkPage /></AnimatedPage>} />
+          <Route path="/remove-watermark" element={<AnimatedPage seo={{ title: t('feature.removeWatermark.title'), description: t('feature.removeWatermark.desc'), path: '/remove-watermark' }}><RemoveWatermarkPage /></AnimatedPage>} />
           <Route path="/remove-bg" element={<AnimatedPage seo={{ title: t('feature.removeBg.title'), description: t('feature.removeBg.desc'), path: '/remove-bg' }}><RemoveBgPage /></AnimatedPage>} />
           <Route path="/filters" element={<AnimatedPage seo={{ title: t('feature.filters.title'), description: t('feature.filters.desc'), path: '/filters' }}><FiltersPage /></AnimatedPage>} />
           <Route path="/rename" element={<AnimatedPage seo={{ title: t('feature.rename.title'), description: t('feature.rename.desc'), path: '/rename' }}><RenamePage /></AnimatedPage>} />
@@ -70,9 +72,9 @@ export default function AnimatedRoutes() {
           <Route path="/annotate" element={<AnimatedPage seo={{ title: t('feature.annotate.title'), description: t('feature.annotate.desc'), path: '/annotate' }}><AnnotatePage /></AnimatedPage>} />
           <Route path="/upscale" element={<AnimatedPage seo={{ title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale' }}><UpscalePage /></AnimatedPage>} />
           <Route path="/ai-generator" element={<AnimatedPage seo={{ title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' }}><AiGeneratorPage /></AnimatedPage>} />
-          {/* Other Tools Route */}          <Route path="/privacy" element={<AnimatedPage seo={{ title: t('nav.privacyPolicy'), description: 'Privacy Policy untuk GambarYuk', path: '/privacy' }}><PrivacyPage /></AnimatedPage>} />
+          <Route path="/privacy" element={<AnimatedPage seo={{ title: t('nav.privacyPolicy'), description: 'Privacy Policy untuk GambarYuk', path: '/privacy' }}><PrivacyPage /></AnimatedPage>} />
           <Route path="/about" element={<AnimatedPage seo={{ title: 'Tentang', description: 'Tentang GambarYuk', path: '/about' }}><AboutPage /></AnimatedPage>} />
-          <Route path="*" element={<AnimatedPage seo={{ title: '404 Không Ditemukan', description: 'Halaman tidak ditemukan', path: '' }}><NotFound /></AnimatedPage>} />
+          <Route path="*" element={<AnimatedPage seo={{ title: t('notFound.title'), description: 'Halaman tidak ditemukan', path: '' }}><NotFound /></AnimatedPage>} />
         </Routes>
       </AnimatePresence>
     </Suspense>
