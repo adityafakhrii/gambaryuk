@@ -50,7 +50,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Detect and accurately remove any watermarks in this image (especially the NotebookLM watermark typically found at the bottom or corners). Inpaint and reconstruct the removed area to match the surrounding image content naturally, with no visible seams or blurred patches. DO NOT crop the image. Maintain the EXACT original dimensions, colors, and content of the entire image. Output only the clean reconstructed image without any watermarks.`;
+    const prompt = `Detect and accurately remove the watermark which is the text "NotebookLM" located at the bottom right of this image. Inpaint and reconstruct the removed area to match the surrounding image content naturally, with no visible seams or blurred patches. DO NOT crop the image. Maintain the EXACT original dimensions, colors, and content of the entire image. Output only the clean reconstructed image without any watermarks or text explanation.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
