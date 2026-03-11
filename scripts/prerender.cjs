@@ -46,7 +46,7 @@ const app = express();
 app.use(express.static(distDir));
 
 // Fallback for SPA routing
-app.get('*', (req, res) => {
+app.get('/{0,}', (req, res) => {
     res.sendFile(path.join(distDir, 'index.html'));
 });
 
