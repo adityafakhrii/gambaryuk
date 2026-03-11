@@ -31,6 +31,8 @@ const OcrPage = lazy(() => import('@/pages/OcrPage'));
 const AnnotatePage = lazy(() => import('@/pages/AnnotatePage'));
 const UpscalePage = lazy(() => import('@/pages/UpscalePage'));
 const AiGeneratorPage = lazy(() => import('@/pages/AiGeneratorPage'));
+const SmartEditorPage = lazy(() => import('@/pages/SmartEditorPage'));
+const SmartLogoPage = lazy(() => import('@/pages/SmartLogoPage'));
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
@@ -69,6 +71,8 @@ export default function AnimatedRoutes() {
           <Route path="/annotate" element={<AnimatedPage seo={{ title: t('feature.annotate.title'), description: t('feature.annotate.desc'), path: '/annotate' }}><AnnotatePage /></AnimatedPage>} />
           <Route path="/upscale" element={<AnimatedPage seo={{ title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale' }}><UpscalePage /></AnimatedPage>} />
           <Route path="/ai-generator" element={<AnimatedPage seo={{ title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' }}><AiGeneratorPage /></AnimatedPage>} />
+          <Route path="/smart-editor" element={<AnimatedPage seo={{ title: t('feature.smartEditor.title'), description: t('feature.smartEditor.desc'), path: '/smart-editor' }}><SmartEditorPage /></AnimatedPage>} />
+          <Route path="/smart-logo" element={<AnimatedPage seo={{ title: t('feature.smartLogo.title'), description: t('feature.smartLogo.desc'), path: '/smart-logo' }}><SmartLogoPage /></AnimatedPage>} />
           <Route path="/privacy" element={<AnimatedPage seo={{ title: t('nav.privacyPolicy'), description: 'Privacy Policy untuk GambarYuk', path: '/privacy' }}><PrivacyPage /></AnimatedPage>} />
           <Route path="/about" element={<AnimatedPage seo={{ title: 'Tentang', description: 'Tentang GambarYuk', path: '/about' }}><AboutPage /></AnimatedPage>} />
           <Route path="*" element={<AnimatedPage seo={{ title: '404 Không Ditemukan', description: 'Halaman tidak ditemukan', path: '' }}><NotFound /></AnimatedPage>} />

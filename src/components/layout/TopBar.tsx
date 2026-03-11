@@ -31,6 +31,7 @@ const routeLabels: Record<string, string> = {
   '/annotate': 'feature.annotate.title',
   '/upscale': 'feature.upscale.title',
   '/ai-generator': 'feature.aiGen.title',
+  '/smart-editor': 'feature.smartEditor.title',
   '/privacy': 'privacy.title',
   '/about': 'about.title',
 };
@@ -85,7 +86,7 @@ export function TopBar() {
         <a href="#" target="_blank" rel="noopener noreferrer">
           <Coffee className="h-4 w-4" />
           <span className="hidden sm:inline font-bold">
-            {language === 'id' ? 'Traktir Kopi' : 'Buy us a Coffee'}
+            {language === 'id' ? 'Traktir Kopi' : 'Buy me a Coffee'}
           </span>
         </a>
       </Button>

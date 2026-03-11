@@ -198,9 +198,20 @@ const translations: Translations = {
 
   // OCR page
   'ocr.extract': { en: 'Extract Text', id: 'Ekstrak Teks' },
+  'ocr.copy': { en: 'Copy Text', id: 'Salin Teks' },
   'ocr.result': { en: 'Extracted Text', id: 'Teks Terekstrak' },
-  'ocr.noText': { en: 'No text found in image', id: 'Tidak ada teks ditemukan di gambar' },
+  'ocr.noText': { en: 'No text extracted', id: 'Belum ada teks yang diekstrak' },
   'ocr.error': { en: 'Failed to extract text. Please try again.', id: 'Gagal mengekstrak teks. Silakan coba lagi.' },
+
+  // Smart AI Editor
+  'nav.smartEditor': { en: 'Smart Editor', id: 'Smart Editor' },
+  'feature.smartEditor.title': { en: 'Smart AI Editor', id: 'Smart AI Editor' },
+  'feature.smartEditor.desc': { en: 'Layers, magic background removal, and smart objects placement', id: 'Layer, hapus background cerdas, dan pengaturan objek' },
+
+  // Smart Logo Tool
+  'nav.smartLogo': { en: 'Smart Logo', id: 'Smart Logo' },
+  'feature.smartLogo.title': { en: 'Smart Logo Placer', id: 'Smart Logo Placer' },
+  'feature.smartLogo.desc': { en: 'Adapt logo colors based on background', id: 'Adaptasi warna logo otomatis sesuai background' },
 
   // Annotate page
   'annotate.pen': { en: 'Pen', id: 'Pena' },
