@@ -20,21 +20,46 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+function extractResultImage(message: any): string | null {
+  let resultImage = message?.images?.[0]?.image_url?.url
+    || message?.images?.[0]?.url
+    || (typeof message?.images?.[0] === "string" ? message.images[0] : null)
+    || null;
+
+  if (!resultImage && Array.isArray(message?.content)) {
+    for (const part of message.content) {
+      const fromImageUrl = typeof part?.image_url === "string"
+        ? part.image_url
+        : part?.image_url?.url;
+
+      const candidate = fromImageUrl || part?.url || part?.source_url || null;
+      if (typeof candidate === "string" && candidate.startsWith("data:image/")) {
+        resultImage = candidate;
+        break;
+      }
+
+      if (typeof part?.text === "string" && part.text.startsWith("data:image/")) {
+        resultImage = part.text;
+        break;
+      }
+    }
+  }
+
+  if (!resultImage && typeof message?.content === "string" && message.content.startsWith("data:image/")) {
+    resultImage = message.content;
+  }
+
+  return resultImage;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-
-  const apikey = req.headers.get("apikey");
-  const expectedKey = Deno.env.get("SUPABASE_ANON_KEY");
-  if (!apikey || apikey !== expectedKey) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (isRateLimited(ip)) {
     return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
-      status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 429,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -44,19 +69,21 @@ serve(async (req) => {
 
     if (typeof image !== "string" || !image.startsWith("data:image/")) {
       return new Response(JSON.stringify({ error: "Invalid input: image must be a base64 data URI" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (image.length > 14_000_000) {
       return new Response(JSON.stringify({ error: "Image too large (max 10 MB)" }), {
-        status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 413,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Remove the background from this image. Return ONLY the main object/subject perfectly isolated on a fully transparent background. Do not alter the subject's colors, lighting, or details. Output as a transparent PNG.`;
+    const prompt = "Remove the background from this image. Keep the main subject intact with original colors and details. Return only the edited image as transparent PNG with no text.";
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -65,15 +92,15 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3.1-flash-image-preview",
+        model: "google/gemini-2.5-flash-image",
         messages: [
           {
             role: "user",
             content: [
               { type: "text", text: prompt },
-              { type: "image_url", image_url: { url: image } }
-            ]
-          }
+              { type: "image_url", image_url: { url: image } },
+            ],
+          },
         ],
         modalities: ["image", "text"],
       }),
@@ -81,46 +108,43 @@ serve(async (req) => {
 
     if (!response.ok) {
       const status = response.status;
+      const t = await response.text();
+      console.error("AI gateway error:", status, t);
+
       if (status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (status === 402) {
         return new Response(JSON.stringify({ error: "Usage limit reached. Please add credits." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", status, t);
+      if (status === 400) {
+        return new Response(JSON.stringify({ error: "Gambar tidak dapat diproses. Pastikan gambar valid dan cukup besar." }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       return new Response(JSON.stringify({ error: "AI processing failed" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const data = await response.json();
-    const message = data.choices?.[0]?.message;
-    
-    let resultImage = message?.images?.[0]?.image_url?.url 
-      || message?.images?.[0]?.url
-      || message?.images?.[0]
-      || null;
-    
-    if (!resultImage && Array.isArray(message?.content)) {
-      for (const part of message.content) {
-        if (part.type === "image_url") {
-          resultImage = part.image_url?.url || null;
-          break;
-        }
-        if (part.type === "image" && part.url) {
-          resultImage = part.url;
-          break;
-        }
-      }
-    }
-    
-    if (!resultImage && typeof message?.content === "string" && message.content.startsWith("data:image/")) {
-      resultImage = message.content;
+    const message = data?.choices?.[0]?.message;
+    const resultImage = extractResultImage(message);
+
+    if (!resultImage) {
+      return new Response(JSON.stringify({ error: "AI tidak mengembalikan gambar. Coba lagi dengan gambar lain." }), {
+        status: 502,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(JSON.stringify({ image: resultImage }), {
@@ -129,7 +153,8 @@ serve(async (req) => {
   } catch (e) {
     console.error("Remove BG error:", e);
     return new Response(JSON.stringify({ error: "An unexpected error occurred" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

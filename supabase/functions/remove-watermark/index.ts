@@ -20,15 +20,46 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+function extractResultImage(message: any): string | null {
+  let resultImage = message?.images?.[0]?.image_url?.url
+    || message?.images?.[0]?.url
+    || (typeof message?.images?.[0] === "string" ? message.images[0] : null)
+    || null;
+
+  if (!resultImage && Array.isArray(message?.content)) {
+    for (const part of message.content) {
+      const fromImageUrl = typeof part?.image_url === "string"
+        ? part.image_url
+        : part?.image_url?.url;
+
+      const candidate = fromImageUrl || part?.url || part?.source_url || null;
+      if (typeof candidate === "string" && candidate.startsWith("data:image/")) {
+        resultImage = candidate;
+        break;
+      }
+
+      if (typeof part?.text === "string" && part.text.startsWith("data:image/")) {
+        resultImage = part.text;
+        break;
+      }
+    }
+  }
+
+  if (!resultImage && typeof message?.content === "string" && message.content.startsWith("data:image/")) {
+    resultImage = message.content;
+  }
+
+  return resultImage;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-
-  // Rate limiting provides protection for this public endpoint
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (isRateLimited(ip)) {
     return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
-      status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 429,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -38,19 +69,21 @@ serve(async (req) => {
 
     if (typeof image !== "string" || !image.startsWith("data:image/")) {
       return new Response(JSON.stringify({ error: "Invalid input: image must be a base64 data URI" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (image.length > 14_000_000) {
       return new Response(JSON.stringify({ error: "Image too large (max 10 MB)" }), {
-        status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 413,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Detect and accurately remove the watermark which is the text "NotebookLM" located at the bottom right of this image. Inpaint and reconstruct the removed area to match the surrounding image content naturally, with no visible seams or blurred patches. DO NOT crop the image. Maintain the EXACT original dimensions, colors, and content of the entire image. Output only the clean reconstructed image without any watermarks or text explanation.`;
+    const prompt = "You are editing a user-owned image. Remove only the overlaid text artifact \"NotebookLM\" and reconstruct the area naturally. Keep the exact same dimensions and overall scene. Return only the edited image with no text.";
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -59,15 +92,15 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3.1-flash-image-preview",
+        model: "google/gemini-2.5-flash-image",
         messages: [
           {
             role: "user",
             content: [
               { type: "text", text: prompt },
-              { type: "image_url", image_url: { url: image } }
-            ]
-          }
+              { type: "image_url", image_url: { url: image } },
+            ],
+          },
         ],
         modalities: ["image", "text"],
       }),
@@ -77,57 +110,49 @@ serve(async (req) => {
       const status = response.status;
       const t = await response.text();
       console.error("AI gateway error:", status, t);
+
       if (status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (status === 402) {
         return new Response(JSON.stringify({ error: "Usage limit reached. Please add credits." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (status === 400) {
         return new Response(JSON.stringify({ error: "Gambar tidak dapat diproses. Pastikan gambar valid dan cukup besar." }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+
       return new Response(JSON.stringify({ error: "AI processing failed" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const data = await response.json();
-    console.log("AI response structure:", JSON.stringify(Object.keys(data)));
-    const message = data.choices?.[0]?.message;
-    console.log("Message keys:", message ? JSON.stringify(Object.keys(message)) : "no message");
-    
-    // Try multiple possible response paths
-    let resultImage = message?.images?.[0]?.image_url?.url 
-      || message?.images?.[0]?.url
-      || message?.images?.[0]
-      || null;
-    
-    // Check if image is in content parts
-    if (!resultImage && Array.isArray(message?.content)) {
-      for (const part of message.content) {
-        if (part.type === "image_url") {
-          resultImage = part.image_url?.url || null;
-          break;
-        }
-        if (part.type === "image" && part.url) {
-          resultImage = part.url;
-          break;
-        }
+    const message = data?.choices?.[0]?.message;
+    const resultImage = extractResultImage(message);
+
+    if (!resultImage) {
+      if (message?.refusal) {
+        return new Response(JSON.stringify({ error: "AI menolak permintaan edit gambar ini. Coba gunakan gambar lain atau watermark yang lebih jelas." }), {
+          status: 422,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
+
+      return new Response(JSON.stringify({ error: "AI tidak mengembalikan gambar hasil. Coba lagi dengan gambar yang lebih jelas." }), {
+        status: 502,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
-    
-    // If content is a base64 string itself
-    if (!resultImage && typeof message?.content === "string" && message.content.startsWith("data:image/")) {
-      resultImage = message.content;
-    }
-    
-    console.log("Result image found:", !!resultImage, resultImage ? resultImage.substring(0, 50) : "null");
 
     return new Response(JSON.stringify({ image: resultImage }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -135,7 +160,8 @@ serve(async (req) => {
   } catch (e) {
     console.error("Remove Watermark error:", e);
     return new Response(JSON.stringify({ error: "An unexpected error occurred" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
