@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 interface BeforeAfterSliderProps {
   beforeSrc: string;
@@ -16,8 +16,18 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   className = '',
 }) => {
   const [position, setPosition] = useState(50);
+  const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      if (entries[0]) setContainerWidth(entries[0].contentRect.width);
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
@@ -71,14 +81,14 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
 
       {/* Before image (clipped) */}
       <div
-        className="absolute inset-0 overflow-hidden"
+        className="absolute inset-y-0 left-0 overflow-hidden"
         style={{ width: `${position}%` }}
       >
         <img
           src={beforeSrc}
           alt={beforeLabel}
-          className="w-full h-auto block"
-          style={{ width: containerRef.current ? `${containerRef.current.offsetWidth}px` : '100%', maxWidth: 'none' }}
+          className="block w-full h-full object-cover object-left"
+          style={{ width: containerWidth > 0 ? `${containerWidth}px` : '100vw', maxWidth: 'none' }}
           draggable={false}
         />
       </div>

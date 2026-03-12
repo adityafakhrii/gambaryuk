@@ -3,8 +3,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Download, Sparkles, RefreshCw, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
-import { downloadImage } from '@/lib/imageProcessing';
+import { Download, Wand2, RefreshCw, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { downloadImage, dataUriToBlob } from '@/lib/imageProcessing';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { aiRateLimiter } from '@/lib/rateLimiter';
@@ -110,8 +110,7 @@ const RemoveWatermarkPage = () => {
       const img = doneImages[0];
       const filename = img.original.file.name.replace(/\.[^/.]+$/, '') + '_nowatermark.png';
       try {
-        const r = await fetch(img.processedUrl);
-        const blob = await r.blob();
+        const blob = dataUriToBlob(img.processedUrl);
         downloadImage(blob, filename);
       } catch {
         toast.error('Gagal mendownload gambar.');
@@ -124,8 +123,7 @@ const RemoveWatermarkPage = () => {
       const zip = new JSZip();
       await Promise.all(doneImages.map(async (img) => {
         const filename = img.original.file.name.replace(/\.[^/.]+$/, '') + '_nowatermark.png';
-        const r = await fetch(img.processedUrl);
-        const blob = await r.blob();
+        const blob = dataUriToBlob(img.processedUrl);
         zip.file(filename, blob);
       }));
       const content = await zip.generateAsync({ type: 'blob' });
@@ -157,11 +155,11 @@ const RemoveWatermarkPage = () => {
 
             <div className="space-y-3">
               <Button
-                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-md"
+                className="w-full"
                 onClick={processImages}
                 disabled={isProcessing || images.length === 0 || images.every(img => processedImages.find(p => p.id === img.id)?.status === 'done')}
               >
-                {isProcessing ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                {isProcessing ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Wand2 className="w-4 h-4 mr-2" />}
                 {isProcessing ? t('common.processing') : 'Hapus dengan AI'}
               </Button>
 
@@ -219,10 +217,9 @@ const RemoveWatermarkPage = () => {
                               variant="ghost"
                               size="sm"
                               className="h-7 px-2 text-xs"
-                              onClick={async () => {
+                              onClick={() => {
                                 try {
-                                  const response = await fetch(processed.processedUrl);
-                                  const blob = await response.blob();
+                                  const blob = dataUriToBlob(processed.processedUrl);
                                   downloadImage(blob, img.file.name.replace(/\.[^/.]+$/, '') + '_nowatermark.png');
                                 } catch { toast.error('Gagal mendownload.'); }
                               }}
@@ -253,7 +250,7 @@ const RemoveWatermarkPage = () => {
                           />
                           {processed?.status === 'processing' && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/50 backdrop-blur-sm gap-2">
-                              <Sparkles className="h-6 w-6 animate-pulse text-indigo-500" />
+                              <Wand2 className="h-6 w-6 animate-pulse text-primary" />
                               <span className="text-xs font-medium bg-background/80 px-2 py-1 rounded text-foreground">
                                 AI sedang merekonstruksi...
                               </span>

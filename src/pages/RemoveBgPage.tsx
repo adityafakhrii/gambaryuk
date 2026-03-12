@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Download, Trash2, Loader2, Eraser } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { downloadImage } from '@/lib/imageProcessing';
+import { downloadImage, dataUriToBlob, removeCheckerboardBackground } from '@/lib/imageProcessing';
 import { aiRateLimiter } from '@/lib/rateLimiter';
 import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 
@@ -51,7 +51,9 @@ const RemoveBgPage = () => {
       }
 
       if (data?.image) {
-        setResultUrl(data.image);
+        // Post-process: convert AI checkerboard to true transparency
+        const transparentImage = await removeCheckerboardBackground(data.image);
+        setResultUrl(transparentImage);
         toast.success(t('removeBg.success'));
       } else {
         toast.error(t('removeBg.noResult'));
@@ -66,9 +68,8 @@ const RemoveBgPage = () => {
 
   const handleDownload = () => {
     if (!resultUrl) return;
-    fetch(resultUrl)
-      .then(r => r.blob())
-      .then(blob => downloadImage(blob, `nobg-${images[0]?.file.name || 'image'}.png`));
+    const blob = dataUriToBlob(resultUrl);
+    downloadImage(blob, `nobg-${images[0]?.file.name || 'image'}.png`);
   };
 
   return (

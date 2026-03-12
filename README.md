@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# GambarYuk — Edit Gambar Online Gratis
 
 ## Project info
 
