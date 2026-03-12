@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Download, Trash2, Loader2, Eraser } from 'lucide-react';
+import { Download, Trash2, Loader2, Eraser } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { downloadImage } from '@/lib/imageProcessing';
 import { aiRateLimiter } from '@/lib/rateLimiter';
+import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 
 const RemoveBgPage = () => {
   const { t } = useLanguage();
@@ -93,44 +94,44 @@ const RemoveBgPage = () => {
                   )}
                   {loading ? t('removeBg.processingLabel') : t('removeBg.processBtn')}
                 </Button>
+                {resultUrl && (
+                  <Button variant="outline" onClick={handleDownload}>
+                    <Download className="h-4 w-4 mr-1" /> {t('common.download')}
+                  </Button>
+                )}
                 <Button variant="ghost" size="icon" onClick={() => { setImages([]); setResultUrl(null); }}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
+              {images[0] && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Resolusi asli: {images[0].width} × {images[0].height} — ukuran dipertahankan
+                </p>
+              )}
             </div>
 
             {/* Before / After */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {resultUrl ? (
+              <BeforeAfterSlider
+                beforeSrc={images[0].preview}
+                afterSrc={resultUrl}
+                beforeLabel="Asli"
+                afterLabel="Tanpa Latar"
+                className="aspect-auto"
+              />
+            ) : (
               <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-                <h3 className="text-sm font-semibold text-muted-foreground mb-2">{t('common.original')}</h3>
-                <div className="relative overflow-hidden rounded-xl border border-border/50 aspect-square flex items-center justify-center bg-muted/30">
-                   <img src={images[0].preview} alt="Original" className="max-w-full max-h-full object-contain" />
-                </div>
-                <p className="text-xs text-muted-foreground mt-2">{images[0].width} × {images[0].height}</p>
-              </div>
-              <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-                <h3 className="text-sm font-semibold text-muted-foreground mb-2">{t('common.result')}</h3>
-                {resultUrl ? (
-                  <>
-                    <div className="relative overflow-hidden rounded-xl border border-border/50 aspect-square flex items-center justify-center"
-                         style={{
-                            backgroundImage: 'linear-gradient(45deg, hsl(var(--muted)) 25%, transparent 25%), linear-gradient(-45deg, hsl(var(--muted)) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, hsl(var(--muted)) 75%), linear-gradient(-45deg, transparent 75%, hsl(var(--muted)) 75%)',
-                            backgroundSize: '20px 20px',
-                            backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
-                         }}>
-                       <img src={resultUrl} alt="Removed Background" className="max-w-full max-h-full object-contain" />
+                <div className="relative overflow-hidden rounded-xl border border-border/50 flex items-center justify-center bg-muted/30">
+                  <img src={images[0].preview} alt="Original" className="max-w-full max-h-[60vh] object-contain" />
+                  {loading && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm gap-2">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      <span className="text-sm font-medium text-foreground">{t('removeBg.processingLabel')}</span>
                     </div>
-                    <Button size="sm" className="mt-4" onClick={handleDownload}>
-                      <Download className="h-4 w-4 mr-1" /> {t('common.download')}
-                    </Button>
-                  </>
-                ) : (
-                  <div className="flex items-center justify-center aspect-square rounded-xl border border-dashed border-border/50 text-muted-foreground text-sm">
-                     <p className="px-8 text-center">{loading ? t('removeBg.processingLabel') : t('removeBg.hint')}</p>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>

@@ -83,7 +83,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = "You are editing a user-owned image. Remove only the overlaid text artifact \"NotebookLM\" and reconstruct the area naturally. Keep the exact same dimensions and overall scene. Return only the edited image with no text.";
+    const prompt = "You are editing a user-owned image. Remove only the overlaid text artifact \"NotebookLM\" and reconstruct the area naturally. The output image MUST have the EXACT same pixel dimensions and resolution as the input — do NOT resize, crop, or change aspect ratio. Return only the edited image with no text.";
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

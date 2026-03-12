@@ -83,7 +83,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = "Remove the background from this image. Keep the main subject intact with original colors and details. Return only the edited image as transparent PNG with no text.";
+    const prompt = "Remove the background from this image. Keep the main subject intact with original colors, details, dimensions, and resolution — do NOT resize or crop. The output image must have the EXACT same pixel dimensions as the input. Return only the edited image as transparent PNG with no text.";
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
