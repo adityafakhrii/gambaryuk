@@ -195,6 +195,7 @@ const ColorPickerPage = () => {
                       />
                     ))}
                   </div>
+                  <p className="text-xs text-muted-foreground mt-2">Klik warna untuk menyalin kode warna</p>
                 </div>
               )}
 
