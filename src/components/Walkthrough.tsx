@@ -124,7 +124,7 @@ export function Walkthrough() {
       content: language === 'id'
         ? 'Kamu juga bisa melihat seluruh katalog alat dengan rapi di sini, lengkap dengan jumlah alat aktif dan yang sedang digarap.'
         : 'You can also browse the entire catalog of nicely sorted tools here, complete with active vs coming soon metrics.',
-      placement: 'top',
+      placement: 'bottom',
       disableBeacon: true,
     },
     {
@@ -133,7 +133,7 @@ export function Walkthrough() {
       content: language === 'id'
         ? 'Kamu bisa mengganti bahasa aplikasi kapan saja di pojok kiri bawah ini.'
         : 'You can switch the app language anytime at the bottom left here.',
-      placement: 'right',
+      placement: 'top',
       disableBeacon: true,
     },
     {

@@ -127,8 +127,8 @@ const Index = () => {
 
       {/* Tools Grid */}
       <section className="relative z-10 flex-1 px-1 pb-8">
-        <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm" id="tour-grid">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+        <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5" id="tour-grid">
             <div className="flex items-center gap-3">
               <h2 className="text-lg font-bold text-sidebar-foreground">
                 {t('nav.home') === 'Home' ? 'Available Tools' : 'Alat Tersedia'}
