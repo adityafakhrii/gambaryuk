@@ -78,7 +78,6 @@ const toolGroups = [
     key: 'category.ai',
     tools: [
       { path: '/ocr', icon: ScanText, key: 'nav.ocr', descKey: 'feature.ocr.desc' },
-      { path: '/annotate', icon: PenTool, key: 'nav.annotate', descKey: 'feature.annotate.desc' },
       { path: '/upscale', icon: Wand2, key: 'nav.upscale', descKey: 'feature.upscale.desc' },
       { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen', descKey: 'feature.aiGen.desc' },
     ],
