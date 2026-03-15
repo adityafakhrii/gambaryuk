@@ -77,6 +77,7 @@ export function TopBar() {
 
       {/* Support Us Button */}
       <Button
+        id="tour-donate"
         variant="outline"
         size="sm"
         asChild

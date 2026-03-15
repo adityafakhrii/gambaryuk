@@ -109,7 +109,7 @@ const Index = () => {
               {t('app.slogan.main')} <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded ml-1">{t('app.slogan.highlight')}</span>
             </p>
           </div>
-          <div className="relative w-full md:w-72">
+          <div className="relative w-full md:w-72" id="tour-search">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               id="tool-search"
@@ -127,7 +127,7 @@ const Index = () => {
 
       {/* Tools Grid */}
       <section className="relative z-10 flex-1 px-1 pb-8">
-        <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm">
+        <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm" id="tour-grid">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
             <div className="flex items-center gap-3">
               <h2 className="text-lg font-bold text-sidebar-foreground">

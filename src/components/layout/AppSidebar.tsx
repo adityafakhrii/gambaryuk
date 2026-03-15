@@ -105,7 +105,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar variant="floating" collapsible="icon" className="border-none">
+    <Sidebar variant="floating" collapsible="icon" className="border-none" id="tour-sidebar">
       {/* Header */}
       <SidebarHeader className="px-3 py-4">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
@@ -226,7 +226,7 @@ export function AppSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
+          <SidebarMenuItem id="tour-language">
             <SidebarMenuButton
               tooltip={language === 'id' ? 'Switch to English' : 'Ganti ke Indonesia'}
               onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
