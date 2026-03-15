@@ -37,6 +37,43 @@ const getExpiryDate = (option: ExpiryOption): string | null => {
   }
 };
 
+const compressAndConvertToWebP = async (file: File, maxDimension = 2048, quality = 0.8): Promise<{ blob: Blob; name: string }> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+
+      // Scale down if larger than maxDimension
+      if (width > maxDimension || height > maxDimension) {
+        const ratio = Math.min(maxDimension / width, maxDimension / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const baseName = file.name.replace(/\.[^/.]+$/, '');
+            resolve({ blob, name: `${baseName}.webp` });
+          } else {
+            reject(new Error('Failed to convert to WebP'));
+          }
+        },
+        'image/webp',
+        quality
+      );
+    };
+    img.onerror = () => reject(new Error('Failed to load image'));
+    img.src = URL.createObjectURL(file);
+  });
+};
+
 const ImageToLinkPage = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -58,14 +95,16 @@ const ImageToLinkPage = () => {
       const results: UploadedImage[] = [];
 
       for (const img of images) {
-        const ext = img.file.name.split('.').pop() || 'jpg';
-        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        // Compress and convert to WebP before uploading
+        const { blob: webpBlob, name: webpName } = await compressAndConvertToWebP(img.file);
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
 
         const { error } = await supabase.storage
           .from('shared-images')
-          .upload(fileName, img.file, {
+          .upload(fileName, webpBlob, {
             cacheControl: '31536000',
             upsert: false,
+            contentType: 'image/webp',
           });
 
         if (error) {
@@ -77,20 +116,19 @@ const ImageToLinkPage = () => {
           .from('shared-images')
           .getPublicUrl(fileName);
 
-        // Track in DB with expiry
         await supabase.from('shared_image_files').insert({
           file_name: fileName,
           bucket_path: fileName,
-          original_name: img.file.name,
-          file_size: img.file.size,
+          original_name: webpName,
+          file_size: webpBlob.size,
           expires_at: getExpiryDate(expiry),
         });
 
         results.push({
           id: img.id,
-          name: img.file.name,
+          name: webpName,
           url: urlData.publicUrl,
-          size: img.file.size,
+          size: webpBlob.size,
           copied: false,
         });
       }
@@ -174,10 +212,8 @@ const ImageToLinkPage = () => {
         <p className="text-sm text-muted-foreground mt-1">{t('feature.imageToLink.desc')}</p>
       </div>
 
-      {/* Upload Zone */}
       <UploadZone onFilesSelected={handleFilesSelected} multiple={true} maxFiles={20} />
 
-      {/* Pending images */}
       {images.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
@@ -185,7 +221,6 @@ const ImageToLinkPage = () => {
               {images.length} {t('imageToLink.readyToUpload')}
             </p>
             <div className="flex items-center gap-2 flex-wrap">
-              {/* Expiry selector */}
               <div className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <Select value={expiry} onValueChange={(v) => setExpiry(v as ExpiryOption)}>
@@ -220,6 +255,10 @@ const ImageToLinkPage = () => {
             </div>
           </div>
 
+          <p className="text-xs text-muted-foreground">
+            💡 Gambar akan otomatis dikompresi dan dikonversi ke format WebP sebelum diunggah untuk ukuran file lebih kecil
+          </p>
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {images.map((img) => (
               <div key={img.id} className="rounded-xl overflow-hidden border border-border bg-card">
@@ -234,7 +273,6 @@ const ImageToLinkPage = () => {
         </div>
       )}
 
-      {/* Uploaded images with links */}
       {uploadedImages.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
@@ -272,6 +310,7 @@ const ImageToLinkPage = () => {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{img.name}</p>
                   <p className="text-xs text-muted-foreground truncate">{img.url}</p>
+                  <p className="text-xs text-muted-foreground">{formatFileSize(img.size)} · WebP</p>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Button
