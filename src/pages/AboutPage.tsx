@@ -1,6 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ExternalLink, Code2, BrainCircuit, GraduationCap, PenTool, Github, Instagram, Twitter, Facebook, Youtube, Linkedin, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DonationModal } from '@/components/DonationModal';
 
 export default function AboutPage() {
   const { t } = useLanguage();
@@ -106,12 +107,14 @@ export default function AboutPage() {
               <p className="text-muted-foreground leading-relaxed mb-5 text-sm sm:text-base">
                 {t('about.supportDesc')}
               </p>
-              <Button asChild className="rounded-full shadow-sm hover:shadow-md transition-all font-semibold px-6">
-                <a href="https://trakteer.id/adityafakhrii/tip" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <Coffee className="h-4 w-4" />
-                  {t('about.supportBtn')}
-                </a>
-              </Button>
+              <DonationModal>
+                <Button className="rounded-full shadow-sm hover:shadow-md transition-all font-semibold px-6">
+                  <span className="flex items-center gap-2">
+                    <Coffee className="h-4 w-4" />
+                    {t('about.supportBtn')}
+                  </span>
+                </Button>
+              </DonationModal>
             </div>
           </div>
         </div>

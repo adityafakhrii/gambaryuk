@@ -4,6 +4,7 @@ import { ChevronRight, Home, Sun, Moon, Coffee } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
+import { DonationModal } from '@/components/DonationModal';
 
 const routeLabels: Record<string, string> = {
   '/resize': 'feature.resize.title',
@@ -76,20 +77,19 @@ export function TopBar() {
       </nav>
 
       {/* Support Us Button */}
-      <Button
-        id="tour-donate"
-        variant="outline"
-        size="sm"
-        asChild
-        className="flex items-center gap-1.5 bg-sidebar-primary/10 text-sidebar-primary border-sidebar-primary/30 hover:bg-sidebar-primary/20 hover:text-sidebar-primary dark:bg-sidebar-primary/10 dark:text-sidebar-primary/90 dark:border-sidebar-primary/20 dark:hover:bg-sidebar-primary/20 dark:hover:text-sidebar-primary flex-shrink-0 mr-1 transition-all"
-      >
-        <a href="#" target="_blank" rel="noopener noreferrer">
+      <DonationModal>
+        <Button
+          id="tour-donate"
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-1.5 bg-sidebar-primary/10 text-sidebar-primary border-sidebar-primary/30 hover:bg-sidebar-primary/20 hover:text-sidebar-primary dark:bg-sidebar-primary/10 dark:text-sidebar-primary/90 dark:border-sidebar-primary/20 dark:hover:bg-sidebar-primary/20 dark:hover:text-sidebar-primary flex-shrink-0 mr-1 transition-all"
+        >
           <Coffee className="h-4 w-4" />
           <span className="hidden sm:inline font-bold">
             {language === 'id' ? 'Traktir Kopi' : 'Buy me a Coffee'}
           </span>
-        </a>
-      </Button>
+        </Button>
+      </DonationModal>
 
       {/* Theme toggle */}
       <Button
