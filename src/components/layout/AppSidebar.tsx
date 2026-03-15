@@ -61,6 +61,7 @@ const toolGroups = [
       { path: '/meme', icon: Type, key: 'nav.meme', descKey: 'feature.meme.desc' },
       { path: '/compare', icon: ArrowLeftRight, key: 'nav.compare', descKey: 'feature.compare.desc' },
       { path: '/beautifier', icon: Sparkles, key: 'nav.beautifier', descKey: 'feature.beautifier.desc' },
+      { path: '/annotate', icon: PenTool, key: 'nav.annotate', descKey: 'feature.annotate.desc' },
     ],
   },
   {
@@ -77,7 +78,6 @@ const toolGroups = [
     key: 'category.ai',
     tools: [
       { path: '/ocr', icon: ScanText, key: 'nav.ocr', descKey: 'feature.ocr.desc' },
-      { path: '/annotate', icon: PenTool, key: 'nav.annotate', descKey: 'feature.annotate.desc' },
       { path: '/upscale', icon: Wand2, key: 'nav.upscale', descKey: 'feature.upscale.desc' },
       { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen', descKey: 'feature.aiGen.desc' },
     ],

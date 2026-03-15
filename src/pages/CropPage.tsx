@@ -141,8 +141,8 @@ const CropPage = () => {
       
       return {
         ...prev,
-        x: Math.max(0, Math.min(maxX, prev.x - deltaX)),
-        y: Math.max(0, Math.min(maxY, prev.y - deltaY)),
+        x: Math.max(0, Math.min(maxX, prev.x + deltaX)),
+        y: Math.max(0, Math.min(maxY, prev.y + deltaY)),
       };
     });
     

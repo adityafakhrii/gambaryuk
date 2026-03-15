@@ -13,6 +13,9 @@ const MemeGeneratorPage = () => {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [fontSize, setFontSize] = useState(48);
+  const [topY, setTopY] = useState(10); // percentage from top
+  const [bottomY, setBottomY] = useState(90); // percentage from top
+  const [textX, setTextX] = useState(50); // percentage from left (center)
   const [resultUrl, setResultUrl] = useState('');
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,7 +33,6 @@ const MemeGeneratorPage = () => {
     ctx.fillStyle = 'white';
     ctx.lineJoin = 'round';
 
-    // Word wrap
     const words = text.split(' ');
     const lines: string[] = [];
     let currentLine = '';
@@ -70,14 +72,14 @@ const MemeGeneratorPage = () => {
 
     const scale = img.width / 600;
     const actualSize = Math.round(fontSize * scale);
-    const padding = actualSize * 0.8;
     const maxWidth = img.width * 0.9;
+    const xPos = (textX / 100) * img.width;
 
     if (topText) {
-      drawMemeText(ctx, topText.toUpperCase(), img.width / 2, padding, maxWidth, actualSize);
+      const yPos = (topY / 100) * img.height;
+      drawMemeText(ctx, topText.toUpperCase(), xPos, yPos, maxWidth, actualSize);
     }
     if (bottomText) {
-      // Calculate bottom text position
       ctx.font = `bold ${actualSize}px Impact, sans-serif`;
       const words = bottomText.split(' ');
       let lines = 1;
@@ -91,8 +93,8 @@ const MemeGeneratorPage = () => {
           currentLine = testLine;
         }
       }
-      const bottomY = img.height - padding - (lines - 1) * actualSize * 1.1;
-      drawMemeText(ctx, bottomText.toUpperCase(), img.width / 2, bottomY, maxWidth, actualSize);
+      const yPos = (bottomY / 100) * img.height - (lines - 1) * actualSize * 1.1;
+      drawMemeText(ctx, bottomText.toUpperCase(), xPos, yPos, maxWidth, actualSize);
     }
 
     const blob = await new Promise<Blob>(resolve =>
@@ -145,6 +147,23 @@ const MemeGeneratorPage = () => {
                 <div>
                   <label className="text-sm font-medium text-foreground block mb-1">{t('meme.fontSize')}: {fontSize}px</label>
                   <Slider value={[fontSize]} onValueChange={([v]) => setFontSize(v)} min={24} max={96} />
+                </div>
+
+                {/* Position controls */}
+                <div className="border-t border-border/50 pt-3 space-y-3">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Posisi Teks</p>
+                  <div>
+                    <label className="text-xs text-muted-foreground block mb-1">Posisi Horizontal: {textX}%</label>
+                    <Slider value={[textX]} onValueChange={([v]) => setTextX(v)} min={10} max={90} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground block mb-1">Posisi Teks Atas: {topY}%</label>
+                    <Slider value={[topY]} onValueChange={([v]) => setTopY(v)} min={5} max={50} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground block mb-1">Posisi Teks Bawah: {bottomY}%</label>
+                    <Slider value={[bottomY]} onValueChange={([v]) => setBottomY(v)} min={50} max={98} />
+                  </div>
                 </div>
 
                 <Button className="w-full" onClick={generateMeme}>
