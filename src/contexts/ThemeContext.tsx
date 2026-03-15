@@ -12,9 +12,9 @@
  
  export function ThemeProvider({ children }: { children: ReactNode }) {
    const [theme, setTheme] = useState<Theme>(() => {
-     const saved = localStorage.getItem('theme');
-     if (saved === 'dark' || saved === 'light') return saved;
-     return 'light';
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return 'light'; // default light mode
    });
  
    useEffect(() => {

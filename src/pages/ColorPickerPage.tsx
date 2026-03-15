@@ -169,9 +169,7 @@ const ColorPickerPage = () => {
                   onMouseMove={handleCanvasMove}
                   onClick={handleCanvasClick}
                 />
-                <p className="text-xs text-muted-foreground mt-2 text-center">
-                  💡 Klik pada gambar untuk mengambil warna, klik kode warna untuk menyalin
-                </p>
+                
                 <div className="flex justify-end mt-2">
                   <Button size="sm" variant="ghost" onClick={() => { setImages([]); setSelectedImage(null); setPickedColors([]); setDominantColors([]); }}>
                     <Trash2 className="h-4 w-4 mr-1" /> {t('common.clearAll')}
@@ -197,6 +195,7 @@ const ColorPickerPage = () => {
                       />
                     ))}
                   </div>
+                  <p className="text-xs text-muted-foreground mt-2">Klik warna untuk menyalin kode warna</p>
                 </div>
               )}
 
