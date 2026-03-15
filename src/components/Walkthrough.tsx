@@ -96,8 +96,8 @@ export function Walkthrough() {
       placement: 'center',
       title: language === 'id' ? 'Selamat datang di GambarYuk!' : 'Welcome to GambarYuk!',
       content: language === 'id'  
-        ? 'Platform edit gambar gratis dengan 25+ tools. Semua proses terjadi di browser — file kamu tidak pernah keluar dari device. Mari kita lihat sekilas!'
-        : 'Free image editing platform with 25+ tools. All processing happens in your browser — your files never leave your device. Let\'s take a quick tour!',
+        ? 'Platform edit gambar gratis dengan 20+ tools. Semua proses terjadi di browser — file kamu tidak pernah keluar dari device. Mari kita lihat sekilas!'
+        : 'Free image editing platform with 20+ tools. All processing happens in your browser — your files never leave your device. Let\'s take a quick tour!',
       disableBeacon: true,
     },
     {

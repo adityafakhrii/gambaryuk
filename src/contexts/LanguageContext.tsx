@@ -254,7 +254,7 @@ const translations: Translations = {
   'about.title': { en: 'About GambarYuk', id: 'Tentang GambarYuk' },
   'about.subtitle': { en: 'A lightweight and complete image editor, straight from your browser.', id: 'Editor gambar ringan & lengkap, langsung dari browser kamu.' },
   'about.whatIs': { en: 'What is GambarYuk?', id: 'Apa itu GambarYuk?' },
-  'about.description': { en: 'GambarYuk is a free online image editing platform with 25+ tools. Ad-free, no login required, and 100% free. All processing happens directly in your browser — your images never leave your device. Fast, private, and professional.', id: 'GambarYuk adalah platform edit gambar online gratis dengan 25+ tools. Tanpa iklan, tanpa login, dan 100% gratis. Semua proses terjadi langsung di browser kamu — gambar kamu tidak pernah keluar dari device. Cepat, privat, dan profesional.' },
+  'about.description': { en: 'GambarYuk is a free online image editing platform with 20+ tools. Ad-free, no login required, and 100% free. All processing happens directly in your browser — your images never leave your device. Fast, private, and professional.', id: 'GambarYuk adalah platform edit gambar online gratis dengan 20+ tools. Tanpa iklan, tanpa login, dan 100% gratis. Semua proses terjadi langsung di browser kamu — gambar kamu tidak pernah keluar dari device. Cepat, privat, dan profesional.' },
   'about.creator': { en: 'Created By', id: 'Dibuat Oleh' },
   'about.creatorBio': { en: 'A fullstack developer who is also active in exploring AI integration, guiding through mentoring, and sharing knowledge via educational content.', id: 'Seorang fullstack developer yang juga aktif mengeksplorasi integrasi AI, membimbing melalui mentoring, dan berbagi edukasi.' },
 
