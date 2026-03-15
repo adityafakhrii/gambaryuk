@@ -61,6 +61,7 @@ const toolGroups = [
       { path: '/meme', icon: Type, key: 'nav.meme', descKey: 'feature.meme.desc' },
       { path: '/compare', icon: ArrowLeftRight, key: 'nav.compare', descKey: 'feature.compare.desc' },
       { path: '/beautifier', icon: Sparkles, key: 'nav.beautifier', descKey: 'feature.beautifier.desc' },
+      { path: '/annotate', icon: PenTool, key: 'nav.annotate', descKey: 'feature.annotate.desc' },
     ],
   },
   {
