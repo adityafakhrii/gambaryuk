@@ -99,7 +99,7 @@ const MemeGeneratorPage = () => {
     if (imgObjRef.current && images.length > 0) {
       drawMeme();
     }
-  }, [drawMeme]);
+  }, [drawMeme, images, topText, bottomText, fontSize, topY, bottomY, textX]);
 
   const handleDownload = async () => {
     const canvas = canvasRef.current;

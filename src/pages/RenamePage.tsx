@@ -66,7 +66,7 @@ const RenamePage = () => {
     const date = now.toISOString().split('T')[0].replace(/-/g, '');
     const time = now.toTimeString().split(' ')[0].replace(/:/g, '');
     
-    let newName = pattern
+    const newName = pattern
       .replace(/{name}/g, originalName)
       .replace(/{index}/g, String(startIndex + index).padStart(2, '0'))
       .replace(/{date}/g, date)

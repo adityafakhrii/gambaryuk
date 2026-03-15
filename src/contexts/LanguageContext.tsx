@@ -343,7 +343,7 @@ const translations: Translations = {
   'compress.before': { en: 'Before', id: 'Sebelum' },
   'compress.after': { en: 'After', id: 'Sesudah' },
   'compress.reduction': { en: 'Size reduced by', id: 'Ukuran berkurang' },
-  'compress.success': { en: 'File size reduced — web loading will be faster 🚀', id: 'Ukuran file berkurang — loading web akan lebih cepat 🚀' },
+  'compress.success': { en: 'File size reduced — web loading will be faster', id: 'Ukuran file berkurang — loading web akan lebih cepat' },
 
   // Convert Tool
   'convert.title': { en: 'Convert Format', id: 'Konversi Format' },

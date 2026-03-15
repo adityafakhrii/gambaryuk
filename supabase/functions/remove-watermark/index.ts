@@ -20,6 +20,7 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractResultImage(message: any): string | null {
   let resultImage = message?.images?.[0]?.image_url?.url
     || message?.images?.[0]?.url

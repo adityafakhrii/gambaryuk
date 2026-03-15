@@ -70,9 +70,12 @@ export default function CompressPage() {
     ));
 
     try {
+      // Force WebP for better compression while preserving transparency if original was PNG,
+      // otherwise fallback to JPEG which naturally supports quality slider well.
+      const format = image.file.type === 'image/png' ? 'webp' : 'jpeg';
       const result = await compressImage(image.preview, {
         quality: quality / 100,
-        format: 'jpeg',
+        format,
       });
 
       setImages(prev => prev.map(img =>
@@ -205,7 +208,7 @@ export default function CompressPage() {
                                 <div className="flex items-center justify-between">
                                   <div>
                                     <p className="text-sm font-medium text-accent">
-                                      -{calculateReduction(image.file.size, image.result.size)}% 🚀
+                                      -{calculateReduction(image.file.size, image.result.size)}%
                                     </p>
                                     <p className="text-xs text-muted-foreground">
                                       {formatFileSize(image.result.size)}
@@ -242,8 +245,8 @@ export default function CompressPage() {
                   <button
                     key={mode.key}
                     className={`w-full text-left px-4 py-3 rounded-xl transition-colors ${selectedMode === mode.key
-                        ? 'bg-primary/10 border-primary border'
-                        : 'bg-muted/50 border border-transparent hover:bg-muted'
+                      ? 'bg-primary/10 border-primary border'
+                      : 'bg-muted/50 border border-transparent hover:bg-muted'
                       }`}
                     onClick={() => handleModeChange(mode.key)}
                   >

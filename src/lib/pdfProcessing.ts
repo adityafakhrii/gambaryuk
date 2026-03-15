@@ -1,8 +1,18 @@
-import { jsPDF } from 'jspdf';
-import * as pdfjsLib from 'pdfjs-dist';
+// Library wrappers for dynamic imports
+let pdfjsLib: any = null;
 
-// Set worker source
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs`;
+async function getPdfjsLib() {
+  if (!pdfjsLib) {
+    pdfjsLib = await import('pdfjs-dist');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs`;
+  }
+  return pdfjsLib;
+}
+
+async function getJsPDF() {
+  const module = await import('jspdf');
+  return module.jsPDF;
+}
 
 export interface PdfPage {
   blob: Blob;
@@ -18,7 +28,8 @@ export async function imagesToSinglePdf(
   imageUrls: { url: string; width: number; height: number }[]
 ): Promise<Blob> {
   const first = imageUrls[0];
-  const pdf = new jsPDF({
+  const JsPDF = await getJsPDF();
+  const pdf = new JsPDF({
     orientation: first.width > first.height ? 'landscape' : 'portrait',
     unit: 'px',
     format: [first.width, first.height],
@@ -45,7 +56,8 @@ export async function imageToPdf(
   width: number,
   height: number
 ): Promise<Blob> {
-  const pdf = new jsPDF({
+  const JsPDF = await getJsPDF();
+  const pdf = new JsPDF({
     orientation: width > height ? 'landscape' : 'portrait',
     unit: 'px',
     format: [width, height],
@@ -65,7 +77,8 @@ export async function pdfToImages(
   scale: number = 2
 ): Promise<PdfPage[]> {
   const arrayBuffer = await pdfFile.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdfJs = await getPdfjsLib();
+  const pdf = await pdfJs.getDocument({ data: arrayBuffer }).promise;
   const pages: PdfPage[] = [];
 
   for (let i = 1; i <= pdf.numPages; i++) {
@@ -123,7 +136,8 @@ export async function extractPdfFirstPage(
   scale: number = 1
 ): Promise<string> {
   const arrayBuffer = await pdfFile.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdfJs = await getPdfjsLib();
+  const pdf = await pdfJs.getDocument({ data: arrayBuffer }).promise;
   const page = await pdf.getPage(1);
   const viewport = page.getViewport({ scale });
 

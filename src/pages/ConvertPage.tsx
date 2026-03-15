@@ -275,7 +275,7 @@ export default function ConvertPage() {
         const icoBlob = new Blob([icoResult.blob], { type: 'image/x-icon' });
         result = { ...icoResult, blob: icoBlob, size: icoBlob.size, format: 'ico' };
       } else {
-        const canvasFormat = (['jpeg', 'png', 'webp'] as const).includes(targetFormat as any)
+        const canvasFormat = (['jpeg', 'png', 'webp'] as const).includes(targetFormat as 'jpeg' | 'png' | 'webp')
           ? targetFormat as 'jpeg' | 'png' | 'webp'
           : 'png';
 

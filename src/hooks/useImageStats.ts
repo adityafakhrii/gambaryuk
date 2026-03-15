@@ -11,7 +11,7 @@ function getStats(): ImageStats {
   try {
     const raw = localStorage.getItem(STATS_KEY);
     if (raw) return JSON.parse(raw);
-  } catch {}
+  } catch { /* ignore */ }
   return { totalProcessed: 0, sessionStart: Date.now() };
 }
 
@@ -46,5 +46,5 @@ export function trackImageProcessed(count = 1) {
     const stats = getStats();
     stats.totalProcessed += count;
     saveStats(stats);
-  } catch {}
+  } catch { /* ignore */ }
 }
