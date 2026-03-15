@@ -256,7 +256,7 @@ const ImageToLinkPage = () => {
           </div>
 
           <p className="text-xs text-muted-foreground">
-            💡 Gambar akan otomatis dikompresi dan dikonversi ke format WebP sebelum diunggah untuk ukuran file lebih kecil
+            Gambar akan otomatis dikompresi dan dikonversi ke format WebP sebelum diunggah untuk ukuran file lebih kecil
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

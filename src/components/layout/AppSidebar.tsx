@@ -40,13 +40,11 @@ const toolGroups = [
       { path: '/crop', icon: Crop, key: 'nav.crop', descKey: 'feature.crop.desc' },
       { path: '/rotate', icon: RotateCcw, key: 'nav.rotate', descKey: 'feature.rotate.desc' },
       { path: '/watermark', icon: Stamp, key: 'nav.watermark', descKey: 'feature.watermark.desc' },
-      { path: '/remove-watermark', icon: Scissors, key: 'nav.removeWatermark', descKey: 'feature.removeWatermark.desc' },
     ],
   },
   {
     key: 'category.advanced',
     tools: [
-      { path: '/remove-bg', icon: Eraser, key: 'nav.removeBg', descKey: 'feature.removeBg.desc' },
       { path: '/filters', icon: Palette, key: 'nav.filters', descKey: 'feature.filters.desc' },
       { path: '/rename', icon: FileText, key: 'nav.rename', descKey: 'feature.rename.desc' },
       { path: '/collage', icon: LayoutGrid, key: 'nav.collage', descKey: 'feature.collage.desc' },
@@ -77,9 +75,11 @@ const toolGroups = [
   {
     key: 'category.ai',
     tools: [
-      { path: '/ocr', icon: ScanText, key: 'nav.ocr', descKey: 'feature.ocr.desc' },
-      { path: '/upscale', icon: Wand2, key: 'nav.upscale', descKey: 'feature.upscale.desc' },
-      { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen', descKey: 'feature.aiGen.desc' },
+      { path: '/ocr', icon: ScanText, key: 'nav.ocr', descKey: 'feature.ocr.desc', isAi: true },
+      { path: '/remove-watermark', icon: Scissors, key: 'nav.removeWatermark', descKey: 'feature.removeWatermark.desc', isAi: true },
+      { path: '/remove-bg', icon: Eraser, key: 'nav.removeBg', descKey: 'feature.removeBg.desc', isAi: true },
+      { path: '/upscale', icon: Wand2, key: 'nav.upscale', descKey: 'feature.upscale.desc', isAi: true },
+      { path: '/ai-generator', icon: BrainCircuit, key: 'nav.aiGen', descKey: 'feature.aiGen.desc', isAi: true },
     ],
   },
 ];
@@ -158,16 +158,38 @@ export function AppSidebar() {
                 <SidebarMenu>
                   {group.tools.map((tool) => (
                     <SidebarMenuItem key={tool.path}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={location.pathname === tool.path}
-                        tooltip={`${t(tool.key)} — ${t(tool.descKey)}`}
-                      >
-                        <Link to={tool.path} className="flex items-center gap-2">
-                          <tool.icon className="h-4 w-4 flex-shrink-0" />
-                          {!isCollapsed && <span className="truncate">{t(tool.key)}</span>}
-                        </Link>
-                      </SidebarMenuButton>
+                      {tool.isAi ? (
+                        <SidebarMenuButton
+                          isActive={location.pathname === tool.path}
+                          tooltip="Segera Hadir / Coming Soon"
+                          className="opacity-50 cursor-not-allowed"
+                        >
+                          {!isCollapsed ? (
+                            <div className="flex items-center gap-2 w-full justify-between" title="Segera Hadir / Coming Soon">
+                              <div className="flex items-center gap-2 overflow-hidden">
+                                <tool.icon className="h-4 w-4 flex-shrink-0" />
+                                <span className="truncate">{t(tool.key)}</span>
+                              </div>
+                              <Sparkles className="h-3 w-3 text-primary flex-shrink-0" />
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <tool.icon className="h-4 w-4 flex-shrink-0" />
+                            </div>
+                          )}
+                        </SidebarMenuButton>
+                      ) : (
+                        <SidebarMenuButton
+                          asChild
+                          isActive={location.pathname === tool.path}
+                          tooltip={`${t(tool.key)} — ${t(tool.descKey)}`}
+                        >
+                          <Link to={tool.path} className="flex items-center gap-2">
+                            <tool.icon className="h-4 w-4 flex-shrink-0" />
+                            {!isCollapsed && <span className="truncate">{t(tool.key)}</span>}
+                          </Link>
+                        </SidebarMenuButton>
+                      )}
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenu>

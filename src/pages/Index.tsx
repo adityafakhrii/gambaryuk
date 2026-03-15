@@ -25,8 +25,6 @@ const Index = () => {
     { icon: Crop, title: t('feature.crop.title'), description: t('feature.crop.desc'), path: '/crop' },
     { icon: RotateCcw, title: t('feature.rotate.title'), description: t('feature.rotate.desc'), path: '/rotate' },
     { icon: Stamp, title: t('feature.watermark.title'), description: t('feature.watermark.desc'), path: '/watermark' },
-    { icon: Scissors, title: t('feature.removeWatermark.title'), description: t('feature.removeWatermark.desc'), path: '/remove-watermark' },
-    { icon: Eraser, title: t('feature.removeBg.title'), description: t('feature.removeBg.desc'), path: '/remove-bg' },
     { icon: Palette, title: t('feature.filters.title'), description: t('feature.filters.desc'), path: '/filters' },
     { icon: FileText, title: t('feature.rename.title'), description: t('feature.rename.desc'), path: '/rename' },
     { icon: LayoutGrid, title: t('feature.collage.title'), description: t('feature.collage.desc'), path: '/collage' },
@@ -41,10 +39,14 @@ const Index = () => {
     { icon: Type, title: t('feature.meme.title'), description: t('feature.meme.desc'), path: '/meme' },
     { icon: ArrowLeftRight, title: t('feature.compare.title'), description: t('feature.compare.desc'), path: '/compare' },
     { icon: Sparkles, title: t('feature.beautifier.title'), description: t('feature.beautifier.desc'), path: '/beautifier' },
-    { icon: ScanText, title: t('feature.ocr.title'), description: t('feature.ocr.desc'), path: '/ocr' },
     { icon: PenTool, title: t('feature.annotate.title'), description: t('feature.annotate.desc'), path: '/annotate' },
-    { icon: Wand2, title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale' },
-    { icon: BrainCircuit, title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator' },
+    
+    // AI Tools (Coming Soon)
+    { icon: ScanText, title: t('feature.ocr.title'), description: t('feature.ocr.desc'), path: '/ocr', isAi: true },
+    { icon: Scissors, title: t('feature.removeWatermark.title'), description: t('feature.removeWatermark.desc'), path: '/remove-watermark', isAi: true },
+    { icon: Eraser, title: t('feature.removeBg.title'), description: t('feature.removeBg.desc'), path: '/remove-bg', isAi: true },
+    { icon: Wand2, title: t('feature.upscale.title'), description: t('feature.upscale.desc'), path: '/upscale', isAi: true },
+    { icon: BrainCircuit, title: t('feature.aiGen.title'), description: t('feature.aiGen.desc'), path: '/ai-generator', isAi: true },
   ];
 
 
@@ -91,6 +93,9 @@ const Index = () => {
     });
   }, [searchQuery, tools]);
 
+  const activeToolsCount = tools.filter(t => !t.isAi).length;
+  const comingSoonToolsCount = tools.filter(t => t.isAi).length;
+
   return (
     <div className="min-h-full flex flex-col">
       {/* Dashboard Header */}
@@ -123,10 +128,23 @@ const Index = () => {
       {/* Tools Grid */}
       <section className="relative z-10 flex-1 px-1 pb-8">
         <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-bold text-sidebar-foreground">
-              {t('nav.home') === 'Home' ? 'Available Tools' : 'Alat Tersedia'}
-            </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-bold text-sidebar-foreground">
+                {t('nav.home') === 'Home' ? 'Available Tools' : 'Alat Tersedia'}
+              </h2>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                  {activeToolsCount} {t('nav.home') === 'Home' ? 'Active' : 'Aktif'}
+                </span>
+                {comingSoonToolsCount > 0 && (
+                  <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground border border-border">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    {comingSoonToolsCount} {t('nav.home') === 'Home' ? 'Coming Soon' : 'Segera Hadir'}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
           {filteredTools.length === 0 ? (
@@ -135,22 +153,26 @@ const Index = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {filteredTools.map((tool, index) => (
-                <Link
-                  key={tool.path}
-                  to={tool.path}
-                  className="group animate-fade-in flex flex-col"
-                  style={{ animationDelay: `${0.02 * index}s` }}
-                >
-                  <div className="h-full rounded-xl border border-border/50 bg-background/50 p-4 transition-all duration-300 group-hover:bg-card group-hover:-translate-y-1 group-hover:border-primary group-hover:ring-1 group-hover:ring-primary group-hover:shadow-md flex flex-col items-start gap-3 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-3xl -z-10 group-hover:from-primary/10 transition-colors" />
+              {filteredTools.map((tool, index) => {
+                const isAiDisabled = tool.isAi;
+                
+                const cardContent = (
+                  <div className={`h-full rounded-xl border border-border/50 bg-background/50 p-4 transition-all duration-300 flex flex-col items-start gap-3 relative overflow-hidden ${isAiDisabled ? 'opacity-60 cursor-not-allowed bg-muted/30 grayscale-[50%]' : 'group-hover:bg-card group-hover:-translate-y-1 group-hover:border-primary group-hover:ring-1 group-hover:ring-primary group-hover:shadow-md'}`}>
+                    <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-3xl -z-10 transition-colors ${!isAiDisabled && 'group-hover:from-primary/10'}`} />
 
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background border border-border/60 text-sidebar-foreground transition-all duration-300 group-hover:border-primary/30 group-hover:text-primary shadow-sm">
+                    {isAiDisabled && (
+                      <div className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-full border border-primary/20">
+                        <Sparkles className="h-3 w-3" />
+                        AI
+                      </div>
+                    )}
+
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-background border border-border/60 text-sidebar-foreground transition-all duration-300 shadow-sm ${!isAiDisabled && 'group-hover:border-primary/30 group-hover:text-primary'}`}>
                       <tool.icon className="h-4 w-4" />
                     </div>
 
                     <div>
-                      <h3 className="text-sm font-bold text-sidebar-foreground leading-tight transition-colors duration-200 group-hover:text-primary mb-1">
+                      <h3 className={`text-sm font-bold text-sidebar-foreground leading-tight transition-colors duration-200 mb-1 ${!isAiDisabled && 'group-hover:text-primary'}`}>
                         {tool.title}
                       </h3>
                       <p className="text-xs text-muted-foreground leading-snug line-clamp-2">
@@ -158,8 +180,32 @@ const Index = () => {
                       </p>
                     </div>
                   </div>
-                </Link>
-              ))}
+                );
+
+                if (isAiDisabled) {
+                  return (
+                    <div 
+                      key={tool.path}
+                      className="group animate-fade-in flex flex-col h-full"
+                      style={{ animationDelay: `${0.02 * index}s` }}
+                      title="Segera Hadir / Coming Soon"
+                    >
+                      {cardContent}
+                    </div>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={tool.path}
+                    to={tool.path}
+                    className="group animate-fade-in flex flex-col h-full"
+                    style={{ animationDelay: `${0.02 * index}s` }}
+                  >
+                    {cardContent}
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>
