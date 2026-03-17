@@ -217,6 +217,39 @@ const Index = () => {
         </div>
       </section>
 
+      {/* FAQ Section (AEO) */}
+      <section className="relative z-10 px-4 py-12 border-t border-border/50 bg-background/30">
+        <div className="mx-auto max-w-3xl">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2">Frequently Asked Questions</h2>
+            <p className="text-muted-foreground text-sm">Jawaban cepat untuk pertanyaan umum tentang GambarYuk.</p>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="rounded-xl border border-border/60 bg-card p-5">
+              <h3 className="text-base font-semibold text-foreground mb-2">Apa itu GambarYuk?</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                GambarYuk adalah platform edit gambar online gratis dengan 25+ fitur yang dijalankan 100% di browser. Anda dapat memotong, mengompres, mengubah format, hingga menghapus latar belakang gambar tanpa perlu mengunduh aplikasi tambahan atau mendaftar akun.
+              </p>
+            </div>
+            
+            <div className="rounded-xl border border-border/60 bg-card p-5">
+              <h3 className="text-base font-semibold text-foreground mb-2">Apakah gambar saya aman dan disimpan di server?</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Gambar Anda 100% aman dan tidak pernah diunggah ke server mana pun. Semua proses pengeditan, mulai dari kompresi, rotasi, hingga filter warna, dilakukan secara lokal di perangkat dan browser Anda sendiri menggunakan teknologi HTML5 dan WebAssembly.
+              </p>
+            </div>
+            
+            <div className="rounded-xl border border-border/60 bg-card p-5">
+              <h3 className="text-base font-semibold text-foreground mb-2">Apakah GambarYuk sepenuhnya gratis?</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Ya, GambarYuk sepenuhnya gratis digunakan tanpa iklan, tanpa batasan jumlah gambar, dan tanpa watermark (kecuali Anda sendiri yang menambahkannya). Platform ini dibuat untuk membantu siapa saja yang membutuhkan alat manipulasi gambar yang cepat dan transparan.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 px-4 py-5">
         <div className="mx-auto max-w-4xl text-center space-y-0.5">
