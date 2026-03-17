@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://gambaryuk.adityafakhri.com/sitemap.xml

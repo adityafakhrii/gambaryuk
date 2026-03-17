@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
@@ -74,6 +75,7 @@ const RemoveBgPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('removeBg.title')} description={t('feature.removeBg.desc')} path="/remove-bg" />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('removeBg.title')}</h1>

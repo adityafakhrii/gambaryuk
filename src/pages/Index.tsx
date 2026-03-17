@@ -12,6 +12,7 @@ import {
   ScanText, PenTool, Wand2, BrainCircuit, Search,
   Shield, Zap, Lock, Layers
 } from 'lucide-react';
+import { SEO } from '@/components/SEO';
 
 const Index = () => {
   const { t } = useLanguage();
@@ -98,6 +99,11 @@ const Index = () => {
 
   return (
     <div className="min-h-full flex flex-col">
+      <SEO 
+        title={t('nav.home') === 'Home' ? 'Free Online Image Editor | 25+ Tools' : 'Edit Gambar Online Gratis | 25+ Tools'} 
+        description={t('app.slogan.main') + ' ' + t('app.slogan.highlight')} 
+        path="/"
+      />
       {/* Dashboard Header */}
       <section className="relative z-10 px-1 pt-2 pb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

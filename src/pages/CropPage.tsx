@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -248,6 +249,7 @@ const CropPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('crop.title')} description={t('feature.crop.desc')} path="/crop" />
       <main className="container relative z-10 mx-auto max-w-6xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('crop.title')}</h1>

@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useRef, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
@@ -133,6 +134,7 @@ const BlurPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('blur.title')} description={t('feature.blur.desc')} path="/blur" />
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.blur.title')}</h1>

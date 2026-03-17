@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -143,6 +144,7 @@ export default function ResizePage() {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('resize.title')} description={t('feature.resize.desc')} path="/resize" />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">

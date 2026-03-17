@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
@@ -114,6 +115,7 @@ const QrCodePage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('qrCode.title')} description={t('feature.qrCode.desc')} path="/qr-code" />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.qrCode.title')}</h1>

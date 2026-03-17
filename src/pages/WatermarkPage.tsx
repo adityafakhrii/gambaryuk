@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -164,6 +165,7 @@ const WatermarkPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('watermark.title')} description={t('feature.watermark.desc')} path="/watermark" />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('watermark.title')}</h1>

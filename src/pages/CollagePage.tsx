@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -166,6 +167,7 @@ const CollagePage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('collage.title')} description={t('feature.collage.desc')} path="/collage" />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('collage.title')}</h1>

@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Shield, Lock, Eye, Server, Trash2, Globe } from 'lucide-react';
 
@@ -53,6 +54,7 @@ const PrivacyPage = () => {
 
   return (
     <div className="min-h-full flex flex-col">
+      <SEO title={t('privacy.title')} description={t('privacy.subtitle')} path="/privacy" />
       <main className="relative z-10 flex-1 px-4 py-12">
         <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-12">

@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -86,6 +87,7 @@ const RotatePage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('rotate.title')} description={t('feature.rotate.desc')} path="/rotate" />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('rotate.title')}</h1>

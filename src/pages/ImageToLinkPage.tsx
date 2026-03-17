@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone } from '@/components/UploadZone';
@@ -207,6 +208,7 @@ const ImageToLinkPage = () => {
 
   return (
     <div className="mx-auto max-w-4xl p-4 md:p-6 space-y-6">
+      <SEO title={t('imageToLink.title')} description={t('feature.imageToLink.desc')} path="/image-to-link" />
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-foreground">{t('feature.imageToLink.title')}</h1>
         <p className="text-sm text-muted-foreground mt-1">{t('feature.imageToLink.desc')}</p>

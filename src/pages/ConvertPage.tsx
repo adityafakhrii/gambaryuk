@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -371,6 +372,7 @@ export default function ConvertPage() {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('convert.title')} description={t('feature.convert.desc')} path="/convert" />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">

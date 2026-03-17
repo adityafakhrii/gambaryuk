@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
@@ -143,6 +144,7 @@ const BeautifierPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('beautifier.title')} description={t('feature.beautifier.desc')} path="/beautifier" />
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.beautifier.title')}</h1>

@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
@@ -146,6 +147,7 @@ const FiltersPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('filters.title')} description={t('feature.filters.desc')} path="/filters" />
       <main className="container relative z-10 mx-auto max-w-6xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('filters.title')}</h1>

@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ExternalLink, Code2, BrainCircuit, GraduationCap, PenTool, Github, Instagram, Twitter, Facebook, Youtube, Linkedin, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('about.title')} description={t('about.subtitle')} path="/about" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-12 sm:py-16">
         {/* Header */}
         <div className="text-center mb-12">

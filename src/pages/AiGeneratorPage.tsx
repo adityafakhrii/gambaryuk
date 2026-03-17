@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -76,6 +77,7 @@ const AiGeneratorPage = () => {
 
   return (
     <div className="min-h-full">
+      <SEO title={t('aiGen.title')} description={t('feature.aiGen.desc')} path="/ai-generator" />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.aiGen.title')}</h1>
