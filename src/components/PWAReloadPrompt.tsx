@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -18,6 +18,43 @@ export function PWAReloadPrompt() {
     },
   })
 
+  const [showPromo, setShowPromo] = useState(false)
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+
+    const hasSeenPromo = localStorage.getItem('offlinePromoShown');
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || ('standalone' in navigator && (navigator as any).standalone);
+
+    let timer: NodeJS.Timeout;
+    if (!hasSeenPromo && !isStandalone) {
+      timer = setTimeout(() => {
+        setShowPromo(true);
+        localStorage.setItem('offlinePromoShown', 'true');
+      }, 5000);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    }
+  };
+
   const isId = (() => {
     try { return localStorage.getItem('language') !== 'en'; } catch { return true; }
   })();
@@ -25,9 +62,14 @@ export function PWAReloadPrompt() {
   const close = () => {
     setOfflineReady(false)
     setNeedRefresh(false)
+    setShowPromo(false)
   }
 
-  if (!offlineReady && !needRefresh) return null
+  const isVisible = offlineReady || needRefresh || showPromo;
+
+  if (!isVisible) return null;
+
+  const isOfflineState = offlineReady || (showPromo && !needRefresh);
 
   return (
     <div className="fixed bottom-4 right-4 z-[9999] animate-in slide-in-from-bottom-5">
@@ -35,7 +77,7 @@ export function PWAReloadPrompt() {
         <CardContent className="p-4 space-y-4">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 space-y-1">
-              {offlineReady ? (
+              {isOfflineState ? (
                 <>
                   <p className="text-sm font-medium text-foreground flex items-center gap-2">
                     <DownloadCloud className="w-4 h-4 text-green-500" />
@@ -64,7 +106,7 @@ export function PWAReloadPrompt() {
               <X className="w-4 h-4" />
             </button>
           </div>
-          
+
           <div className="flex gap-2">
             {needRefresh && (
               <Button
@@ -76,6 +118,18 @@ export function PWAReloadPrompt() {
                 {isId ? 'Muat Ulang' : 'Reload'}
               </Button>
             )}
+
+            {(isOfflineState && deferredPrompt) && (
+              <Button
+                variant="default"
+                size="sm"
+                className="w-full h-8 text-xs"
+                onClick={handleInstall}
+              >
+                {isId ? 'Instal Aplikasi' : 'Install App'}
+              </Button>
+            )}
+
             <Button
               variant="outline"
               size="sm"
