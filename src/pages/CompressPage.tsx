@@ -25,9 +25,10 @@ interface ProcessedFile extends ImageFile {
 }
 
 const compressionModes = [
-  { key: 'balanced', quality: 0.75, label: 'compress.balanced' },
-  { key: 'maximum', quality: 0.5, label: 'compress.maximum' },
-  { key: 'highQuality', quality: 0.92, label: 'compress.highQuality' },
+  { key: 'balanced', quality: 0.75, label: 'compress.balanced', percentage: '75%', desc: 'compress.balanced.desc' },
+  { key: 'maximum', quality: 0.5, label: 'compress.maximum', percentage: '50%', desc: 'compress.maximum.desc' },
+  { key: 'highQuality', quality: 0.92, label: 'compress.highQuality', percentage: '92%', desc: 'compress.highQuality.desc' },
+  { key: 'custom', quality: null, label: 'compress.custom', percentage: null, desc: 'compress.custom.desc' },
 ];
 
 export default function CompressPage() {
@@ -61,11 +62,18 @@ export default function CompressPage() {
     setSelectedMode(mode);
     const modeConfig = compressionModes.find(m => m.key === mode);
     if (modeConfig) {
-      setQuality(Math.round(modeConfig.quality * 100));
+      if (modeConfig.quality !== null) {
+        const newQuality = Math.round(modeConfig.quality * 100);
+        setQuality(newQuality);
+        if (images.length > 0) {
+          processAllWithQuality(newQuality);
+        }
+      }
     }
   };
 
-  const processImage = async (image: ProcessedFile) => {
+  const processImage = async (image: ProcessedFile, targetQuality?: number) => {
+    const activeQuality = targetQuality ?? quality;
     setImages(prev => prev.map(img =>
       img.id === image.id ? { ...img, processing: true } : img
     ));
@@ -75,7 +83,7 @@ export default function CompressPage() {
       // otherwise fallback to JPEG which naturally supports quality slider well.
       const format = image.file.type === 'image/png' ? 'webp' : 'jpeg';
       const result = await compressImage(image.preview, {
-        quality: quality / 100,
+        quality: activeQuality / 100,
         format,
       });
 
@@ -93,11 +101,15 @@ export default function CompressPage() {
     }
   };
 
+  const processAllWithQuality = async (q: number) => {
+    for (const image of images) {
+      await processImage(image, q);
+    }
+  };
+
   const processAll = async () => {
     for (const image of images) {
-      if (!image.result) {
-        await processImage(image);
-      }
+      await processImage(image, quality);
     }
   };
 
@@ -145,14 +157,42 @@ export default function CompressPage() {
               <UploadZone onFilesSelected={handleFilesSelected} className="min-h-[300px]" />
             ) : (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <p className="text-sm text-muted-foreground">
                     {images.length} image{images.length > 1 ? 's' : ''} selected
                   </p>
-                  <Button variant="outline" size="sm" onClick={handleClearAll}>
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    {t('common.clearAll')}
-                  </Button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Hapus Semua */}
+                    <Button variant="outline" size="sm" onClick={handleClearAll}>
+                      <Trash2 className="h-4 w-4 mr-1.5" />
+                      {t('common.clearAll')}
+                    </Button>
+
+                    {/* Unduh Semua */}
+                    {images.some(img => img.result) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadAll}
+                      >
+                        <Download className="h-4 w-4 mr-1.5" />
+                        {t('common.downloadAll')}
+                      </Button>
+                    )}
+
+                    {/* Proses Gambar */}
+                    <Button
+                      size="sm"
+                      className="btn-accent"
+                      onClick={processAll}
+                      disabled={images.every(img => img.processing)}
+                    >
+                      {images.some(img => img.processing) ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
+                      ) : null}
+                      {images.length > 1 ? t('common.processAll') : t('common.process')}
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="space-y-6">
@@ -242,17 +282,31 @@ export default function CompressPage() {
           <div className="space-y-6">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
               <h2 className="font-semibold text-foreground">{t('compress.mode')}</h2>
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-3">
                 {compressionModes.map((mode) => (
                   <button
                     key={mode.key}
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-colors ${selectedMode === mode.key
-                      ? 'bg-primary/10 border-primary border'
-                      : 'bg-muted/50 border border-transparent hover:bg-muted'
+                    className={`w-full text-left px-4 py-3.5 rounded-xl transition-all duration-200 border ${selectedMode === mode.key
+                      ? 'bg-primary border-primary shadow-md text-primary-foreground'
+                      : 'bg-muted/30 border-transparent hover:bg-muted/60 hover:border-border/50 text-foreground'
                       }`}
                     onClick={() => handleModeChange(mode.key)}
                   >
-                    <span className="text-sm font-medium">{t(mode.label)}</span>
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm font-semibold ${selectedMode === mode.key ? 'text-primary-foreground' : 'text-foreground'}`}>
+                        {t(mode.label)}
+                      </span>
+                      {mode.percentage && (
+                        <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${selectedMode === mode.key ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-primary/15 text-primary'}`}>
+                          {mode.percentage}
+                        </span>
+                      )}
+                    </div>
+                    {mode.desc && (
+                      <p className={`text-xs mt-1.5 leading-relaxed ${selectedMode === mode.key ? 'text-primary-foreground/85' : 'text-muted-foreground'}`}>
+                        {t(mode.desc)}
+                      </p>
+                    )}
                   </button>
                 ))}
               </div>
@@ -267,7 +321,12 @@ export default function CompressPage() {
                     value={[quality]}
                     onValueChange={(value) => {
                       setQuality(value[0]);
-                      setSelectedMode('');
+                      setSelectedMode('custom');
+                    }}
+                    onValueCommit={(value) => {
+                      if (images.length > 0) {
+                        processAllWithQuality(value[0]);
+                      }
                     }}
                     min={10}
                     max={100}
@@ -282,33 +341,6 @@ export default function CompressPage() {
               </div>
             </div>
 
-            {images.length > 0 && (
-              <div className="space-y-3">
-                <Button
-                  className="w-full btn-accent"
-                  size="lg"
-                  onClick={processAll}
-                  disabled={images.every(img => img.processing)}
-                >
-                  {images.some(img => img.processing) ? (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  ) : null}
-                  {images.length > 1 ? t('common.processAll') : t('common.process')}
-                </Button>
-
-                {images.some(img => img.result) && (
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    size="lg"
-                    onClick={handleDownloadAll}
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    {t('common.downloadAll')}
-                  </Button>
-                )}
-              </div>
-            )}
           </div>
         </div>
       </main>
