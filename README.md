@@ -3,6 +3,12 @@
 > **Edit images? Just upload and go!**  
 > Platform optimasi dan edit gambar lengkap yang cepat, ringan, tanpa iklan, dan 100% gratis. 
 
+🌐 **Halaman Live:** [gambaryuk.adityafakhri.com](https://gambaryuk.adityafakhri.com/)
+
+---
+
+![Tampilan GambarYuk](https://ltdwpaciulpophywcuam.supabase.co/storage/v1/object/public/shared-images/1779685401483-b4rcz6.webp)
+
 ---
 
 ## 📖 Tentang Proyek
@@ -128,6 +134,15 @@ Ketika pengembangan selesai dan siap *deploy*:
 npm run build
 ```
 *(Nantinya seluruh bundel statis akan tersimpan rapi pada direktori `/dist`)*.
+
+---
+
+## ☕ Dukungan & Donasi
+
+Jika GambarYuk membantu pekerjaan Anda dan Anda ingin memberikan dukungan/apresiasi kepada kreator, Anda dapat mentraktir kopi ke:
+👉 **[Halaman About & Traktir Kopi](https://gambaryuk.adityafakhri.com/about)**
+
+Terima kasih atas segala bentuk dukungan dan kebaikan Anda! ❤️
 
 ---
 
