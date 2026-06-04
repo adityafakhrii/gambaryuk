@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Download, Wand2, RefreshCw, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Download, Wand2, RefreshCw, Trash2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
 import { downloadImage, dataUriToBlob } from '@/lib/imageProcessing';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -143,6 +143,14 @@ const RemoveWatermarkPage = () => {
           <p className="text-muted-foreground mt-2">
             Hapus otomatis Watermark NotebookLM menggunakan teknologi AI tanpa mengubah ukuran atau resolusi gambar.
           </p>
+        </div>
+
+        <div className="mb-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/10 flex items-start gap-3 text-amber-600 dark:text-amber-400 max-w-3xl mx-auto">
+          <Sparkles className="h-5 w-5 mt-0.5 flex-shrink-0" />
+          <div className="text-left text-xs md:text-sm leading-relaxed">
+            <p className="font-semibold">{t('common.betaTitle')}</p>
+            <p className="mt-0.5 opacity-90">{t('common.betaDesc')}</p>
+          </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">

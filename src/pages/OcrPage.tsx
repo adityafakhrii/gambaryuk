@@ -1,16 +1,16 @@
 import { SEO } from '@/components/SEO';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UploadZone, ImageFile } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { ScanText, Copy, Check, Download, Trash2, Loader2 } from 'lucide-react';
+import { ScanText, Copy, Check, Download, Trash2, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { aiRateLimiter } from '@/lib/rateLimiter';
 
 const OcrPage = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [extractedText, setExtractedText] = useState('');
   const [loading, setLoading] = useState(false);
@@ -84,13 +84,46 @@ const OcrPage = () => {
     setExtractedText('');
   };
 
+  const schemaData = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": language === 'id' ? "Ekstrak Teks dari Gambar (OCR) Online - GambarYuk" : "Extract Text from Image (OCR) Online - GambarYuk",
+      "url": "https://gambaryuk.com/ocr",
+      "description": language === 'id'
+        ? "Ekstrak dan salin teks dari gambar JPG, PNG, WebP secara online menggunakan teknologi AI OCR gratis."
+        : "Extract and copy text from JPG, PNG, WebP images online using free AI OCR technology.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5 support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      }
+    };
+  }, [language]);
+
   return (
     <div className="min-h-full">
-      <SEO title={t('ocr.title')} description={t('feature.ocr.desc')} path="/ocr" />
+      <SEO 
+        title={t('ocr.title')} 
+        description={t('feature.ocr.desc')} 
+        path="/ocr" 
+        schema={schemaData}
+      />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.ocr.title')}</h1>
           <p className="text-sm text-muted-foreground mt-1">{t('feature.ocr.desc')}</p>
+        </div>
+
+        <div className="mb-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/10 flex items-start gap-3 text-amber-600 dark:text-amber-400">
+          <Sparkles className="h-5 w-5 mt-0.5 flex-shrink-0" />
+          <div className="text-left text-xs md:text-sm leading-relaxed">
+            <p className="font-semibold">{t('common.betaTitle')}</p>
+            <p className="mt-0.5 opacity-90">{t('common.betaDesc')}</p>
+          </div>
         </div>
 
         {images.length === 0 ? (
@@ -151,9 +184,70 @@ const OcrPage = () => {
             )}
           </div>
         )}
+
+        {/* SEO & AEO Content Section */}
+        <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Cara Mengambil Teks dari Gambar (OCR) Secara Online' : 'How to Extract Text from Images (OCR) Online'}
+            </h2>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground leading-relaxed">
+              <li>
+                {language === 'id' 
+                  ? 'Unggah gambar JPG, PNG, atau WebP yang berisi teks yang ingin Anda ambil.' 
+                  : 'Upload the JPG, PNG, or WebP image containing the text you want to extract.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Klik tombol "Ekstrak Teks" untuk memulai proses pembacaan karakter (OCR).' 
+                  : 'Click the "Extract Text" button to start the character recognition (OCR) process.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Tunggu beberapa saat hingga teks hasil ekstraksi muncul di kotak teks hasil.' 
+                  : 'Wait a few moments for the extracted text to appear in the result text box.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Gunakan tombol "Salin" untuk menyalin teks ke papan klip atau "Unduh .txt" untuk menyimpannya sebagai file teks.' 
+                  : 'Use the "Copy" button to copy the text to your clipboard or "Download .txt" to save it as a text file.'}
+              </li>
+            </ol>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Pertanyaan yang Sering Diajukan (FAQ)' : 'Frequently Asked Questions (FAQ)'}
+            </h2>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Bagaimana cara kerja fitur Ekstrak Teks (OCR)?' : 'How does the Extract Text (OCR) feature work?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Fitur ini menggunakan teknologi OCR (Optical Character Recognition) berbasis kecerdasan buatan (AI) yang mendeteksi pola bentuk huruf pada gambar dan mengonversinya menjadi teks digital yang bisa diedit.'
+                    : 'This feature uses artificial intelligence (AI) based OCR (Optical Character Recognition) technology to detect letter shape patterns in images and convert them into editable digital text.'}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Format gambar apa saja yang didukung untuk OCR?' : 'What image formats are supported for OCR?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'GambarYuk mendukung format gambar populer seperti JPEG/JPG, PNG, dan WebP dengan kualitas tulisan yang cukup jelas agar hasil ekstraksi akurat.'
+                    : 'GambarYuk supports popular image formats such as JPEG/JPG, PNG, and WebP, as long as the text quality is clear enough for accurate extraction.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
 };
 
 export default OcrPage;
+

@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
 import { UploadZone } from '@/components/UploadZone';
@@ -24,7 +24,7 @@ interface SocialMediaPreset {
 }
 
 const CropPage = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [uploadedImages, setUploadedImages] = useState<{ file: File; url: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<{ file: File; url: string } | null>(null);
   const [cropArea, setCropArea] = useState<CropArea>({ x: 0, y: 0, width: 100, height: 100 });
@@ -247,9 +247,34 @@ const CropPage = () => {
 
   const getCurrentPreset = () => socialMediaPresets.find(p => p.value === aspectRatio);
 
+  const schemaData = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": language === 'id' ? "Potong Gambar Online (Crop) - GambarYuk" : "Crop Image Online - GambarYuk",
+      "url": "https://gambaryuk.com/crop",
+      "description": language === 'id'
+        ? "Potong foto dan sesuaikan rasio aspek untuk Instagram, YouTube, Facebook secara gratis dan instan di browser."
+        : "Crop images and adjust aspect ratios for Instagram, YouTube, Facebook for free and instantly inside your browser.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5 support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      }
+    };
+  }, [language]);
+
   return (
     <div className="min-h-full">
-      <SEO title={t('crop.title')} description={t('feature.crop.desc')} path="/crop" />
+      <SEO 
+        title={t('crop.title')} 
+        description={t('feature.crop.desc')} 
+        path="/crop" 
+        schema={schemaData} 
+      />
       <main className="container relative z-10 mx-auto max-w-6xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">{t('crop.title')}</h1>
@@ -449,6 +474,71 @@ const CropPage = () => {
             </Card>
           </div>
         )}
+
+        {/* SEO & AEO Content Section */}
+        <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Cara Memotong Gambar Secara Online dengan GambarYuk' : 'How to Crop Images Online with GambarYuk'}
+            </h2>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground leading-relaxed">
+              <li>
+                {language === 'id' 
+                  ? 'Unggah gambar JPG, PNG, atau WebP dengan menyeretnya ke dalam kotak unggah.' 
+                  : 'Upload your JPG, PNG, or WebP image by dragging it into the upload box.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Pilih preset rasio aspek media sosial yang diinginkan (seperti Instagram Post, YouTube Thumbnail, dll.) atau pilih opsi Bebas.' 
+                  : 'Select your preferred social media aspect ratio preset (like Instagram Post, YouTube Thumbnail, etc.) or choose Free.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Geser dan atur area pemotongan bingkai pada gambar.' 
+                  : 'Drag and position the crop frame over your image.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Klik tombol "Terapkan Potong" untuk memotong gambar Anda secara instan.' 
+                  : 'Click the "Apply Crop" button to trim your image instantly.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Periksa hasil pemotongan lalu klik tombol "Unduh" untuk menyimpan hasilnya.' 
+                  : 'Check the cropped preview and click the "Download" button to save your result.'}
+              </li>
+            </ol>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Pertanyaan yang Sering Diajukan (FAQ)' : 'Frequently Asked Questions (FAQ)'}
+            </h2>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Apakah resolusi gambar saya akan turun setelah dipotong?' : 'Will my image resolution drop after cropping?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Pemotongan hanya akan mengambil area piksel yang Anda pilih. Kualitas piksel asli di dalam area tersebut akan tetap terjaga sepenuhnya tanpa kompresi tambahan yang merusak.'
+                    : 'Cropping only extracts the selected pixel area. The original pixel quality within the crop frame is fully preserved without any quality loss.'}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Apakah GambarYuk menyimpan foto yang saya unggah?' : 'Does GambarYuk store my uploaded photos?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Tidak sama sekali. Seluruh proses pengunggahan, pemotongan, dan pengolahan gambar dilakukan 100% secara lokal di browser Anda. Tidak ada data gambar yang dikirim ke server kami, sehingga keamanan data Anda sangat terjamin.'
+                    : 'Not at all. The entire upload, crop, and image processing steps are executed 100% locally in your browser. No image data is sent to our servers, ensuring maximum privacy.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

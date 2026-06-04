@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
 import { UploadZone, ImagePreview } from '@/components/UploadZone';
@@ -32,7 +32,7 @@ const compressionModes = [
 ];
 
 export default function CompressPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [images, setImages] = useState<ProcessedFile[]>([]);
   const [quality, setQuality] = useState(75);
   const [selectedMode, setSelectedMode] = useState<string>('balanced');
@@ -139,9 +139,34 @@ export default function CompressPage() {
     return Math.round(((original - compressed) / original) * 100);
   };
 
+  const schemaData = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": language === 'id' ? "Kompres Gambar Online - GambarYuk" : "Compress Image Online - GambarYuk",
+      "url": "https://gambaryuk.com/compress",
+      "description": language === 'id' 
+        ? "Kurangi ukuran file foto JPG, PNG, WebP secara gratis langsung di browser dengan kualitas gambar tetap terjaga." 
+        : "Reduce JPG, PNG, and WebP file size for free inside browser while maintaining excellent image quality.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5 support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      }
+    };
+  }, [language]);
+
   return (
     <div className="min-h-full">
-      <SEO title={t('compress.title')} description={t('feature.compress.desc')} path="/compress" />
+      <SEO 
+        title={t('compress.title')} 
+        description={t('feature.compress.desc')} 
+        path="/compress" 
+        schema={schemaData} 
+      />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">
@@ -162,13 +187,11 @@ export default function CompressPage() {
                     {images.length} image{images.length > 1 ? 's' : ''} selected
                   </p>
                   <div className="flex flex-wrap items-center gap-2">
-                    {/* Hapus Semua */}
                     <Button variant="outline" size="sm" onClick={handleClearAll}>
                       <Trash2 className="h-4 w-4 mr-1.5" />
                       {t('common.clearAll')}
                     </Button>
 
-                    {/* Unduh Semua */}
                     {images.some(img => img.result) && (
                       <Button
                         variant="outline"
@@ -180,7 +203,6 @@ export default function CompressPage() {
                       </Button>
                     )}
 
-                    {/* Proses Gambar */}
                     <Button
                       size="sm"
                       className="btn-accent"
@@ -340,9 +362,71 @@ export default function CompressPage() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
+
+        {/* SEO & AEO Content Section */}
+        <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Cara Kompres Ukuran Gambar Secara Online Gratis' : 'How to Compress Image Size Online for Free'}
+            </h2>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground leading-relaxed">
+              <li>
+                {language === 'id' 
+                  ? 'Pilih atau seret beberapa file foto (JPG, PNG, WebP) ke area unggah.' 
+                  : 'Select or drag multiple image files (JPG, PNG, WebP) into the upload area.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Pilih mode kompresi: Seimbang (Rekomendasi), Kompresi Maksimal, Kualitas Tinggi, atau Kustom.' 
+                  : 'Choose a compression mode: Balanced (Recommended), Maximum Compression, High Quality, or Custom.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Jika memilih Kustom, sesuaikan persentase kualitas secara manual menggunakan slider slider.' 
+                  : 'If you choose Custom, manually adjust the quality percentage using the slider.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Klik "Proses Semua" untuk mengompresi gambar Anda secara lokal dalam beberapa milidetik.' 
+                  : 'Click "Process All" to compress your images locally in a few milliseconds.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Lihat persentase pengurangan ukuran file dan unduh hasilnya secara langsung.' 
+                  : 'See the file size reduction percentage and download your results instantly.'}
+              </li>
+            </ol>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">FAQ - Kompres Gambar</h2>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Apakah gambar saya akan buram setelah dikompres?' : 'Will my images look blurry after compression?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Tidak! Mode Seimbang dirancang untuk meminimalkan ukuran file secara optimal tanpa mengurangi detail penting yang terlihat secara visual oleh mata manusia.'
+                    : 'No! The Balanced mode is designed to optimize file size reduction without losing critical visual details visible to the human eye.'}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Kenapa kompresi di GambarYuk sangat cepat?' : 'Why is the compression so fast on GambarYuk?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Karena seluruh pemrosesan kompresi dilakukan secara internal di komputer/perangkat Anda sendiri melalui browser, tanpa proses upload dan download dari server luar.'
+                    : 'Because the entire compression process is executed internally on your computer/device via the browser, avoiding the need to upload and download files to external servers.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

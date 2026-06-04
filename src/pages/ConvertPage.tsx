@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
 import { UploadZone } from '@/components/UploadZone';
@@ -42,7 +42,7 @@ interface PdfFileState {
 type Format = 'jpeg' | 'png' | 'webp' | 'bmp' | 'gif' | 'ico' | 'svg' | 'avif' | 'tiff' | 'pdf';
 
 export default function ConvertPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const formats: { value: Format; label: string; description: string }[] = [
     { value: 'jpeg', label: 'JPEG (.jpg)', description: t('format.jpeg.desc') },
@@ -84,17 +84,15 @@ export default function ConvertPage() {
       return;
     }
 
-    // Create initial state
     const newPdfStates: PdfFileState[] = pdfs.map(f => ({ file: f }));
     setPdfFiles(newPdfStates);
     setImages([]);
     setPdfPages([]);
     setTargetFormat('jpeg');
 
-    // Load previews asynchronously
     for (let i = 0; i < pdfs.length; i++) {
       try {
-        const previewUrl = await extractPdfFirstPage(pdfs[i], 0.5); // scale 0.5 for small preview
+        const previewUrl = await extractPdfFirstPage(pdfs[i], 0.5);
         setPdfFiles(current => {
           const updated = [...current];
           if (updated[i]) {
@@ -157,7 +155,6 @@ export default function ConvertPage() {
     return format;
   };
 
-  // Process PDF to Images
   const processPdfToImages = async () => {
     setPdfProcessing(true);
     try {
@@ -175,16 +172,13 @@ export default function ConvertPage() {
     setPdfProcessing(false);
   };
 
-  // Process Images to PDF
   const processImagesToPdf = async () => {
     if (pdfMode === 'single') {
-      // Merge all images into one PDF
       setImages(prev => prev.map(img => ({ ...img, processing: true })));
       try {
         const pdfBlob = await imagesToSinglePdf(
           images.map(img => ({ url: img.preview, width: img.width, height: img.height }))
         );
-        // Store result on first image, mark all done
         const resultUrl = URL.createObjectURL(pdfBlob);
         setImages(prev => prev.map((img, i) => ({
           ...img,
@@ -206,7 +200,6 @@ export default function ConvertPage() {
         setImages(prev => prev.map(img => ({ ...img, processing: false })));
       }
     } else {
-      // Separate: each image becomes its own PDF
       for (const image of images) {
         if (image.result) continue;
         setImages(prev => prev.map(img =>
@@ -222,8 +215,8 @@ export default function ConvertPage() {
               result: {
                 blob: pdfBlob,
                 url: URL.createObjectURL(pdfBlob),
-                width: img.width,
-                height: img.height,
+                width: image.width,
+                height: image.height,
                 size: pdfBlob.size,
                 format: 'pdf',
               },
@@ -240,7 +233,6 @@ export default function ConvertPage() {
     }
   };
 
-  // Standard image format conversion
   const imageToTracedSvg = async (imageUrl: string, w: number, h: number): Promise<Blob> => {
     const canvas = document.createElement('canvas');
     canvas.width = w;
@@ -370,9 +362,34 @@ export default function ConvertPage() {
   const showPdfModeOption = targetFormat === 'pdf' && images.length > 1;
   const showTransparency = !['jpeg', 'bmp', 'gif', 'ico', 'pdf'].includes(targetFormat);
 
+  const schemaData = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": language === 'id' ? "Konversi Format Gambar & PDF - GambarYuk" : "Convert Image & PDF Formats Online - GambarYuk",
+      "url": "https://gambaryuk.com/convert",
+      "description": language === 'id' 
+        ? "Konversi format gambar JPG, PNG, WebP, SVG, AVIF secara instan, atau konversi PDF ke JPG online gratis langsung di browser." 
+        : "Convert JPG, PNG, WebP, SVG, AVIF format images instantly, or extract PDF pages to JPG for free inside browser.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5 support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      }
+    };
+  }, [language]);
+
   return (
     <div className="min-h-full">
-      <SEO title={t('convert.title')} description={t('feature.convert.desc')} path="/convert" />
+      <SEO 
+        title={t('convert.title')} 
+        description={t('feature.convert.desc')} 
+        path="/convert" 
+        schema={schemaData} 
+      />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">
@@ -384,7 +401,6 @@ export default function ConvertPage() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
           {/* Main Area */}
           <div className="space-y-6">
-            {/* PDF Upload Option */}
             {images.length === 0 && pdfFiles.length === 0 && (
               <div className="space-y-4">
                 <UploadZone onFilesSelected={handleFilesSelected} className="min-h-[240px]" />
@@ -419,7 +435,6 @@ export default function ConvertPage() {
               </div>
             )}
 
-            {/* PDF source: show PDF info & results */}
             {isPdfSource && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -435,7 +450,6 @@ export default function ConvertPage() {
                   </Button>
                 </div>
 
-                {/* PDF file cards */}
                 <div className="space-y-2">
                   {pdfFiles.map((pdfState, i) => (
                     <div key={i} className="rounded-xl border border-border bg-card p-4 flex items-center gap-3">
@@ -456,7 +470,6 @@ export default function ConvertPage() {
                   ))}
                 </div>
 
-                {/* Converted pages */}
                 {pdfPages.length > 0 && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -486,7 +499,6 @@ export default function ConvertPage() {
               </div>
             )}
 
-            {/* Image source: show images */}
             {!isPdfSource && images.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -596,7 +608,6 @@ export default function ConvertPage() {
                   </div>
                 )}
 
-                {/* PDF merge option */}
                 {showPdfModeOption && (
                   <div className="space-y-3">
                     <Label className="text-sm font-medium">{t('convert.pdfOptions')}</Label>
@@ -640,7 +651,7 @@ export default function ConvertPage() {
                     onClick={processPdfToImages}
                     disabled={pdfProcessing}
                   >
-                    {pdfProcessing && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                    {pdfProcessing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                     Konversi PDF ke JPG
                   </Button>
                 )}
@@ -680,6 +691,69 @@ export default function ConvertPage() {
             )}
           </div>
         </div>
+
+        {/* SEO & AEO Content Section */}
+        <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Cara Mengonversi Format Gambar & PDF Online Gratis' : 'How to Convert Image & PDF Formats Online for Free'}
+            </h2>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground leading-relaxed">
+              <li>
+                {language === 'id' 
+                  ? 'Unggah file gambar (JPG, PNG, WebP, SVG, dll.) atau file PDF ke area unggah.' 
+                  : 'Upload image files (JPG, PNG, WebP, SVG, etc.) or a PDF file into the upload area.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Gunakan menu dropdown untuk memilih format target (seperti PNG, WebP, SVG, atau PDF).' 
+                  : 'Use the dropdown menu to select your target format (such as PNG, WebP, SVG, or PDF).'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Aktifkan "Pertahankan transparansi" jika Anda mengonversi gambar dengan latar transparan.' 
+                  : 'Toggle "Preserve transparency" if you are converting transparent source images.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Untuk file PDF, setiap halaman akan diekstrak menjadi file gambar JPG beresolusi tinggi.' 
+                  : 'For PDF files, each page will be rendered into high-resolution JPG image files.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Klik tombol proses dan unduh hasil konversinya secara instan.' 
+                  : 'Click the process button and download your converted results instantly.'}
+              </li>
+            </ol>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">FAQ - Konversi Gambar & PDF</h2>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Format gambar apa saja yang didukung untuk konversi?' : 'Which image formats are supported for conversion?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Kami mendukung konversi timbal balik untuk format populer termasuk JPEG, PNG, WebP, AVIF, BMP, GIF, ICO, SVG, TIFF, dan juga dokumen PDF.'
+                    : 'We support cross-conversions between popular formats including JPEG, PNG, WebP, AVIF, BMP, GIF, ICO, SVG, TIFF, and also PDF documents.'}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Apakah resolusi gambar saya akan berubah saat konversi?' : 'Does converting formats change my image resolution?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Tidak, dimensi piksel asli dari gambar Anda dipertahankan sepenuhnya, kecuali Anda secara sadar mengonversinya ke format ICO (yang memiliki ukuran ikon default).'
+                    : 'No, the original pixel dimensions of your images are fully preserved, unless you convert them to ICO format (which has default icon sizes).'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

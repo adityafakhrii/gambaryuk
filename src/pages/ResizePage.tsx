@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackImageProcessed } from '@/hooks/useImageStats';
 import { UploadZone, ImagePreview } from '@/components/UploadZone';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { resizeImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
 import { downloadAsZip } from '@/lib/zipDownload';
-import { Download, Lock, Unlock, Loader2, X, Trash2 } from 'lucide-react';
+import { Download, Lock, Unlock, Loader2, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ImageFile {
@@ -33,7 +33,7 @@ const presets = [
 ];
 
 export default function ResizePage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [images, setImages] = useState<ProcessedFile[]>([]);
   const [width, setWidth] = useState<number>(1080);
   const [height, setHeight] = useState<number>(1080);
@@ -142,9 +142,34 @@ export default function ResizePage() {
     );
   };
 
+  const schemaData = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": language === 'id' ? "Ubah Ukuran Gambar Online - GambarYuk" : "Resize Image Online - GambarYuk",
+      "url": "https://gambaryuk.com/resize",
+      "description": language === 'id' 
+        ? "Ubah ukuran dan dimensi piksel gambar JPG, PNG, WebP secara instan langsung di browser tanpa upload ke server." 
+        : "Resize and modify pixel dimensions of JPG, PNG, and WebP images instantly in browser, no server upload required.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5 support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      }
+    };
+  }, [language]);
+
   return (
     <div className="min-h-full">
-      <SEO title={t('resize.title')} description={t('feature.resize.desc')} path="/resize" />
+      <SEO 
+        title={t('resize.title')} 
+        description={t('feature.resize.desc')} 
+        path="/resize" 
+        schema={schemaData} 
+      />
       <main className="container relative z-10 mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">
@@ -154,7 +179,6 @@ export default function ResizePage() {
         </div>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
-          {/* Main Area */}
           <div className="space-y-6">
             {images.length === 0 ? (
               <UploadZone onFilesSelected={handleFilesSelected} className="min-h-[300px]" />
@@ -216,7 +240,6 @@ export default function ResizePage() {
             )}
           </div>
 
-          {/* Controls Sidebar */}
           <div className="space-y-6">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
               <h2 className="font-semibold text-foreground">{t('resize.presets')}</h2>
@@ -308,6 +331,68 @@ export default function ResizePage() {
             )}
           </div>
         </div>
+
+        <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Cara Mengubah Ukuran Gambar Online Gratis' : 'How to Resize Image Online for Free'}
+            </h2>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground leading-relaxed">
+              <li>
+                {language === 'id' 
+                  ? 'Seret dan lepas gambar Anda ke area unggah atau klik untuk memilih file.' 
+                  : 'Drag and drop your image into the upload box or click to select a file.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Pilih preset resolusi cepat (Instagram, YouTube, Banner) atau masukkan lebar dan tinggi khusus.' 
+                  : 'Select one of the quick resolution presets (Instagram, YouTube, Banner) or input custom width and height.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Aktifkan "Kunci rasio aspek" agar gambar Anda tidak terdistorsi.' 
+                  : 'Toggle "Lock aspect ratio" to keep the original image proportions and avoid distortion.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Klik tombol "Proses Gambar" untuk memulai proses resizing instan.' 
+                  : 'Click the "Process Image" button to start the instant resizing process.'}
+              </li>
+              <li>
+                {language === 'id' 
+                  ? 'Unduh hasilnya satu per satu atau unduh semua sekaligus sebagai file ZIP.' 
+                  : 'Download the result individually or download all at once as a ZIP file.'}
+              </li>
+            </ol>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground">FAQ - Resize Gambar</h2>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Apakah aman mengubah ukuran foto saya di GambarYuk?' : 'Is it safe to resize my photos on GambarYuk?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Sangat aman! GambarYuk berjalan sepenuhnya secara lokal di dalam browser web Anda menggunakan teknologi client-side. Gambar Anda tidak pernah dikirim atau disimpan di server mana pun.'
+                    : 'Absolutely safe! GambarYuk runs entirely locally inside your web browser using client-side technology. Your images are never sent or stored on any external servers.'}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card/50 p-5">
+                <h3 className="font-semibold text-foreground mb-2">
+                  {language === 'id' ? 'Apakah kualitas gambar akan berkurang setelah di-resize?' : 'Does resizing reduce image quality?'}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === 'id'
+                    ? 'Alat kami menggunakan algoritma penskalaan kanvas berkualitas tinggi untuk memastikan gambar hasil ubah ukuran tetap tajam. Kualitas akan disesuaikan dengan dimensi baru yang Anda pilih.'
+                    : 'Our tool uses high-quality canvas scaling algorithms to ensure the resized image remains sharp. The quality will be optimized to match the new dimensions you chose.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

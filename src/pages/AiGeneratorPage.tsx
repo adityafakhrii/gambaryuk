@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Wand2, Download, Loader2 } from 'lucide-react';
+import { Wand2, Download, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { downloadImage } from '@/lib/imageProcessing';
@@ -82,6 +82,14 @@ const AiGeneratorPage = () => {
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.aiGen.title')}</h1>
           <p className="text-sm text-muted-foreground mt-1">{t('feature.aiGen.desc')}</p>
+        </div>
+
+        <div className="mb-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/10 flex items-start gap-3 text-amber-600 dark:text-amber-400">
+          <Sparkles className="h-5 w-5 mt-0.5 flex-shrink-0" />
+          <div className="text-left text-xs md:text-sm leading-relaxed">
+            <p className="font-semibold">{t('common.betaTitle')}</p>
+            <p className="mt-0.5 opacity-90">{t('common.betaDesc')}</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

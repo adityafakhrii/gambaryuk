@@ -471,6 +471,8 @@ const translations: Translations = {
   'common.clearAll': { en: 'Clear All', id: 'Hapus Semua' },
   'common.apply': { en: 'Apply', id: 'Terapkan' },
   'common.getStarted': { en: 'Get started', id: 'Mulai' },
+  'common.betaTitle': { en: 'BETA / Experimental Feature', id: 'Fitur BETA / Uji Coba' },
+  'common.betaDesc': { en: 'This feature is in active development and relies on a backend service that may be currently inactive or limited.', id: 'Fitur ini dalam pengembangan aktif dan bergantung pada layanan backend yang mungkin belum aktif saat ini.' },
 
   // Errors
   'error.unsupported': { en: 'Unsupported file format', id: 'Format file tidak didukung' },

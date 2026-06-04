@@ -84,6 +84,14 @@ const UpscalePage = () => {
           <p className="text-sm text-muted-foreground mt-1">{t('feature.upscale.desc')}</p>
         </div>
 
+        <div className="mb-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/10 flex items-start gap-3 text-amber-600 dark:text-amber-400">
+          <Sparkles className="h-5 w-5 mt-0.5 flex-shrink-0" />
+          <div className="text-left text-xs md:text-sm leading-relaxed">
+            <p className="font-semibold">{t('common.betaTitle')}</p>
+            <p className="mt-0.5 opacity-90">{t('common.betaDesc')}</p>
+          </div>
+        </div>
+
         {images.length === 0 ? (
           <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
         ) : (

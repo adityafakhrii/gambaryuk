@@ -10,7 +10,22 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 User-agent: *
 Allow: /
 
-Sitemap: https://gambaryuk.adityafakhri.com/sitemap.xml
+Sitemap: https://gambaryuk.com/sitemap.xml
