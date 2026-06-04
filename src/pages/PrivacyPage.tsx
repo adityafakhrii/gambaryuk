@@ -1,6 +1,6 @@
 import { SEO } from '@/components/SEO';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Shield, Lock, Eye, Server, Trash2, Globe } from 'lucide-react';
+import { Shield, Lock, Eye, Server, Trash2, Globe, Instagram } from 'lucide-react';
 
 const PrivacyPage = () => {
   const { t } = useLanguage();
@@ -111,13 +111,26 @@ const PrivacyPage = () => {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 px-4 py-6">
-        <div className="container mx-auto max-w-5xl text-center space-y-1">
-          <p className="text-sm text-muted-foreground">
-            © 2026 GambarYuk. Part of YukAccess.
-          </p>
-          <p className="text-xs text-muted-foreground/70">
-            {t('footer.browserOnly')}
-          </p>
+        <div className="container mx-auto max-w-5xl text-center space-y-3">
+          <div className="flex justify-center items-center gap-1.5 text-xs text-muted-foreground">
+            <Instagram className="h-3.5 w-3.5 text-muted-foreground" />
+            <a 
+              href="https://instagram.com/gambar.yuk" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors font-medium"
+            >
+              @gambar.yuk
+            </a>
+          </div>
+          <div className="space-y-0.5">
+            <p className="text-sm text-muted-foreground">
+              © 2026 GambarYuk. Part of YukAccess.
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              {t('footer.browserOnly')}
+            </p>
+          </div>
         </div>
       </footer>
     </div>

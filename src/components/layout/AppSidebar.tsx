@@ -8,6 +8,7 @@ import {
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
   ScanText, PenTool, Wand2, BrainCircuit, Heart, Scissors,
+  Instagram,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -224,6 +225,22 @@ export function AppSidebar() {
                 <Shield className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">{t('nav.privacyPolicy')}</span>}
               </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip="Instagram @gambar.yuk"
+            >
+              <a
+                href="https://instagram.com/gambar.yuk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sidebar-foreground/70"
+              >
+                <Instagram className="h-4 w-4 flex-shrink-0" />
+                {!isCollapsed && <span className="text-xs">@gambar.yuk</span>}
+              </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem id="tour-language">

@@ -10,7 +10,7 @@ import {
   Info, Pipette, Binary, QrCode, Image as ImageIcon,
   Grid3X3, EyeOff, Type, ArrowLeftRight, Sparkles,
   ScanText, PenTool, Wand2, BrainCircuit, Search,
-  Shield, Zap, Lock, Layers
+  Shield, Zap, Lock, Layers, Instagram
 } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 
@@ -252,13 +252,26 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 px-4 py-5">
-        <div className="mx-auto max-w-4xl text-center space-y-0.5">
-          <p className="text-xs text-muted-foreground">
-            © 2026 GambarYuk. Part of YukAccess.
-          </p>
-          <p className="text-xs text-muted-foreground/60">
-            All processing happens in your browser — zero data stored.
-          </p>
+        <div className="mx-auto max-w-4xl text-center space-y-3">
+          <div className="flex justify-center items-center gap-1.5 text-xs text-muted-foreground">
+            <Instagram className="h-3.5 w-3.5 text-muted-foreground" />
+            <a 
+              href="https://instagram.com/gambar.yuk" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors font-medium"
+            >
+              @gambar.yuk
+            </a>
+          </div>
+          <div className="space-y-0.5">
+            <p className="text-xs text-muted-foreground">
+              © 2026 GambarYuk. Part of YukAccess.
+            </p>
+            <p className="text-xs text-muted-foreground/60">
+              All processing happens in your browser — zero data stored.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
