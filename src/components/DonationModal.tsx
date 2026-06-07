@@ -103,17 +103,17 @@ export function DonationModal({ children }: { children: React.ReactNode }) {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+        <form onSubmit={handleSubmit} className="space-y-3.5 mt-1">
           {/* Amount Selection */}
-          <div className="space-y-2">
-            <Label>{language === 'id' ? 'Pilih Nominal' : 'Select Amount'}</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold">{language === 'id' ? 'Pilih Nominal' : 'Select Amount'}</Label>
             <div className="grid grid-cols-2 gap-2">
               {PRESET_AMOUNTS.map((preset) => (
                 <Button
                   key={preset}
                   type="button"
                   variant={amount === preset && !customAmount ? 'default' : 'outline'}
-                  className="w-full"
+                  className="w-full rounded-xl h-10 text-xs sm:text-sm"
                   onClick={() => handleAmountClick(preset)}
                 >
                   Rp {preset.toLocaleString('id-ID')}
@@ -125,57 +125,60 @@ export function DonationModal({ children }: { children: React.ReactNode }) {
               placeholder={language === 'id' ? 'Nominal Lainnya (Min. 10.000)' : 'Custom Amount (Min. 10.000)'}
               value={customAmount ? `Rp ${parseInt(customAmount, 10).toLocaleString('id-ID')}` : ''}
               onChange={handleCustomAmountChange}
-              className="mt-2"
+              className="mt-1.5 rounded-xl h-10 text-sm"
             />
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div className="space-y-1">
-              <Label htmlFor="donator-name">{language === 'id' ? 'Nama' : 'Name'}</Label>
+              <Label htmlFor="donator-name" className="text-xs font-semibold">{language === 'id' ? 'Nama' : 'Name'}</Label>
               <Input
                 id="donator-name"
                 placeholder={language === 'id' ? 'Nama Panggilanmu' : 'Your Nickname'}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="rounded-xl h-10 text-sm"
                 required
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="donator-email">{language === 'id' ? 'Email' : 'Email'}</Label>
+              <Label htmlFor="donator-email" className="text-xs font-semibold">{language === 'id' ? 'Email' : 'Email'}</Label>
               <Input
                 id="donator-email"
                 type="email"
                 placeholder="email@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="rounded-xl h-10 text-sm"
                 required
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="donator-mobile">{language === 'id' ? 'Nomor WhatsApp / HP' : 'WhatsApp / Phone Number'}</Label>
+              <Label htmlFor="donator-mobile" className="text-xs font-semibold">{language === 'id' ? 'Nomor WhatsApp / HP' : 'WhatsApp / Phone Number'}</Label>
               <Input
                 id="donator-mobile"
                 type="tel"
                 placeholder="081234567890"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
+                className="rounded-xl h-10 text-sm"
                 required
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="donator-message">{language === 'id' ? 'Pesan (Opsional)' : 'Message (Optional)'}</Label>
+              <Label htmlFor="donator-message" className="text-xs font-semibold">{language === 'id' ? 'Pesan (Opsional)' : 'Message (Optional)'}</Label>
               <Textarea
                 id="donator-message"
                 placeholder={language === 'id' ? 'Pesan penyemangat untuk kreator...' : 'Encouragement message...'}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="resize-none h-20"
+                className="resize-none h-16 rounded-xl text-sm"
               />
             </div>
           </div>
 
-          <div className="pt-2 text-center">
-            <Button type="submit" className="w-full h-11" disabled={isLoading}>
+          <div className="pt-1 text-center">
+            <Button type="submit" className="w-full h-11 rounded-xl btn-accent font-semibold" disabled={isLoading}>
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
@@ -186,7 +189,7 @@ export function DonationModal({ children }: { children: React.ReactNode }) {
                 : `Pay Rp ${amount.toLocaleString('id-ID')}`
               }
             </Button>
-            <p className="mt-3 text-[11px] text-muted-foreground font-medium">
+            <p className="mt-2 text-[11px] text-muted-foreground font-medium">
               {language === 'id' 
                 ? 'Pembayaran aman didukung oleh Mayar.id' 
                 : 'Secure payment powered by Mayar.id'}
