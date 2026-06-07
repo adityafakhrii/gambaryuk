@@ -135,16 +135,16 @@ const Index = () => {
       <section className="relative z-10 flex-1 px-1 pb-8">
         <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5" id="tour-grid">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-bold text-sidebar-foreground">
+            <div className="flex flex-col items-start sm:flex-row sm:items-center gap-2.5 sm:gap-3">
+              <h2 className="text-lg font-bold text-sidebar-foreground whitespace-nowrap">
                 {t('nav.home') === 'Home' ? 'Available Tools' : 'Alat Tersedia'}
               </h2>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary whitespace-nowrap">
                   {activeToolsCount} {t('nav.home') === 'Home' ? 'Active' : 'Aktif'}
                 </span>
                 {comingSoonToolsCount > 0 && (
-                  <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground border border-border">
+                  <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground border border-border whitespace-nowrap">
                     <Sparkles className="w-3 h-3 mr-1" />
                     {comingSoonToolsCount} {t('nav.home') === 'Home' ? 'Coming Soon' : 'Segera Hadir'}
                   </span>

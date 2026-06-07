@@ -248,10 +248,22 @@ export function AppSidebar() {
               tooltip={language === 'id' ? 'Switch to English' : 'Ganti ke Indonesia'}
               onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
             >
-              <Globe className="h-4 w-4 flex-shrink-0" />
+              {language === 'id' ? (
+                <img 
+                  src="https://flagcdn.com/w40/id.png" 
+                  alt="ID" 
+                  className="h-4 w-4 object-cover rounded-full flex-shrink-0 border border-border/30" 
+                />
+              ) : (
+                <img 
+                  src="https://flagcdn.com/w40/us.png" 
+                  alt="US" 
+                  className="h-4 w-4 object-cover rounded-full flex-shrink-0 border border-border/30" 
+                />
+              )}
               {!isCollapsed && (
                 <span className="text-xs">
-                  {language === 'id' ? '🇮🇩 Indonesia' : '🇺🇸 English'}
+                  {language === 'id' ? 'Bahasa: Indonesia' : 'Language: English'}
                 </span>
               )}
             </SidebarMenuButton>

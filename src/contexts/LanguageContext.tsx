@@ -18,7 +18,7 @@ const translations: Translations = {
   'nav.convert': { en: 'Convert', id: 'Konversi' },
   'nav.crop': { en: 'Crop', id: 'Potong' },
   'nav.rotate': { en: 'Rotate & Flip', id: 'Putar & Balik' },
-  'nav.watermark': { en: 'Watermark', id: 'Tanda Air' },
+  'nav.watermark': { en: 'Watermark', id: 'Watermark' },
   'nav.removeWatermark': { en: 'Remove Watermark', id: 'Hapus Watermark' },
   'nav.removeBg': { en: 'Remove Background', id: 'Hapus Latar' },
   'nav.filters': { en: 'Filters', id: 'Filter' },
@@ -62,7 +62,7 @@ const translations: Translations = {
   'feature.crop.desc': { en: 'Cut images with preset ratios', id: 'Potong gambar dengan rasio preset' },
   'feature.rotate.title': { en: 'Rotate & Flip', id: 'Putar & Balik' },
   'feature.rotate.desc': { en: 'Rotate 90°/180° and flip', id: 'Putar 90°/180° dan balik' },
-  'feature.watermark.title': { en: 'Add Watermark', id: 'Tambah Tanda Air' },
+  'feature.watermark.title': { en: 'Add Watermark', id: 'Tambah Watermark' },
   'feature.watermark.desc': { en: 'Add text or logo watermark', id: 'Tambah teks atau logo watermark' },
   'feature.removeWatermark.title': { en: 'Remove Watermark', id: 'Hapus Watermark' },
   'feature.removeWatermark.desc': { en: 'Batch remove bottom watermarks', id: 'Hapus watermark bawah massal' },
@@ -386,7 +386,7 @@ const translations: Translations = {
   'rotate.flip': { en: 'Flip', id: 'Flip' },
 
   // Watermark Tool
-  'watermark.title': { en: 'Add Watermark', id: 'Tambah Tanda Air' },
+  'watermark.title': { en: 'Add Watermark', id: 'Tambah Watermark' },
   'watermark.text': { en: 'Text Watermark', id: 'Watermark Teks' },
   'watermark.image': { en: 'Image Watermark', id: 'Watermark Gambar' },
   'watermark.content': { en: 'Watermark Text', id: 'Teks Watermark' },

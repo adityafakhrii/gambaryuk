@@ -123,22 +123,49 @@ export function Header() {
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Globe className="h-4 w-4" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-9 w-9"
+                title={language === 'id' ? 'Ganti Bahasa' : 'Change Language'}
+              >
+                {language === 'id' ? (
+                  <img 
+                    src="https://flagcdn.com/w40/id.png" 
+                    alt="ID" 
+                    className="h-[18px] w-[18px] object-cover rounded-full border border-border/30" 
+                  />
+                ) : (
+                  <img 
+                    src="https://flagcdn.com/w40/us.png" 
+                    alt="US" 
+                    className="h-[18px] w-[18px] object-cover rounded-full border border-border/30" 
+                  />
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onClick={() => setLanguage('en')}
-                className={language === 'en' ? 'bg-muted' : ''}
+                className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-muted' : ''}`}
               >
-                🇺🇸 English
+                <img 
+                  src="https://flagcdn.com/w40/us.png" 
+                  alt="US" 
+                  className="h-4 w-4 object-cover rounded-full border border-border/30" 
+                />
+                English
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setLanguage('id')}
-                className={language === 'id' ? 'bg-muted' : ''}
+                className={`flex items-center gap-2 cursor-pointer ${language === 'id' ? 'bg-muted' : ''}`}
               >
-                🇮🇩 Indonesia
+                <img 
+                  src="https://flagcdn.com/w40/id.png" 
+                  alt="ID" 
+                  className="h-4 w-4 object-cover rounded-full border border-border/30" 
+                />
+                Indonesia
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
