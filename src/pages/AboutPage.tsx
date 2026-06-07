@@ -8,9 +8,9 @@ export default function AboutPage() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-full">
+    <div className="min-h-full flex flex-col">
       <SEO title={t('about.title')} description={t('about.subtitle')} path="/about" />
-      <div className="relative z-10 max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 py-12 sm:py-16 flex-1">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
@@ -121,6 +121,31 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-border/50 px-4 py-6">
+        <div className="container mx-auto max-w-5xl text-center space-y-3">
+          <div className="flex justify-center items-center gap-1.5 text-xs text-muted-foreground">
+            <Instagram className="h-3.5 w-3.5 text-muted-foreground" />
+            <a 
+              href="https://instagram.com/gambar.yuk" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors font-medium"
+            >
+              @gambar.yuk
+            </a>
+          </div>
+          <div className="space-y-0.5">
+            <p className="text-sm text-muted-foreground">
+              © 2026 GambarYuk. Part of YukAccess.
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              {t('footer.browserOnly')}
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
