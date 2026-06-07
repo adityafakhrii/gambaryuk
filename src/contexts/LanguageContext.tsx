@@ -193,7 +193,7 @@ const translations: Translations = {
 
   // Fase 3 tools
   'feature.ocr.title': { en: 'Image to Text (OCR)', id: 'Gambar ke Teks (OCR)' },
-  'feature.ocr.desc': { en: 'Extract text from images using AI', id: 'Ekstrak teks dari gambar menggunakan AI' },
+  'feature.ocr.desc': { en: 'Extract text from images locally in browser', id: 'Ekstrak teks dari gambar secara lokal di browser' },
   'feature.annotate.title': { en: 'Draw & Annotate', id: 'Gambar & Anotasi' },
   'feature.annotate.desc': { en: 'Add text, arrows, shapes on images', id: 'Tambah teks, panah, bentuk pada gambar' },
   'feature.upscale.title': { en: 'AI Upscale', id: 'AI Upscale' },

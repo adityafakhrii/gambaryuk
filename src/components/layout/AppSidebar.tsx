@@ -50,6 +50,7 @@ const toolGroups = [
       { path: '/rename', icon: FileText, key: 'nav.rename', descKey: 'feature.rename.desc' },
       { path: '/collage', icon: LayoutGrid, key: 'nav.collage', descKey: 'feature.collage.desc' },
       { path: '/image-to-link', icon: LinkIcon, key: 'nav.imageToLink', descKey: 'feature.imageToLink.desc' },
+      { path: '/ocr', icon: ScanText, key: 'nav.ocr', descKey: 'feature.ocr.desc' },
     ],
   },
   {
@@ -76,7 +77,6 @@ const toolGroups = [
   {
     key: 'category.ai',
     tools: [
-      { path: '/ocr', icon: ScanText, key: 'nav.ocr', descKey: 'feature.ocr.desc', isAi: true },
       { path: '/remove-watermark', icon: Scissors, key: 'nav.removeWatermark', descKey: 'feature.removeWatermark.desc', isAi: true },
       { path: '/remove-bg', icon: Eraser, key: 'nav.removeBg', descKey: 'feature.removeBg.desc', isAi: true },
       { path: '/upscale', icon: Wand2, key: 'nav.upscale', descKey: 'feature.upscale.desc', isAi: true },

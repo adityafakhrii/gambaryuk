@@ -43,7 +43,7 @@ export function Header() {
     {
       label: 'category.advanced',
       tools: [
-        { path: '/remove-bg', label: 'nav.removeBg' },
+        { path: '/ocr', label: 'nav.ocr' },
         { path: '/filters', label: 'nav.filters' },
         { path: '/rename', label: 'nav.rename' },
         { path: '/collage', label: 'nav.collage' },

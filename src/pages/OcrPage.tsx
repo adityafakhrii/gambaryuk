@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScanText, Copy, Check, Download, Trash2, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-import { aiRateLimiter } from '@/lib/rateLimiter';
+import Tesseract from 'tesseract.js';
 
 const OcrPage = () => {
   const { t, language } = useLanguage();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [extractedText, setExtractedText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [copied, setCopied] = useState(false);
 
   const handleFilesSelected = (files: ImageFile[]) => {
@@ -24,41 +24,34 @@ const OcrPage = () => {
   const handleExtract = async () => {
     if (images.length === 0) return;
     setLoading(true);
+    setProgress(0);
     setExtractedText('');
 
     try {
-      // Convert image to base64
       const file = images[0].file;
-      const reader = new FileReader();
-      const base64 = await new Promise<string>((resolve) => {
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
 
-      const { allowed, retryAfterMs } = aiRateLimiter.check();
-      if (!allowed) {
-        toast.error(`Rate limited. Try again in ${Math.ceil(retryAfterMs / 1000)}s`);
-        setLoading(false);
-        return;
-      }
+      // Perform local client-side OCR using tesseract.js
+      const result = await Tesseract.recognize(
+        file,
+        'eng+ind',
+        {
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              setProgress(Math.round(m.progress * 100));
+            }
+          }
+        }
+      );
 
-      const { data, error } = await supabase.functions.invoke('ocr', {
-        body: { image: base64 },
-      });
-
-      if (error) throw error;
-      if (data?.error) {
-        toast.error(data.error);
-        return;
-      }
-
-      setExtractedText(data.text || t('ocr.noText'));
+      const text = result.data.text;
+      setExtractedText(text || t('ocr.noText'));
       toast.success(t('common.success'));
     } catch (err) {
       console.error('OCR error:', err);
       toast.error(t('ocr.error'));
     } finally {
       setLoading(false);
+      setProgress(0);
     }
   };
 
@@ -118,13 +111,7 @@ const OcrPage = () => {
           <p className="text-sm text-muted-foreground mt-1">{t('feature.ocr.desc')}</p>
         </div>
 
-        <div className="mb-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/10 flex items-start gap-3 text-amber-600 dark:text-amber-400">
-          <Sparkles className="h-5 w-5 mt-0.5 flex-shrink-0" />
-          <div className="text-left text-xs md:text-sm leading-relaxed">
-            <p className="font-semibold">{t('common.betaTitle')}</p>
-            <p className="mt-0.5 opacity-90">{t('common.betaDesc')}</p>
-          </div>
-        </div>
+        {/* Fitur OCR berjalan 100% lokal di browser pengguna */}
 
         {images.length === 0 ? (
           <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
@@ -146,11 +133,16 @@ const OcrPage = () => {
                   <div className="flex gap-2">
                     <Button onClick={handleExtract} disabled={loading}>
                       {loading ? (
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          {progress > 0 ? `${t('common.processing')} (${progress}%)` : t('common.processing')}
+                        </>
                       ) : (
-                        <ScanText className="h-4 w-4 mr-2" />
+                        <>
+                          <ScanText className="h-4 w-4 mr-2" />
+                          {t('ocr.extract')}
+                        </>
                       )}
-                      {loading ? t('common.processing') : t('ocr.extract')}
                     </Button>
                     <Button variant="ghost" size="icon" onClick={handleClear}>
                       <Trash2 className="h-4 w-4" />
