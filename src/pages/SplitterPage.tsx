@@ -82,7 +82,7 @@ const SplitterPage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('splitter.title')} description={t('feature.splitter.desc')} path="/splitter" />
+      <SEO title={t('feature.splitter.title')} description={t('feature.splitter.desc')} path="/splitter" />
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.splitter.title')}</h1>

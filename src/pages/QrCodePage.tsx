@@ -115,7 +115,7 @@ const QrCodePage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('qrCode.title')} description={t('feature.qrCode.desc')} path="/qr-code" />
+      <SEO title={t('feature.qrCode.title')} description={t('feature.qrCode.desc')} path="/qr-code" />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.qrCode.title')}</h1>

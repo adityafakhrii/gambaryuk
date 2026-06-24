@@ -77,7 +77,7 @@ const UpscalePage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('upscale.title')} description={t('feature.upscale.desc')} path="/upscale" />
+      <SEO title={t('feature.upscale.title')} description={t('feature.upscale.desc')} path="/upscale" />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.upscale.title')}</h1>

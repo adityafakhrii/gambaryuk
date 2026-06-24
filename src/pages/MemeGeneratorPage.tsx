@@ -119,7 +119,7 @@ const MemeGeneratorPage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('meme.title')} description={t('feature.meme.desc')} path="/meme" />
+      <SEO title={t('feature.meme.title')} description={t('feature.meme.desc')} path="/meme" />
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.meme.title')}</h1>

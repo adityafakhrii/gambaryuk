@@ -87,7 +87,7 @@ const FaviconPage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('favicon.title')} description={t('feature.favicon.desc')} path="/favicon" />
+      <SEO title={t('feature.favicon.title')} description={t('feature.favicon.desc')} path="/favicon" />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.favicon.title')}</h1>

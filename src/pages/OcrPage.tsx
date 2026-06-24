@@ -100,7 +100,7 @@ const OcrPage = () => {
   return (
     <div className="min-h-full">
       <SEO 
-        title={t('ocr.title')} 
+        title={t('feature.ocr.title')} 
         description={t('feature.ocr.desc')} 
         path="/ocr" 
         schema={schemaData}

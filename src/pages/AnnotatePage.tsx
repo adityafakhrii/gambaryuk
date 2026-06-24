@@ -191,7 +191,7 @@ const AnnotatePage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('annotate.title')} description={t('feature.annotate.desc')} path="/annotate" />
+      <SEO title={t('feature.annotate.title')} description={t('feature.annotate.desc')} path="/annotate" />
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.annotate.title')}</h1>

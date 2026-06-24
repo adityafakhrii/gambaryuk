@@ -141,7 +141,7 @@ const ColorPickerPage = () => {
 
   return (
     <div className="min-h-full">
-      <SEO title={t('colorPicker.title')} description={t('feature.colorPicker.desc')} path="/color-picker" />
+      <SEO title={t('feature.colorPicker.title')} description={t('feature.colorPicker.desc')} path="/color-picker" />
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">{t('feature.colorPicker.title')}</h1>
