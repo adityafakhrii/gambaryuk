@@ -12,10 +12,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
     proxy: {
-      '^/\\d+-[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$': {
-        target: 'https://ltdwpaciulpophywcuam.supabase.co/storage/v1/object/public/shared-images',
+      '^/[0-9]+-[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$': {
+        target: 'https://ltdwpaciulpophywcuam.supabase.co',
         changeOrigin: true,
-        rewrite: (path) => path,
+        rewrite: (path) => `/storage/v1/object/public/shared-images${path}`,
       },
     },
   },
