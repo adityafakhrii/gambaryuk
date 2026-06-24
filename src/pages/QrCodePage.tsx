@@ -64,7 +64,7 @@ const QrCodePage = () => {
           .from('shared-images')
           .getPublicUrl(fileName);
 
-        const publicUrl = urlData.publicUrl;
+        const publicUrl = `${window.location.origin}/${fileName}`;
         
         // Track in DB with expiry (30 days default for QR images)
         await supabase.from('shared_image_files').insert({

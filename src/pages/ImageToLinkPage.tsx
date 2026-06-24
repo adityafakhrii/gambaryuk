@@ -128,7 +128,7 @@ const ImageToLinkPage = () => {
         results.push({
           id: img.id,
           name: webpName,
-          url: urlData.publicUrl,
+          url: `${window.location.origin}/${fileName}`,
           size: webpBlob.size,
           copied: false,
         });

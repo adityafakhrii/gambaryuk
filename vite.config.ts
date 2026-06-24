@@ -11,6 +11,13 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+    proxy: {
+      '^/\\d+-[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$': {
+        target: 'https://ltdwpaciulpophywcuam.supabase.co/storage/v1/object/public/shared-images',
+        changeOrigin: true,
+        rewrite: (path) => path,
+      },
+    },
   },
   plugins: [
     react(),
