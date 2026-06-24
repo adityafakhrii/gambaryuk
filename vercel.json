@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/:filename([0-9]+-[a-zA-Z0-9]+\\.[a-zA-Z0-9]+)",
-      "destination": "https://ltdwpaciulpophywcuam.supabase.co/storage/v1/object/public/shared-images/:filename"
+      "source": "/([0-9]+-[a-zA-Z0-9]+\\.[a-zA-Z0-9]+)",
+      "destination": "https://ltdwpaciulpophywcuam.supabase.co/storage/v1/object/public/shared-images/$1"
     },
     {
       "source": "/(.*)",
