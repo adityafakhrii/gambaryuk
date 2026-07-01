@@ -14,7 +14,8 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 import { HelmetProvider } from 'react-helmet-async';
-
+import { PwaProvider } from "@/pwa/PwaContext";
+import { PwaBanner } from "@/components/PwaBanner";
 
 const queryClient = new QueryClient();
 
@@ -29,26 +30,29 @@ const App = () => (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <LanguageProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <KeyboardShortcuts />
+            <PwaProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <KeyboardShortcuts />
 
-              <BrowserRouter>
-                <SidebarProvider defaultOpen={true}>
-                  <div className="min-h-screen flex w-full bg-background transition-colors">
-                    <AppSidebar />
-                    <div className="flex flex-col flex-1 min-w-0 overflow-hidden p-2 pl-0 gap-2">
-                      <TopBar />
-                      <main className="flex-1 overflow-auto bg-card rounded-2xl shadow-sm border border-border/50 relative p-4 md:p-6 lg:p-8">
-                        <AnimatedRoutes />
-                      </main>
+                <BrowserRouter>
+                  <SidebarProvider defaultOpen={true}>
+                    <div className="min-h-screen flex w-full bg-background transition-colors">
+                      <AppSidebar />
+                      <div className="flex flex-col flex-1 min-w-0 overflow-hidden p-2 pl-0 gap-2">
+                        <TopBar />
+                        <main className="flex-1 overflow-auto bg-card rounded-2xl shadow-sm border border-border/50 relative p-4 md:p-6 lg:p-8">
+                          <AnimatedRoutes />
+                        </main>
+                      </div>
                     </div>
-                  </div>
-                  <Walkthrough />
-                </SidebarProvider>
-              </BrowserRouter>
-            </TooltipProvider>
+                    <Walkthrough />
+                  </SidebarProvider>
+                </BrowserRouter>
+                <PwaBanner />
+              </TooltipProvider>
+            </PwaProvider>
           </LanguageProvider>
         </ThemeProvider>
       </QueryClientProvider>

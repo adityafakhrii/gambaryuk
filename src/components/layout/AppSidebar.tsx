@@ -201,7 +201,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter className="px-2 py-3 space-y-1">
+      <SidebarFooter className="px-2 py-2.5 space-y-1 border-t border-border/40">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton

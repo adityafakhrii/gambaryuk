@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import JSZip from 'jszip';
+import { OfflineGuard } from '@/components/OfflineGuard';
 
 interface ImageFile {
   id: string;
@@ -214,138 +215,140 @@ const ImageToLinkPage = () => {
         <p className="text-sm text-muted-foreground mt-1">{t('feature.imageToLink.desc')}</p>
       </div>
 
-      <UploadZone onFilesSelected={handleFilesSelected} multiple={true} maxFiles={20} />
+      <OfflineGuard featureNameKey="feature.imageToLink.title">
+        <UploadZone onFilesSelected={handleFilesSelected} multiple={true} maxFiles={20} />
 
-      {images.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <p className="text-sm text-muted-foreground">
-              {images.length} {t('imageToLink.readyToUpload')}
+        {images.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <p className="text-sm text-muted-foreground">
+                {images.length} {t('imageToLink.readyToUpload')}
+              </p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <Select value={expiry} onValueChange={(v) => setExpiry(v as ExpiryOption)}>
+                    <SelectTrigger className="h-8 w-[140px] text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="24h">{t('imageToLink.expiry.24h')}</SelectItem>
+                      <SelectItem value="7d">{t('imageToLink.expiry.7d')}</SelectItem>
+                      <SelectItem value="30d">{t('imageToLink.expiry.30d')}</SelectItem>
+                      <SelectItem value="90d">{t('imageToLink.expiry.90d')}</SelectItem>
+                      <SelectItem value="forever">{t('imageToLink.expiry.forever')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => setImages([])}>
+                  {t('common.clearAll')}
+                </Button>
+                <Button size="sm" onClick={handleUpload} disabled={uploading}>
+                  {uploading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
+                      {t('imageToLink.uploading')}
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 mr-1.5" />
+                      {t('imageToLink.generateLinks')}
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Gambar akan otomatis dikompresi dan dikonversi ke format WebP sebelum diunggah untuk ukuran file lebih kecil
             </p>
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <Select value={expiry} onValueChange={(v) => setExpiry(v as ExpiryOption)}>
-                  <SelectTrigger className="h-8 w-[140px] text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="24h">{t('imageToLink.expiry.24h')}</SelectItem>
-                    <SelectItem value="7d">{t('imageToLink.expiry.7d')}</SelectItem>
-                    <SelectItem value="30d">{t('imageToLink.expiry.30d')}</SelectItem>
-                    <SelectItem value="90d">{t('imageToLink.expiry.90d')}</SelectItem>
-                    <SelectItem value="forever">{t('imageToLink.expiry.forever')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button variant="outline" size="sm" onClick={() => setImages([])}>
-                {t('common.clearAll')}
-              </Button>
-              <Button size="sm" onClick={handleUpload} disabled={uploading}>
-                {uploading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
-                    {t('imageToLink.uploading')}
-                  </>
-                ) : (
-                  <>
-                    <Upload className="h-4 w-4 mr-1.5" />
-                    {t('imageToLink.generateLinks')}
-                  </>
-                )}
-              </Button>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {images.map((img) => (
+                <div key={img.id} className="rounded-xl overflow-hidden border border-border bg-card">
+                  <img src={img.preview} alt={img.file.name} className="w-full h-28 object-cover" />
+                  <div className="p-2">
+                    <p className="text-xs font-medium text-foreground truncate">{img.file.name}</p>
+                    <p className="text-xs text-muted-foreground">{formatFileSize(img.file.size)}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        )}
 
-          <p className="text-xs text-muted-foreground">
-            Gambar akan otomatis dikompresi dan dikonversi ke format WebP sebelum diunggah untuk ukuran file lebih kecil
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {images.map((img) => (
-              <div key={img.id} className="rounded-xl overflow-hidden border border-border bg-card">
-                <img src={img.preview} alt={img.file.name} className="w-full h-28 object-cover" />
-                <div className="p-2">
-                  <p className="text-xs font-medium text-foreground truncate">{img.file.name}</p>
-                  <p className="text-xs text-muted-foreground">{formatFileSize(img.file.size)}</p>
-                </div>
+        {uploadedImages.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <LinkIcon className="h-5 w-5 text-primary" />
+                {t('imageToLink.generatedLinks')}
+              </h2>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={copyAll}>
+                  <Copy className="h-3.5 w-3.5 mr-1.5" />
+                  {t('imageToLink.copyAll')}
+                </Button>
+                <Button variant="outline" size="sm" onClick={downloadAllAsZip} disabled={downloadingZip}>
+                  {downloadingZip ? (
+                    <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                  ) : (
+                    <Download className="h-3.5 w-3.5 mr-1.5" />
+                  )}
+                  {t('imageToLink.downloadAllZip')}
+                </Button>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
 
-      {uploadedImages.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <LinkIcon className="h-5 w-5 text-primary" />
-              {t('imageToLink.generatedLinks')}
-            </h2>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={copyAll}>
-                <Copy className="h-3.5 w-3.5 mr-1.5" />
-                {t('imageToLink.copyAll')}
-              </Button>
-              <Button variant="outline" size="sm" onClick={downloadAllAsZip} disabled={downloadingZip}>
-                {downloadingZip ? (
-                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
-                ) : (
-                  <Download className="h-3.5 w-3.5 mr-1.5" />
-                )}
-                {t('imageToLink.downloadAllZip')}
-              </Button>
+            <div className="space-y-2">
+              {uploadedImages.map((img) => (
+                <div
+                  key={img.id}
+                  className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+                >
+                  <img
+                    src={img.url}
+                    alt={img.name}
+                    className="h-12 w-12 rounded-lg object-cover flex-shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{img.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{img.url}</p>
+                    <p className="text-xs text-muted-foreground">{formatFileSize(img.size)} · WebP</p>
+                  </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => copyToClipboard(img.url, img.id)}
+                    >
+                      {img.copied ? (
+                        <Check className="h-4 w-4 text-primary" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                      <a href={img.url} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive"
+                      onClick={() => removeUploaded(img.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-
-          <div className="space-y-2">
-            {uploadedImages.map((img) => (
-              <div
-                key={img.id}
-                className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
-              >
-                <img
-                  src={img.url}
-                  alt={img.name}
-                  className="h-12 w-12 rounded-lg object-cover flex-shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{img.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{img.url}</p>
-                  <p className="text-xs text-muted-foreground">{formatFileSize(img.size)} · WebP</p>
-                </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={() => copyToClipboard(img.url, img.id)}
-                  >
-                    {img.copied ? (
-                      <Check className="h-4 w-4 text-primary" />
-                    ) : (
-                      <Copy className="h-4 w-4" />
-                    )}
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                    <a href={img.url} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-destructive"
-                    onClick={() => removeUploaded(img.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        )}
+      </OfflineGuard>
     </div>
   );
 };

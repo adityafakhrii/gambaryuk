@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { downloadImage, dataUriToBlob, removeCheckerboardBackground } from '@/lib/imageProcessing';
 import { aiRateLimiter } from '@/lib/rateLimiter';
 import BeforeAfterSlider from '@/components/BeforeAfterSlider';
+import { OfflineGuard } from '@/components/OfflineGuard';
 
 const RemoveBgPage = () => {
   const { t, language } = useLanguage();
@@ -115,61 +116,63 @@ const RemoveBgPage = () => {
           </div>
         </div>
 
-        {images.length === 0 ? (
-          <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
-        ) : (
-          <div className="space-y-4">
-            {/* Controls */}
-            <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-              <div className="flex flex-wrap items-center gap-4">
-                <Button onClick={handleRemoveBg} disabled={loading} className="flex-1 md:flex-none">
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <Eraser className="h-4 w-4 mr-2" />
-                  )}
-                  {loading ? t('removeBg.processingLabel') : t('removeBg.processBtn')}
-                </Button>
-                {resultUrl && (
-                  <Button variant="outline" onClick={handleDownload}>
-                    <Download className="h-4 w-4 mr-1" /> {t('common.download')}
+        <OfflineGuard featureNameKey="removeBg.title">
+          {images.length === 0 ? (
+            <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
+          ) : (
+            <div className="space-y-4">
+              {/* Controls */}
+              <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
+                <div className="flex flex-wrap items-center gap-4">
+                  <Button onClick={handleRemoveBg} disabled={loading} className="flex-1 md:flex-none">
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Eraser className="h-4 w-4 mr-2" />
+                    )}
+                    {loading ? t('removeBg.processingLabel') : t('removeBg.processBtn')}
                   </Button>
+                  {resultUrl && (
+                    <Button variant="outline" onClick={handleDownload}>
+                      <Download className="h-4 w-4 mr-1" /> {t('common.download')}
+                    </Button>
+                  )}
+                  <Button variant="ghost" size="icon" onClick={() => { setImages([]); setResultUrl(null); }}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                {images[0] && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Resolusi asli: {images[0].width} × {images[0].height} — ukuran dipertahankan
+                  </p>
                 )}
-                <Button variant="ghost" size="icon" onClick={() => { setImages([]); setResultUrl(null); }}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
               </div>
-              {images[0] && (
-                <p className="text-xs text-muted-foreground mt-2">
-                  Resolusi asli: {images[0].width} × {images[0].height} — ukuran dipertahankan
-                </p>
+
+              {/* Before / After */}
+              {resultUrl ? (
+                <BeforeAfterSlider
+                  beforeSrc={images[0].preview}
+                  afterSrc={resultUrl}
+                  beforeLabel="Asli"
+                  afterLabel="Tanpa Latar"
+                  className="aspect-auto"
+                />
+              ) : (
+                <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
+                  <div className="relative overflow-hidden rounded-xl border border-border/50 flex items-center justify-center bg-muted/30">
+                    <img src={images[0].preview} alt="Original" className="max-w-full max-h-[60vh] object-contain" />
+                    {loading && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm gap-2">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <span className="text-sm font-medium text-foreground">{t('removeBg.processingLabel')}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
-
-            {/* Before / After */}
-            {resultUrl ? (
-              <BeforeAfterSlider
-                beforeSrc={images[0].preview}
-                afterSrc={resultUrl}
-                beforeLabel="Asli"
-                afterLabel="Tanpa Latar"
-                className="aspect-auto"
-              />
-            ) : (
-              <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-                <div className="relative overflow-hidden rounded-xl border border-border/50 flex items-center justify-center bg-muted/30">
-                  <img src={images[0].preview} alt="Original" className="max-w-full max-h-[60vh] object-contain" />
-                  {loading && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm gap-2">
-                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                      <span className="text-sm font-medium text-foreground">{t('removeBg.processingLabel')}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </OfflineGuard>
 
         {/* SEO & AEO Content Section */}
         <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">

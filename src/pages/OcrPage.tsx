@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScanText, Copy, Check, Download, Trash2, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import Tesseract from 'tesseract.js';
+import { OfflineGuard } from '@/components/OfflineGuard';
 
 const OcrPage = () => {
   const { t, language } = useLanguage();
@@ -113,69 +114,71 @@ const OcrPage = () => {
 
         {/* Fitur OCR berjalan 100% lokal di browser pengguna */}
 
-        {images.length === 0 ? (
-          <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
-        ) : (
-          <div className="space-y-4">
-            {/* Preview + controls */}
-            <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-              <div className="flex items-start gap-4">
-                <img
-                  src={images[0].preview}
-                  alt="Preview"
-                  className="w-40 h-40 object-cover rounded-xl border border-border/50"
-                />
-                <div className="flex-1 min-w-0 space-y-3">
-                  <h3 className="font-semibold text-foreground truncate">{images[0].file.name}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {images[0].width} × {images[0].height}
-                  </p>
-                  <div className="flex gap-2">
-                    <Button onClick={handleExtract} disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          {progress > 0 ? `${t('common.processing')} (${progress}%)` : t('common.processing')}
-                        </>
-                      ) : (
-                        <>
-                          <ScanText className="h-4 w-4 mr-2" />
-                          {t('ocr.extract')}
-                        </>
-                      )}
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={handleClear}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+        <OfflineGuard featureNameKey="feature.ocr.title">
+          {images.length === 0 ? (
+            <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
+          ) : (
+            <div className="space-y-4">
+              {/* Preview + controls */}
+              <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
+                <div className="flex items-start gap-4">
+                  <img
+                    src={images[0].preview}
+                    alt="Preview"
+                    className="w-40 h-40 object-cover rounded-xl border border-border/50"
+                  />
+                  <div className="flex-1 min-w-0 space-y-3">
+                    <h3 className="font-semibold text-foreground truncate">{images[0].file.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {images[0].width} × {images[0].height}
+                    </p>
+                    <div className="flex gap-2">
+                      <Button onClick={handleExtract} disabled={loading}>
+                        {loading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            {progress > 0 ? `${t('common.processing')} (${progress}%)` : t('common.processing')}
+                          </>
+                        ) : (
+                          <>
+                            <ScanText className="h-4 w-4 mr-2" />
+                            {t('ocr.extract')}
+                          </>
+                        )}
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={handleClear}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Extracted text */}
-            {extractedText && (
-              <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-foreground">{t('ocr.result')}</h3>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={handleCopy}>
-                      {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
-                      {copied ? 'Copied!' : 'Copy'}
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={handleDownloadTxt}>
-                      <Download className="h-4 w-4 mr-1" /> .txt
-                    </Button>
+              {/* Extracted text */}
+              {extractedText && (
+                <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-foreground">{t('ocr.result')}</h3>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={handleCopy}>
+                        {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
+                        {copied ? 'Copied!' : 'Copy'}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={handleDownloadTxt}>
+                        <Download className="h-4 w-4 mr-1" /> .txt
+                      </Button>
+                    </div>
                   </div>
+                  <Textarea
+                    value={extractedText}
+                    readOnly
+                    className="min-h-[200px] font-mono text-sm bg-muted/30"
+                  />
                 </div>
-                <Textarea
-                  value={extractedText}
-                  readOnly
-                  className="min-h-[200px] font-mono text-sm bg-muted/30"
-                />
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </OfflineGuard>
 
         {/* SEO & AEO Content Section */}
         <section className="mt-16 border-t border-border/50 pt-12 max-w-4xl mx-auto space-y-10">

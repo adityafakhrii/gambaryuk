@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { downloadImage } from '@/lib/imageProcessing';
 import { aiRateLimiter } from '@/lib/rateLimiter';
+import { OfflineGuard } from '@/components/OfflineGuard';
 
 const UpscalePage = () => {
   const { t } = useLanguage();
@@ -92,64 +93,66 @@ const UpscalePage = () => {
           </div>
         </div>
 
-        {images.length === 0 ? (
-          <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
-        ) : (
-          <div className="space-y-4">
-            {/* Controls */}
-            <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-              <div className="flex flex-wrap items-end gap-4">
-                <div className="space-y-1.5">
-                  <Label className="text-sm">{t('upscale.scale')}</Label>
-                  <Select value={scale} onValueChange={setScale}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2">2× {t('upscale.enhance')}</SelectItem>
-                      <SelectItem value="4">4× {t('upscale.enhance')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={handleUpscale} disabled={loading}>
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <Sparkles className="h-4 w-4 mr-2" />
-                  )}
-                  {loading ? t('common.processing') : t('upscale.process')}
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => { setImages([]); setResultUrl(null); }}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Before / After */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <OfflineGuard featureNameKey="feature.upscale.title">
+          {images.length === 0 ? (
+            <UploadZone onFilesSelected={handleFilesSelected} multiple={false} />
+          ) : (
+            <div className="space-y-4">
+              {/* Controls */}
               <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-                <h3 className="text-sm font-semibold text-muted-foreground mb-2">{t('common.original')}</h3>
-                <img src={images[0].preview} alt="Original" className="w-full rounded-xl border border-border/50" />
-                <p className="text-xs text-muted-foreground mt-2">{images[0].width} × {images[0].height}</p>
-              </div>
-              <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
-                <h3 className="text-sm font-semibold text-muted-foreground mb-2">{t('common.result')}</h3>
-                {resultUrl ? (
-                  <>
-                    <img src={resultUrl} alt="Upscaled" className="w-full rounded-xl border border-border/50" />
-                    <Button size="sm" className="mt-3" onClick={handleDownload}>
-                      <Download className="h-4 w-4 mr-1" /> {t('common.download')}
-                    </Button>
-                  </>
-                ) : (
-                  <div className="flex items-center justify-center h-48 rounded-xl border border-dashed border-border/50 text-muted-foreground text-sm">
-                    {loading ? t('common.processing') : t('upscale.hint')}
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-sm">{t('upscale.scale')}</Label>
+                    <Select value={scale} onValueChange={setScale}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="2">2× {t('upscale.enhance')}</SelectItem>
+                        <SelectItem value="4">4× {t('upscale.enhance')}</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                )}
+                  <Button onClick={handleUpscale} disabled={loading}>
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4 mr-2" />
+                    )}
+                    {loading ? t('common.processing') : t('upscale.process')}
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => { setImages([]); setResultUrl(null); }}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Before / After */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">{t('common.original')}</h3>
+                  <img src={images[0].preview} alt="Original" className="w-full rounded-xl border border-border/50" />
+                  <p className="text-xs text-muted-foreground mt-2">{images[0].width} × {images[0].height}</p>
+                </div>
+                <div className="rounded-2xl border border-border/50 bg-card p-4 shadow-soft">
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">{t('common.result')}</h3>
+                  {resultUrl ? (
+                    <>
+                      <img src={resultUrl} alt="Upscaled" className="w-full rounded-xl border border-border/50" />
+                      <Button size="sm" className="mt-3" onClick={handleDownload}>
+                        <Download className="h-4 w-4 mr-1" /> {t('common.download')}
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="flex items-center justify-center h-48 rounded-xl border border-dashed border-border/50 text-muted-foreground text-sm">
+                      {loading ? t('common.processing') : t('upscale.hint')}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </OfflineGuard>
       </div>
     </div>
   );

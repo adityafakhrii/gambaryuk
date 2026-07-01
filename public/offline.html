@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline — GambarYuk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B132B;
+      --card: #1C2541;
+      --primary: #4040E0;
+      --primary-hover: #5555F5;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Ambient background glows */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(64, 64, 224, 0.2) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      z-index: 1;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(64, 64, 224, 0.15) 0%, transparent 70%);
+      bottom: -150px;
+      right: -150px;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      background: rgba(28, 37, 65, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      width: 90%;
+      max-width: 480px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      animation: scaleUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleUp {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .icon-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pulse-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(64, 64, 224, 0.1);
+      border: 2px solid rgba(64, 64, 224, 0.2);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.85);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(0.85);
+        opacity: 0.8;
+      }
+    }
+
+    .svg-icon {
+      position: relative;
+      z-index: 2;
+      width: 64px;
+      height: 64px;
+      color: var(--text-muted);
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.025em;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .btn-retry {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.875rem 1.75rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(64, 64, 224, 0.3);
+    }
+
+    .btn-retry:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(64, 64, 224, 0.4);
+    }
+
+    .btn-retry:active {
+      transform: translateY(0);
+    }
+
+    .lang-switcher {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .lang-btn.active {
+      color: var(--text);
+      text-decoration: underline;
+    }
+
+    /* English content hidden by default */
+    [lang="en"] .lang-id,
+    [lang="id"] .lang-en {
+      display: none;
+    }
+  </style>
+</head>
+<body data-lang="id">
+  <div class="container">
+    <div class="icon-wrapper">
+      <div class="pulse-ring"></div>
+      <svg class="svg-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.5M5 12.5a10.94 10.94 0 0 1 5.83-2.84M8.53 16.03a6 6 0 0 1 7-3.43M12 20h.01"></path>
+      </svg>
+    </div>
+
+    <div class="lang-id">
+      <h1>Koneksi Terputus</h1>
+      <p>GambarYuk tidak dapat terhubung ke internet. Anda masih bisa menggunakan alat-alat editor yang sudah Anda buka sebelumnya secara offline.</p>
+      <button class="btn-retry" onclick="retryConnection()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 4s linear infinite;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        Coba Lagi
+      </button>
+    </div>
+
+    <div class="lang-en">
+      <h1>Connection Lost</h1>
+      <p>GambarYuk cannot connect to the internet. You can still use previously opened image editing tools offline.</p>
+      <button class="btn-retry" onclick="retryConnection()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 4s linear infinite;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        Try Again
+      </button>
+    </div>
+
+    <div class="lang-switcher">
+      <button class="lang-btn id-btn active" onclick="setLang('id')">Bahasa Indonesia</button>
+      <span>|</span>
+      <button class="lang-btn en-btn" onclick="setLang('en')">English</button>
+    </div>
+  </div>
+
+  <script>
+    // Detect system or stored language
+    try {
+      const storedLang = localStorage.getItem('language') || (navigator.language.startsWith('id') ? 'id' : 'en');
+      setLang(storedLang);
+    } catch (e) {}
+
+    function setLang(lang) {
+      document.body.setAttribute('data-lang', lang);
+      if (lang === 'id') {
+        document.querySelector('.id-btn').classList.add('active');
+        document.querySelector('.en-btn').classList.remove('active');
+      } else {
+        document.querySelector('.en-btn').classList.add('active');
+        document.querySelector('.id-btn').classList.remove('active');
+      }
+      try {
+        localStorage.setItem('language', lang);
+      } catch (e) {}
+    }
+
+    function retryConnection() {
+      const button = document.querySelector('.btn-retry');
+      button.style.opacity = '0.7';
+      button.style.pointerEvents = 'none';
+      
+      // Attempt immediate check
+      fetch('/logo.webp', { cache: 'no-store', method: 'HEAD' })
+        .then(response => {
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            showFailedToast();
+          }
+        })
+        .catch(() => {
+          showFailedToast();
+        });
+    }
+
+    function showFailedToast() {
+      const button = document.querySelector('.btn-retry');
+      button.style.opacity = '1';
+      button.style.pointerEvents = 'auto';
+      
+      const isId = document.body.getAttribute('data-lang') === 'id';
+      alert(isId ? 'Koneksi masih offline. Silakan coba beberapa saat lagi.' : 'Connection is still offline. Please try again in a moment.');
+    }
+
+    // Auto-reload when navigator goes online
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
