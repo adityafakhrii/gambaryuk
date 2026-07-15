@@ -11,8 +11,8 @@
     :root {
       --bg: #0B132B;
       --card: #1C2541;
-      --primary: #4040E0;
-      --primary-hover: #5555F5;
+      --primary: #145c40;
+      --primary-hover: #1b7a54;
       --text: #F8FAFC;
       --text-muted: #94A3B8;
       --border: rgba(255, 255, 255, 0.08);
@@ -137,6 +137,11 @@
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     h1 {

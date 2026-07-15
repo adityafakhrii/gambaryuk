@@ -1,11 +1,11 @@
 import { SEO } from '@/components/SEO';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ExternalLink, Code2, BrainCircuit, GraduationCap, PenTool, Github, Instagram, Twitter, Facebook, Youtube, Linkedin, Coffee } from 'lucide-react';
+import { ExternalLink, Code2, BrainCircuit, GraduationCap, PenTool, Github, Instagram, Twitter, Facebook, Youtube, Linkedin, Coffee, WifiOff, Monitor, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DonationModal } from '@/components/DonationModal';
 
 export default function AboutPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <div className="min-h-full flex flex-col">
@@ -27,6 +27,77 @@ export default function AboutPage() {
           <p className="text-muted-foreground leading-relaxed">
             {t('about.description')}
           </p>
+        </div>
+
+        {/* Offline Access & PWA Installation Guide */}
+        <div className="card-soft p-6 sm:p-8 mb-8 border border-primary/20 bg-primary/5">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-xl bg-primary/10 text-primary">
+              <WifiOff className="h-6 w-6" />
+            </div>
+            <h2 className="text-xl font-bold text-foreground">
+              {language === 'id' ? 'Akses Offline & Instalasi' : 'Offline Access & Installation'}
+            </h2>
+          </div>
+
+          <p className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
+            {language === 'id'
+              ? 'GambarYuk dapat diakses dan digunakan sepenuhnya secara offline (tanpa koneksi internet) setelah diinstal di perangkat Anda. Seluruh proses pengeditan gambar berjalan secara lokal di dalam browser Anda tanpa mengirim data apa pun ke server.'
+              : 'GambarYuk can be fully accessed and used offline (without an internet connection) once installed on your device. All image editing processes run locally within your browser without sending any data to the server.'}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Desktop */}
+            <div className="p-4 rounded-xl bg-card border border-border/60">
+              <div className="flex items-center gap-2 mb-3">
+                <Monitor className="h-4 w-4 text-primary" />
+                <h3 className="font-bold text-sm text-foreground">
+                  {language === 'id' ? 'Di Desktop (PC / Laptop)' : 'On Desktop (PC / Laptop)'}
+                </h3>
+              </div>
+              <ol className="list-decimal list-inside text-xs text-muted-foreground space-y-2 leading-relaxed">
+                <li>
+                  {language === 'id'
+                    ? 'Buka browser (Chrome, Edge, Opera, dll).'
+                    : 'Open your browser (Chrome, Edge, Opera, etc.).'}
+                </li>
+                <li>
+                  {language === 'id'
+                    ? 'Klik ikon unduh/instal (tanda plus atau monitor panah) di sebelah kanan address bar.'
+                    : 'Click the download/install icon (plus sign or monitor icon) on the right side of the address bar.'}
+                </li>
+                <li>
+                  {language === 'id'
+                    ? 'Klik tombol "Instal" pada pop-up yang muncul.'
+                    : 'Click the "Install" button on the pop-up that appears.'}
+                </li>
+              </ol>
+            </div>
+
+            {/* Mobile */}
+            <div className="p-4 rounded-xl bg-card border border-border/60">
+              <div className="flex items-center gap-2 mb-3">
+                <Smartphone className="h-4 w-4 text-primary" />
+                <h3 className="font-bold text-sm text-foreground">
+                  {language === 'id' ? 'Di Mobile (HP / Tablet)' : 'On Mobile (Phone / Tablet)'}
+                </h3>
+              </div>
+              <ul className="text-xs text-muted-foreground space-y-3 leading-relaxed">
+                <li>
+                  <span className="font-semibold text-foreground">Android (Chrome): </span>
+                  {language === 'id'
+                    ? 'Klik banner "Instal Aplikasi" di bagian bawah layar, atau klik ikon titik tiga di pojok kanan atas lalu pilih "Tambahkan ke Layar Utama".'
+                    : 'Click the "Install App" banner at the bottom of the screen, or tap the three dots icon in the top right and select "Add to Home Screen".'}
+                </li>
+                <li>
+                  <span className="font-semibold text-foreground">iOS (Safari): </span>
+                  {language === 'id'
+                    ? 'Ketuk tombol "Bagikan" (Share) di bagian bawah layar Safari, gulir ke bawah, lalu ketuk "Tambahkan ke Layar Utama" (Add to Home Screen).'
+                    : 'Tap the "Share" button at the bottom of the Safari screen, scroll down, and tap "Add to Home Screen".'}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* Creator */}
@@ -127,10 +198,10 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-5xl text-center space-y-3">
           <div className="flex justify-center items-center gap-1.5 text-xs text-muted-foreground">
             <Instagram className="h-3.5 w-3.5 text-muted-foreground" />
-            <a 
-              href="https://instagram.com/gambar.yuk" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href="https://instagram.com/gambar.yuk"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:text-primary transition-colors font-medium"
             >
               @gambar.yuk

@@ -89,8 +89,14 @@ export function AppSidebar() {
   const { t, language, setLanguage } = useLanguage();
 
   const location = useLocation();
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const isCollapsed = state === 'collapsed';
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     'category.essential': true,
@@ -109,7 +115,7 @@ export function AppSidebar() {
     <Sidebar variant="floating" collapsible="icon" className="border-none" id="tour-sidebar">
       {/* Header */}
       <SidebarHeader className="px-3 py-4">
-        <Link to="/" className="flex items-center gap-2.5 min-w-0">
+        <Link to="/" className="flex items-center gap-2.5 min-w-0" onClick={handleLinkClick}>
           <img src={logoImg} alt="GambarYuk" className="flex-shrink-0 h-8 w-8 object-contain" />
           {!isCollapsed && (
             <span className="font-bold text-sidebar-foreground text-base truncate">
@@ -128,7 +134,7 @@ export function AppSidebar() {
               isActive={location.pathname === '/'}
               tooltip={t('nav.home')}
             >
-              <Link to="/" className="flex items-center gap-2">
+              <Link to="/" className="flex items-center gap-2" onClick={handleLinkClick}>
                 <Home className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span>{t('nav.home')}</span>}
               </Link>
@@ -185,7 +191,7 @@ export function AppSidebar() {
                           isActive={location.pathname === tool.path}
                           tooltip={`${t(tool.key)} — ${t(tool.descKey)}`}
                         >
-                          <Link to={tool.path} className="flex items-center gap-2">
+                          <Link to={tool.path} className="flex items-center gap-2" onClick={handleLinkClick}>
                             <tool.icon className="h-4 w-4 flex-shrink-0" />
                             {!isCollapsed && <span className="truncate">{t(tool.key)}</span>}
                           </Link>
@@ -209,7 +215,7 @@ export function AppSidebar() {
               isActive={location.pathname === '/about'}
               tooltip={t('nav.about')}
             >
-              <Link to="/about" className="flex items-center gap-2 text-sidebar-foreground/70">
+              <Link to="/about" className="flex items-center gap-2 text-sidebar-foreground/70" onClick={handleLinkClick}>
                 <Info className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">{t('nav.about')}</span>}
               </Link>
@@ -221,7 +227,7 @@ export function AppSidebar() {
               isActive={location.pathname === '/privacy'}
               tooltip="Privacy Policy"
             >
-              <Link to="/privacy" className="flex items-center gap-2 text-sidebar-foreground/70">
+              <Link to="/privacy" className="flex items-center gap-2 text-sidebar-foreground/70" onClick={handleLinkClick}>
                 <Shield className="h-4 w-4 flex-shrink-0" />
                 {!isCollapsed && <span className="text-xs">{t('nav.privacyPolicy')}</span>}
               </Link>
