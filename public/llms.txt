@@ -1,0 +1,35 @@
+# GambarYuk
+
+> All-in-one free online image editor and utility tools. 100% client-side, ad-free, and no login required.
+
+## Core Tools
+
+- [Resize Image](https://gambaryuk.com/resize): Resize any image to custom dimensions or standard social presets.
+- [Compress Image](https://gambaryuk.com/compress): Reduce image file size while keeping high quality.
+- [Convert Format](https://gambaryuk.com/convert): Convert between JPG, PNG, WEBP, and PDF.
+- [Crop Image](https://gambaryuk.com/crop): Crop images with custom aspect ratios.
+- [Rotate & Flip](https://gambaryuk.com/rotate): Rotate and mirror images.
+- [Add Watermark](https://gambaryuk.com/watermark): Add text or image overlay watermarks.
+- [Filters](https://gambaryuk.com/filters): Apply filters and adjust colors.
+- [Bulk Rename](https://gambaryuk.com/rename): Rename multiple files in batches.
+- [Collage Maker](https://gambaryuk.com/collage): Merge multiple images into custom grid layouts.
+- [Image to Link](https://gambaryuk.com/image-to-link): Upload images to get quick shareable links.
+- [EXIF Metadata Viewer](https://gambaryuk.com/metadata): Read camera EXIF info and properties.
+- [Color Picker](https://gambaryuk.com/color-picker): Extract color palettes and codes.
+- [Base64 Converter](https://gambaryuk.com/base64): Encode/decode images to/from Base64 strings.
+- [QR Code Generator](https://gambaryuk.com/qr-code): Generate QR codes for links, text, or images.
+- [Favicon Generator](https://gambaryuk.com/favicon): Generate favicon and PWA app icon sets.
+- [Image Splitter](https://gambaryuk.com/splitter): Split images into grids for Instagram posts.
+- [Blur & Censor](https://gambaryuk.com/blur): Blur or pixelate sensitive image regions.
+- [Meme Generator](https://gambaryuk.com/meme): Create funny memes with top and bottom captions.
+- [Image Compare](https://gambaryuk.com/compare): Interactive before/after image comparison slider.
+- [Screenshot Beautifier](https://gambaryuk.com/beautifier): Wrap screenshots with background gradients and mockups.
+- [Image to Text (OCR)](https://gambaryuk.com/ocr): Read text from images locally.
+- [Draw & Annotate](https://gambaryuk.com/annotate): Core drawing tools with arrows, shapes, and text.
+- [AI Upscale](https://gambaryuk.com/upscale): Enhance image resolution using client-side AI.
+- [AI Image Generator](https://gambaryuk.com/ai-generator): Generate pictures from prompts.
+
+## Information
+
+- [About](https://gambaryuk.com/about): Creator bio, tech stack, and goals.
+- [Privacy Policy](https://gambaryuk.com/privacy): Details on how client-side privacy is guaranteed.
