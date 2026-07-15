@@ -32,8 +32,10 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       position: relative;
+      padding: 1.5rem;
     }
 
     /* Ambient background glows */
@@ -205,6 +207,58 @@
     [lang="en"] .lang-id,
     [lang="id"] .lang-en {
       display: none;
+    }
+
+    /* Responsivitas untuk layar kecil (Mobile) */
+    @media (max-width: 480px) {
+      .container {
+        padding: 2rem 1.5rem;
+        border-radius: 18px;
+      }
+      .icon-wrapper {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 1.5rem;
+      }
+      .svg-icon {
+        width: 48px;
+        height: 48px;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      p {
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+      }
+      .btn-retry {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Responsivitas untuk orientasi landscape atau layar pendek */
+    @media (max-height: 600px) {
+      body {
+        align-items: flex-start;
+        padding: 2rem 1rem;
+      }
+      .container {
+        margin: auto;
+        padding: 1.5rem;
+      }
+      .icon-wrapper {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1rem;
+      }
+      .svg-icon {
+        width: 40px;
+        height: 40px;
+      }
+      p {
+        margin-bottom: 1.25rem;
+      }
     }
   </style>
 </head>
