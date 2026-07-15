@@ -511,12 +511,50 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(() => {
-    const saved = localStorage.getItem('language');
-    return (saved as Language) || 'id'; // Default to Indonesian
+    // 1. Check URL query parameter 'lang' first (crucial for search engine indexing)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const queryLang = params.get('lang');
+      if (queryLang === 'en' || queryLang === 'id') {
+        return queryLang;
+      }
+    }
+
+    // 2. Check localStorage
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('language');
+      if (saved === 'en' || saved === 'id') {
+        return saved;
+      }
+    }
+    return 'id'; // Default to Indonesian
   });
 
+  const changeLanguage = (newLang: Language) => {
+    setLanguage(newLang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', newLang);
+
+      // Keep URL search param synchronized without reloading the page
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', newLang);
+      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+  };
+
+  // Synchronize language state if the URL lang query param changes via browser navigation
   useEffect(() => {
-    localStorage.setItem('language', language);
+    const handleUrlLang = () => {
+      const params = new URLSearchParams(window.location.search);
+      const queryLang = params.get('lang');
+      if ((queryLang === 'en' || queryLang === 'id') && queryLang !== language) {
+        setLanguage(queryLang);
+        localStorage.setItem('language', queryLang);
+      }
+    };
+
+    window.addEventListener('popstate', handleUrlLang);
+    return () => window.removeEventListener('popstate', handleUrlLang);
   }, [language]);
 
   const t = (key: string): string => {
@@ -529,7 +567,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: changeLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

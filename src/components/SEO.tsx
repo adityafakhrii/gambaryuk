@@ -11,18 +11,32 @@ interface SEOProps {
 
 export function SEO({ title, description, path = '', image = '/logo.webp', schema }: SEOProps) {
     const siteUrl = 'https://gambaryuk.com';
-    const url = `${siteUrl}${path}`;
+    // Format paths consistently
+    const cleanPath = path === '/' ? '/' : path;
+    const url = `${siteUrl}${cleanPath}`;
     const fullTitle = `${title} | GambarYuk`;
     const { language } = useLanguage();
 
     const currentLocale = language === 'id' ? 'id_ID' : 'en_US';
     const alternateLocale = language === 'id' ? 'en_US' : 'id_ID';
 
+    // Construct language variant URLs for hreflang
+    const idUrl = cleanPath === '/' ? `${siteUrl}/?lang=id` : `${siteUrl}${cleanPath}?lang=id`;
+    const enUrl = cleanPath === '/' ? `${siteUrl}/?lang=en` : `${siteUrl}${cleanPath}?lang=en`;
+
     return (
         <Helmet>
+            {/* Dynamic HTML lang attribute */}
+            <html lang={language} />
+
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
             <link rel="canonical" href={url} />
+
+            {/* Multilingual alternates (hreflang) */}
+            <link rel="alternate" hrefLang="id" href={idUrl} />
+            <link rel="alternate" hrefLang="en" href={enUrl} />
+            <link rel="alternate" hrefLang="x-default" href={url} />
 
             {/* Open Graph / Facebook */}
             <meta property="og:type" content="website" />

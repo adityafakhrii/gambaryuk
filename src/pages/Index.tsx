@@ -15,7 +15,7 @@ import {
 import { SEO } from '@/components/SEO';
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -97,12 +97,79 @@ const Index = () => {
   const activeToolsCount = tools.filter(t => !t.isAi).length;
   const comingSoonToolsCount = tools.filter(t => t.isAi).length;
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "GambarYuk",
+    "url": "https://gambaryuk.com",
+    "description": language === 'id'
+      ? "Platform edit gambar online gratis dengan 25+ tools. Semua diproses di browser, tanpa upload ke server."
+      : "Free online image editor platform with 25+ tools. All processed in browser, no upload to server.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "IDR"
+    },
+    "creator": {
+      "@type": "Person",
+      "name": "Aditya Fakhri Riansyah",
+      "url": "https://www.adityafakhri.com/"
+    },
+    "featureList": [
+      "Resize Image", "Compress Image", "Convert Format", "Crop Image",
+      "Rotate & Flip", "Add Watermark", "Remove Background", "Image Filters",
+      "Bulk Rename", "Collage Maker", "Image to Link", "EXIF Metadata Viewer",
+      "Color Picker", "Base64 Encoder", "QR Code Generator", "Favicon Generator",
+      "Image Splitter", "Blur & Censor", "Meme Generator", "Image Compare",
+      "Screenshot Beautifier", "OCR Image to Text", "Draw & Annotate",
+      "AI Upscale", "AI Image Generator"
+    ],
+    "mainEntity": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": language === 'id' ? "Apa itu GambarYuk?" : "What is GambarYuk?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": language === 'id'
+              ? "GambarYuk adalah platform edit gambar online gratis dengan 25+ fitur yang dijalankan 100% di browser."
+              : "GambarYuk is a free online image editor platform with 25+ features that runs 100% in your browser."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": language === 'id' ? "Apakah gambar saya aman dan disimpan di server?" : "Are my images safe and stored on the server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": language === 'id'
+              ? "Gambar Anda 100% aman dan tidak pernah diunggah ke server mana pun."
+              : "Your images are 100% safe and are never uploaded to any server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": language === 'id' ? "Apakah GambarYuk sepenuhnya gratis?" : "Is GambarYuk completely free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": language === 'id'
+              ? "Ya, GambarYuk sepenuhnya gratis digunakan tanpa iklan, tanpa batasan, dan tanpa perlu mendaftar."
+              : "Yes, GambarYuk is completely free to use with no ads, no limits, and no registration required."
+          }
+        }
+      ]
+    }
+  };
+
   return (
     <div className="min-h-full flex flex-col">
       <SEO 
         title={t('nav.home') === 'Home' ? 'Free Online Image Editor | 25+ Tools' : 'Edit Gambar Online Gratis | 25+ Tools'} 
         description={t('app.slogan.main') + ' ' + t('app.slogan.highlight')} 
         path="/"
+        schema={schema}
       />
       {/* Dashboard Header */}
       <section className="relative z-10 px-1 pt-2 pb-6">
