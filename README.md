@@ -3,7 +3,7 @@
 > **Edit images? Just upload and go!**  
 > Platform optimasi dan edit gambar lengkap yang cepat, ringan, tanpa iklan, dan 100% gratis. 
 
-🌐 **Halaman Live:** [gambaryuk.adityafakhri.com](https://gambaryuk.adityafakhri.com/)
+🌐 **Halaman Live:** [gambaryuk.com](https://gambaryuk.com/)
 
 ---
 
@@ -140,7 +140,7 @@ npm run build
 ## ☕ Dukungan & Donasi
 
 Jika GambarYuk membantu pekerjaan Anda dan Anda ingin memberikan dukungan/apresiasi kepada kreator, Anda dapat mentraktir kopi ke:
-👉 **[Halaman About & Traktir Kopi](https://gambaryuk.adityafakhri.com/about)**
+👉 **[Halaman About & Traktir Kopi](https://gambaryuk.com/about)**
 
 Terima kasih atas segala bentuk dukungan dan kebaikan Anda! ❤️
 
