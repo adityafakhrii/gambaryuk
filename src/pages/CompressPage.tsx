@@ -6,9 +6,9 @@ import { UploadZone, ImagePreview } from '@/components/UploadZone';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { compressImage, downloadImage, formatFileSize, ProcessedImage } from '@/lib/imageProcessing';
+import { compressImage, downloadImage, formatFileSize, getExtension, ProcessedImage } from '@/lib/imageProcessing';
 import { downloadAsZip } from '@/lib/zipDownload';
-import { Download, Loader2, Trash2 } from 'lucide-react';
+import { CheckCircle2, Download, Info, Loader2, Sparkles, Trash2, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ImageFile {
@@ -31,11 +31,23 @@ const compressionModes = [
   { key: 'custom', quality: null, label: 'compress.custom', percentage: null, desc: 'compress.custom.desc' },
 ];
 
+type TargetFormat = 'auto' | 'jpeg' | 'webp' | 'png';
+
+const formatButtons: { key: TargetFormat; label: string }[] = [
+  { key: 'auto', label: 'Auto' },
+  { key: 'jpeg', label: 'JPG' },
+  { key: 'webp', label: 'WebP' },
+  { key: 'png', label: 'PNG' },
+];
+
+
+
 export default function CompressPage() {
   const { t, language } = useLanguage();
   const [images, setImages] = useState<ProcessedFile[]>([]);
   const [quality, setQuality] = useState(75);
   const [selectedMode, setSelectedMode] = useState<string>('balanced');
+  const [targetFormat, setTargetFormat] = useState<TargetFormat>('auto');
 
   const handleFilesSelected = useCallback((files: ImageFile[]) => {
     setImages((prev) => [...prev, ...files.map(f => ({ ...f }))]);
@@ -58,33 +70,28 @@ export default function CompressPage() {
     setImages([]);
   };
 
-  const handleModeChange = (mode: string) => {
-    setSelectedMode(mode);
-    const modeConfig = compressionModes.find(m => m.key === mode);
-    if (modeConfig) {
-      if (modeConfig.quality !== null) {
-        const newQuality = Math.round(modeConfig.quality * 100);
-        setQuality(newQuality);
-        if (images.length > 0) {
-          processAllWithQuality(newQuality);
-        }
-      }
-    }
-  };
-
-  const processImage = async (image: ProcessedFile, targetQuality?: number) => {
+  const processImage = async (
+    image: ProcessedFile,
+    targetQuality?: number,
+    formatChoice?: TargetFormat
+  ) => {
     const activeQuality = targetQuality ?? quality;
+    const activeFormatChoice = formatChoice ?? targetFormat;
+
     setImages(prev => prev.map(img =>
       img.id === image.id ? { ...img, processing: true } : img
     ));
 
     try {
-      // Force WebP for better compression while preserving transparency if original was PNG,
-      // otherwise fallback to JPEG which naturally supports quality slider well.
-      const format = image.file.type === 'image/png' ? 'webp' : 'jpeg';
+      const mime = image.file.type || (
+        image.file.name.toLowerCase().endsWith('.png') ? 'image/png' :
+        image.file.name.toLowerCase().endsWith('.webp') ? 'image/webp' : 'image/jpeg'
+      );
+
       const result = await compressImage(image.preview, {
         quality: activeQuality / 100,
-        format,
+        format: activeFormatChoice,
+        originalMimeType: mime,
       });
 
       setImages(prev => prev.map(img =>
@@ -101,22 +108,51 @@ export default function CompressPage() {
     }
   };
 
+
+  const processAllWithSettings = async (q: number, fmt: TargetFormat) => {
+    for (const image of images) {
+      await processImage(image, q, fmt);
+    }
+  };
+
   const processAllWithQuality = async (q: number) => {
     for (const image of images) {
-      await processImage(image, q);
+      await processImage(image, q, targetFormat);
     }
   };
 
   const processAll = async () => {
     for (const image of images) {
-      await processImage(image, quality);
+      await processImage(image, quality, targetFormat);
+    }
+  };
+
+  const handleModeChange = (mode: string) => {
+    setSelectedMode(mode);
+    const modeConfig = compressionModes.find(m => m.key === mode);
+    if (modeConfig) {
+      if (modeConfig.quality !== null) {
+        const newQuality = Math.round(modeConfig.quality * 100);
+        setQuality(newQuality);
+        if (images.length > 0) {
+          processAllWithQuality(newQuality);
+        }
+      }
+    }
+  };
+
+  const handleFormatChange = (newFormat: TargetFormat) => {
+    setTargetFormat(newFormat);
+    if (images.length > 0) {
+      processAllWithSettings(quality, newFormat);
     }
   };
 
   const handleDownload = (image: ProcessedFile) => {
     if (image.result) {
+      const ext = getExtension(image.result.format);
       const baseName = image.file.name.replace(/\.[^.]+$/, '');
-      downloadImage(image.result.blob, `${baseName}-compressed.jpg`);
+      downloadImage(image.result.blob, `${baseName}-compressed.${ext}`);
     }
   };
 
@@ -127,10 +163,14 @@ export default function CompressPage() {
       return;
     }
     await downloadAsZip(
-      processed.map(img => ({
-        name: img.file.name.replace(/\.[^.]+$/, '') + '-compressed.jpg',
-        blob: img.result!.blob,
-      })),
+      processed.map(img => {
+        const ext = getExtension(img.result!.format);
+        const baseName = img.file.name.replace(/\.[^.]+$/, '');
+        return {
+          name: `${baseName}-compressed.${ext}`,
+          blob: img.result!.blob,
+        };
+      }),
       'compressed-images.zip'
     );
   };
@@ -138,6 +178,7 @@ export default function CompressPage() {
   const calculateReduction = (original: number, compressed: number) => {
     return Math.round(((original - compressed) / original) * 100);
   };
+
 
   const schemaData = useMemo(() => {
     return {
@@ -262,6 +303,9 @@ export default function CompressPage() {
                                 <div className="absolute top-3 left-3 z-10 rounded-full bg-accent text-accent-foreground px-3 py-1 text-xs font-medium">
                                   {t('compress.after')}
                                 </div>
+                                <div className="absolute top-3 right-3 z-10 rounded-full bg-background/90 backdrop-blur-sm border border-border/80 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-foreground shadow-sm">
+                                  .{getExtension(image.result.format)}
+                                </div>
                                 <img
                                   src={image.result.url}
                                   alt="Compressed"
@@ -271,18 +315,60 @@ export default function CompressPage() {
                               <div className="p-3 border-t border-border">
                                 <div className="flex items-center justify-between">
                                   <div>
-                                    <p className="text-sm font-medium text-accent">
-                                      -{calculateReduction(image.file.size, image.result.size)}%
-                                    </p>
+                                    <div className="flex items-center gap-1.5">
+                                      {(() => {
+                                        const reduction = calculateReduction(image.file.size, image.result.size);
+                                        if (reduction > 0) {
+                                          return (
+                                            <p className="text-sm font-semibold text-accent">
+                                              -{reduction}%
+                                            </p>
+                                          );
+                                        } else if (reduction < 0) {
+                                          return (
+                                            <p className="text-sm font-semibold text-amber-500 dark:text-amber-400">
+                                              +{Math.abs(reduction)}%
+                                            </p>
+                                          );
+                                        } else {
+                                          return (
+                                            <p className="text-sm font-semibold text-muted-foreground">
+                                              0%
+                                            </p>
+                                          );
+                                        }
+                                      })()}
+                                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground uppercase font-semibold">
+                                        .{getExtension(image.result.format)}
+                                      </span>
+                                    </div>
                                     <p className="text-xs text-muted-foreground">
                                       {formatFileSize(image.result.size)}
                                     </p>
                                   </div>
-                                  <Button size="sm" onClick={() => handleDownload(image)}>
+                                  <Button 
+                                    size="sm" 
+                                    onClick={() => handleDownload(image)}
+                                    className="gap-1.5"
+                                  >
                                     <Download className="h-4 w-4" />
+                                    <span className="text-xs font-semibold uppercase">.{getExtension(image.result.format)}</span>
                                   </Button>
                                 </div>
+                                {image.result.size > image.file.size && image.result.format === 'png' && (
+                                  <div className="mt-2.5 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-700 dark:text-amber-300">
+                                    <span>{t('compress.pngEnlargedTip')}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleFormatChange('jpeg')}
+                                      className="font-bold underline shrink-0 hover:text-amber-900 dark:hover:text-amber-100 text-left"
+                                    >
+                                      {t('compress.switchToJpg')} →
+                                    </button>
+                                  </div>
+                                )}
                               </div>
+
                             </>
                           ) : (
                             <div className="flex h-full items-center justify-center bg-muted/30">
@@ -302,35 +388,109 @@ export default function CompressPage() {
 
           {/* Controls Sidebar */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-              <h2 className="font-semibold text-foreground">{t('compress.mode')}</h2>
-              <div className="mt-4 space-y-3">
-                {compressionModes.map((mode) => (
-                  <button
-                    key={mode.key}
-                    className={`w-full text-left px-4 py-3.5 rounded-xl transition-all duration-200 border ${selectedMode === mode.key
-                      ? 'bg-primary border-primary shadow-md text-primary-foreground'
-                      : 'bg-muted/30 border-transparent hover:bg-muted/60 hover:border-border/50 text-foreground'
-                      }`}
-                    onClick={() => handleModeChange(mode.key)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className={`text-sm font-semibold ${selectedMode === mode.key ? 'text-primary-foreground' : 'text-foreground'}`}>
-                        {t(mode.label)}
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-6">
+              {/* Output Format Section */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="font-semibold text-foreground text-sm">{t('compress.targetFormat')}</h2>
+                </div>
+
+                <div className="grid grid-cols-4 gap-1 p-1 bg-muted/70 dark:bg-muted/40 rounded-xl border border-border/50">
+                  {formatButtons.map((fmt) => {
+                    const isSelected = targetFormat === fmt.key;
+                    return (
+                      <button
+                        key={fmt.key}
+                        type="button"
+                        onClick={() => handleFormatChange(fmt.key)}
+                        className={`py-2 text-xs font-semibold rounded-lg transition-all text-center ${
+                          isSelected
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-background/40'
+                        }`}
+                      >
+                        {fmt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-2.5 flex items-start gap-1.5 text-[11px] text-muted-foreground leading-relaxed">
+                  {targetFormat === 'auto' && (
+                    <>
+                      <Sparkles className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                      <span>
+                        {language === 'id' 
+                          ? 'Otomatis memilih format terbaik agar ukuran file menyusut optimal.' 
+                          : 'Automatically picks the best format for maximum compression.'}
                       </span>
-                      {mode.percentage && (
-                        <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${selectedMode === mode.key ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-primary/15 text-primary'}`}>
-                          {mode.percentage}
+                    </>
+                  )}
+                  {targetFormat === 'jpeg' && (
+                    <>
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                      <span>
+                        {language === 'id' 
+                          ? 'Format JPG didukung 100% di Google Slides & Office (latar putih).' 
+                          : 'JPG format: 100% supported by Google Slides & Office.'}
+                      </span>
+                    </>
+                  )}
+                  {targetFormat === 'webp' && (
+                    <>
+                      <Zap className="h-3.5 w-3.5 text-amber-500 shrink-0 mt-0.5" />
+                      <span>
+                        {language === 'id' 
+                          ? 'Format WebP paling hemat untuk website dengan transparansi.' 
+                          : 'WebP format: Ultra-compact web size with transparency.'}
+                      </span>
+                    </>
+                  )}
+                  {targetFormat === 'png' && (
+                    <>
+                      <Info className="h-3.5 w-3.5 text-blue-500 shrink-0 mt-0.5" />
+                      <span>
+                        {language === 'id' 
+                          ? 'Format PNG lossless asli (ukuran foto/poster tidak menyusut).' 
+                          : 'PNG format: Lossless format (photo/poster sizes will not shrink).'}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+
+
+              {/* Mode Section */}
+              <div className="pt-4 border-t border-border/60">
+                <h2 className="font-semibold text-foreground text-sm mb-3">{t('compress.mode')}</h2>
+                <div className="space-y-2.5">
+                  {compressionModes.map((mode) => (
+                    <button
+                      key={mode.key}
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 border ${selectedMode === mode.key
+                        ? 'bg-primary border-primary shadow-md text-primary-foreground'
+                        : 'bg-muted/30 border-transparent hover:bg-muted/60 hover:border-border/50 text-foreground'
+                        }`}
+                      onClick={() => handleModeChange(mode.key)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={`text-sm font-semibold ${selectedMode === mode.key ? 'text-primary-foreground' : 'text-foreground'}`}>
+                          {t(mode.label)}
                         </span>
+                        {mode.percentage && (
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${selectedMode === mode.key ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-primary/15 text-primary'}`}>
+                            {mode.percentage}
+                          </span>
+                        )}
+                      </div>
+                      {mode.desc && (
+                        <p className={`text-xs mt-1 leading-relaxed ${selectedMode === mode.key ? 'text-primary-foreground/85' : 'text-muted-foreground'}`}>
+                          {t(mode.desc)}
+                        </p>
                       )}
-                    </div>
-                    {mode.desc && (
-                      <p className={`text-xs mt-1.5 leading-relaxed ${selectedMode === mode.key ? 'text-primary-foreground/85' : 'text-muted-foreground'}`}>
-                        {t(mode.desc)}
-                      </p>
-                    )}
-                  </button>
-                ))}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="mt-6 space-y-4">
