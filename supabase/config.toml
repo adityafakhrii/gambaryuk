@@ -1,4 +1,4 @@
-project_id = "kmjodkwdcxenijqgxnhh"
+project_id = "ltdwpaciulpophywcuam"
 
 [functions.ocr]
 verify_jwt = false
@@ -16,4 +16,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.remove-bg]
+verify_jwt = false
+
+[functions.create-mayar-payment]
 verify_jwt = false

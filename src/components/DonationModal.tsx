@@ -56,18 +56,46 @@ export function DonationModal({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
 
     try {
-      // 1. Call Supabase Edge Function to create Mayar payment link
+      // 1. Call Supabase Edge Function (Mayar API V2) to create payment link
+      const trimmedName = name.trim() || 'Orang Baik';
+      const trimmedMessage = message.trim();
+
       const { data, error } = await supabase.functions.invoke('create-mayar-payment', {
         body: {
           amount,
-          customerName: name || 'Orang Baik',
-          customerEmail: email || 'anonymous@gambaryuk.com',
-          customerMobile: mobile,
-          description: `Donasi GambarYuk dari ${name || 'Orang Baik'}${message ? ` - Pesan: ${message}` : ''}`,
+          customerName: trimmedName,
+          customerEmail: email.trim() || 'anonymous@gambaryuk.com',
+          customerMobile: mobile.trim(),
+          description: `Donasi GambarYuk dari ${trimmedName}${trimmedMessage ? ` - Pesan: ${trimmedMessage}` : ''}`,
+          ...(trimmedMessage ? { notes: trimmedMessage } : {}),
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Parse upstream status/message from FunctionsHttpError when available
+        let statusCode: number | undefined;
+        let errorMessage: string | undefined;
+        if (error.context && typeof error.context.json === 'function') {
+          try {
+            const errBody = await error.context.json();
+            statusCode = errBody?.code ?? error.context.status;
+            errorMessage = errBody?.error;
+          } catch {
+            statusCode = error.context.status;
+          }
+        }
+
+        if (statusCode === 429) {
+          toast.error(
+            language === 'id'
+              ? 'Permintaan duplikat terdeteksi. Tunggu 1 menit sebelum mencoba lagi.'
+              : 'Duplicate request detected. Please wait 1 minute before trying again.'
+          );
+          return;
+        }
+
+        throw new Error(errorMessage || error.message || 'Payment creation failed');
+      }
 
       if (data?.link) {
         // Redirect to Mayar checkout page
@@ -75,7 +103,7 @@ export function DonationModal({ children }: { children: React.ReactNode }) {
       } else {
         throw new Error('Invalid response from payment gateway');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Payment creation failed:', err);
       toast.error(
         language === 'id'
